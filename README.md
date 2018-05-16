@@ -20,12 +20,13 @@ body <- '{
   "es_query": {}
 }'
 
-base = "https://dss.data.humancellatlas.org/v1/%s"
-url <- sprintf(base, "search?output_format=summary&replica=aws&per_page=100")
+base = "https://dss.data.humancellatlas.org/v1/"
+search <- sprintf(base, "search?output_format=summary&replica=aws&per_page=100")
 headers = add_headers(
     accept = "application/json",
     `Content-Type` = "application/json"
 )
+url <- paste0(base, search)
 response <- httr::POST(url, headers, body = body)
 stop_for_status(response)
 lol <- content(response)
