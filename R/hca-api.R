@@ -17,7 +17,7 @@
     response <- httr::POST(url, headers, body = body)
     stop_for_status(response)
     response
-}   b
+}
 
 bundles_checkout <-
     function(uuid)
@@ -27,63 +27,86 @@ bundles_checkout <-
     ## ...
 }
 
-.getBundleCheckout <-
-    function(replica=c('aws', 'gcp', 'azure'), checkout_job_id)
+#' @importFrom httr GET POST add_headers content stop_for_status
+#' @importFrom jsonlite fromJSON
+.getBundlesCheckout <-
+    function(uuid, replica=c('aws', 'gcp', 'azure'),
+        url = 'https://dss.data.humancellatlas.org/')
 {
 
 }
 
 .getBundle <-
     function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        directurls=TRUE, presignedurls=TRUE, token=NULL)
+        directurls=TRUE, presignedurls=TRUE, token=NULL,
+        url = 'https://dss.data.humancellatlas.org/')
 {
-
+    replica <- match.arg(replica)
+    headers <- add_headers(
+        accept = "application/json",
+        `Content-Type` = "application/json",
+        uuid = uuid,
+        replica = replica
+    )
+    url <- paste0(url, 'v1/bundles/', uuid, '?replica=', replica)
+    response <- httr::GET(url, headers, body=body)
+    stop_for_status(response)
+    response <- content(response, as = "text")
+    fromJSON(response, flatten=TRUE)
 }
 
 .putBundle <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), request=NULL, version=NULL)
+    function(uuid, replica=c('aws', 'gcp', 'azure'), request=NULL, version=NULL,
+         url = 'https://dss.data.humancellatlas.org/')
 {
 
 }
 
 .putCollections <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), request=NULL, version=NULL)
+    function(uuid, replica=c('aws', 'gcp', 'azure'), request=NULL, version=NULL,
+        url = 'https://dss.data.humancellatlas.org/')
 {
 
 }
 
 .getCollections <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL)
+    function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
+        url = 'https://dss.data.humancellatlas.org/')
 {
 
 }
 
 .getFiles <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), token=NULL, version=NULL)
+    function(uuid, replica=c('aws', 'gcp', 'azure'), token=NULL, version=NULL,
+        url = 'https://dss.data.humancellatlas.org/')
 {
 
 }
 
 .putFiles <-
-    function(uuid, request=NULL, version=NULL)
+    function(uuid, request=NULL, version=NULL,
+         url = 'https://dss.data.humancellatlas.org/')
 {
 
 }
 
 .getSubscriptions <-
-    function(replica=c('aws', 'gcp', 'azure'))
+    function(replica=c('aws', 'gcp', 'azure'),
+        url = 'https://dss.data.humancellatlas.org/')
 {
 
 }
 
 .putSubscriptions <-
-    function(replica=c('aws', 'gcp', 'azure'), request=NULL)
+    function(replica=c('aws', 'gcp', 'azure'), request=NULL,
+         url = 'https://dss.data.humancellatlas.org/')
 {
 
 }
 
 .getSubscription <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'))
+    function(uuid, replica=c('aws', 'gcp', 'azure'),
+        url = 'https://dss.data.humancellatlas.org/')
 {
 
 }

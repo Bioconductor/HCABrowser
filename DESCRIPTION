@@ -21,7 +21,7 @@ Description: Search, browse, reference, and download resources from
     the Human Cell Atlas data portal. Development of this package is
     supported through funds from the Chan / Zuckerberg initiative.
 Depends: R (>= 3.5.0)
-Imports: dpylr, googleAuthR, httr, jsonlite
+Imports: dplyr, googleAuthR, httr, jsonlite
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
