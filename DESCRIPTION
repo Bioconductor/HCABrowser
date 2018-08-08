@@ -1,6 +1,6 @@
 Package: HCABrowser
 Title: Browse the Human Cell Atlas data portal
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: c(
     person(
         "Daniel", "van Twisk",
@@ -21,7 +21,7 @@ Description: Search, browse, reference, and download resources from
     the Human Cell Atlas data portal. Development of this package is
     supported through funds from the Chan / Zuckerberg initiative.
 Depends: R (>= 3.5.0)
-Imports: dplyr, googleAuthR, httr, jsonlite
+Imports: dplyr, httr, jsonlite
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
