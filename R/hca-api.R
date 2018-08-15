@@ -1,4 +1,4 @@
-## https://dss.data.humancellatlas.org/
+## https://dss.integration.data.humancellatlas.org/
 
 .apis <- c(
     getBundlesCheckout = "/bundles/%s/checkout",
@@ -33,93 +33,98 @@
 }
 
 #' @importFrom httr add_headers
-.build_header <- function()
+.build_header <- function(include_token)
 {
-    token <- get_token()
-    add_headers(
-        access_token = token$credentials[['access_token']]#,
-#        token_type = token$credentials[['token_type']],
-#        expires_in = token$credentials[['expires_in']]
+    header <- list(
+        `Content-Type` = "application/json",
+        `Accept` = "application/json",
     )
+    if (include_token) {
+        token <- get_token()
+        header['access_token'] <- token$credentials[['access_token']]
+        header['token_type'] <- token_type = token$credentials[['token_type']]
+        header['expires_in'] <- expires_in = token$credentials[['expires_in']]
+    }
+    do.call(add_headers, header)
 }
 
 #' @importFrom httr content stop_for_status
 #' @importFrom jsonlite fromJSON
-.return_reponse <-
+.return_response <-
     function(response)
 {
     stop_for_status(response)
     response <- content(response, as = "text")
-    fromJSON(response, flatten=TRUE)
+    fromJSON(response, flatten=FALSE)
 }
 
 #' @importFrom httr DELETE
 .hca_delete <-
     function(url, body)
 {
-    header <- .build_header()
+    header <- .build_header(include_token=TRUE)
     response <- httr::DELETE(url, header, body=body, encode="json")
-    .return_reponse(response)
+    .return_response(response)
 } 
 
 #' @importFrom httr GET
 .hca_get <-
-    function(url)
+    function(url, include_token)
 {
-    header <- .build_header()
+    header <- .build_header(include_token)
     response <- httr::GET(url, header)
-    .return_reponse(response)
+    .return_response(response)
 }
 
 #' @importFrom httr HEAD
 .hca_head <-
     function(url)
 {
-    header <- .build_header()
+    header <- .build_header(include_token=FALSE)
     response <- httr::HEAD(url, header)
-    .return_reponse(response)
+    .return_response(response)
 }
 
 #' @importFrom httr PATCH
 .hca_post <-
     function(url, body)
 {
-    header <- .build_header()
+    header <- .build_header(include_token=TRUE)
     response <- httr::PATCH(url, header, body=body, encode="json")
-    .return_reponse(response)
+    .return_response(response)
 }
 
 #' @importFrom httr POST
 .hca_post <-
     function(url, body)
 {
-    header <- .build_header()
+    header <- .build_header(include_token=FALSE)
     response <- httr::POST(url, header, body=body, encode="json")
-    .return_reponse(response)
+    .return_response(response)
 }
 
 #' @importFrom httr PUT
 .hca_put <-
-    function(url, body)
+    function(url, body, include_token)
 {
-    header <- .build_header()
-    reponse <- httr::PUT(url, header, body, encode="json")
-    .return_reponse(response)
+    header <- .build_header(include_token)
+    response <- httr::PUT(url, header, body, encode="json")
+    .return_response(response)
 }
 
 .getBundlesCheckout <-
     function(checkout_job_id, replica=c('aws', 'gcp', 'azure'),
-        url='https://dss.data.humancellatlas.org/')
+        url='https://dss.integration.data.humancellatlas.org/')
 {
     replica <- match.arg(replica)
     args <- list=(replica=replica)
     url <- .build_url(url, .apis['getBundlesCheckout'], checkout_job_id, args)
-    .hca_get(url)
+    .hca_get(url, include_token=FALSE)
 }
 
 .deleteBundle <-
     function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        reason = NULL, url='https://dss.data.humancellatlas.org/v1')
+        reason = NULL, url='https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
@@ -130,35 +135,29 @@
 .getBundle <-
     function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
         directurls=NULL, presignedurls=FALSE, token=NULL,
-        url='https://dss.data.humancellatlas.org/v1')
+        url='https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version, directurls=directurls,
                   presignedurls=presignedurls, token=token)
     url <- .build_url(url, .apis['getBundle'], uuid, args)
-    .hca_get(url)
+    .hca_get(url, include_token=FALSE)
 }
 
 .putBundle <-
     function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        creator_uid, files, url='https://dss.data.humancellatlas.org/v1')
+        creator_uid, files, url='https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
     body <- list(creator_uid=creator_uid, files=files)
     url <- .build_url(url, .apis['putBundle'], uuid, args)
-    .hca_put(url, body)
-#    headers <- add_headers(
-#        accept = "application/json",
-#        `Content-Type` = "application/json",
-#        uuid = uuid,
-#        replica = replica
-#    )
+    .hca_put(url, body, include_token=FALSE)
 }
 
 .postBundlesCheckout <-
     function(uuid, replica=c('aws', 'gcp', 'azure'), destination=NULL,
-        email=NULL, url='https://dss.data.humancellatlas.org/v1')
+        email=NULL, url='https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
@@ -170,18 +169,18 @@
 .putCollection <-
     function(uuid, replica=c('aws', 'gcp', 'azure'), version, contents,
         description, details, name,
-        url='https://dss.data.humancellatlas.org/v1')
+        url='https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     body <- list(contents=contents, description=description, details=details,
                  name=name)
     url <- .build_url(url, .apis['putCollection'], uuid, NULL)
-    .hca_put(url, body)
+    .hca_put(url, body, include_token=TRUE)
 }
 
 .deleteCollection <-
     function(uuid, replica=c('aws', 'gcp', 'azure'),
-        url='https://dss.data.humancellatlas.org/v1')
+        url='https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list=(replica=replica)
@@ -191,18 +190,18 @@
 
 .getCollection <-
     function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        url='https://dss.data.humancellatlas.org/v1')
+        url='https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
     url <- .build_url(url, .apis['getCollection'], uuid, args)
-    .hca_get(url)
+    .hca_get(url, include_token=TRUE)
 }
 
 .patchCollection <-
     function(uuid, replica=c('aws', 'gcp', 'azure'), version, add_contents,
         description, details, name, remove_contents,
-        url = 'https://dss.data.humancellatlas.org/v1')
+        url = 'https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
@@ -214,17 +213,17 @@
 
 .getFile <-
     function(uuid, replica=c('aws', 'gcp', 'azure'), token=NULL, version=NULL,
-        url = 'https://dss.data.humancellatlas.org/v1')
+        url = 'https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version, token=token)
     url <- .build_url(url, .apis['getFile'], uuid, args)
-    .hca_get(url)
+    .hca_get(url, include_token=FALSE)
 }
 
 .headFile <-
     function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        url = 'https://dss.data.humancellatlas.org/v1')
+        url = 'https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
@@ -234,19 +233,19 @@
 
 .putFile <-
     function(uuid, creator_uid, source_url, version=NULL,
-        url = 'https://dss.data.humancellatlas.org/v1')
+        url = 'https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(version=version)
     body <- list(creator_uid=creator_uid, source_url=source_url)
     url <- .build_url(url, .apis['putFile'], uuid, args)
-    .hca_put(url, body)
+    .hca_put(url, body, include_token=FALSE)
 }
 
 .postSearch <-
     function(replica=c('aws', 'gcp', 'azure'),
         output_format=c('summary', 'raw'), es_query, per_page=100,
-        search_after=NULL, url = 'https://dss.data.humancellatlas.org/v1')
+        search_after=NULL, url = 'https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     output_format <- match.arg(output_format)
@@ -259,19 +258,19 @@
 
 .getSubscriptions <-
     function(replica=c('aws', 'gcp', 'azure'),
-        url = 'https://dss.data.humancellatlas.org/v1')
+        url = 'https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica)
     url <- .build_url(url, .apis['getSubscriptions'], NULL, args)
-    .hca_get(url)
+    .hca_get(url, include_token=TRUE)
 }
 
 .putSubscription <-
     function(replica=c('aws', 'gcp', 'azure'), attachments, callback_url,
         encoding, es_query, form_fields, hmac_key_id, hmac_secret_key,
         method, payload_form_field,
-        url = 'https://dss.data.humancellatlas.org/v1')
+        url = 'https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica)
@@ -280,12 +279,12 @@
                  hmac_key_id=hmac_key_id, hmac_secret_key=hmac_secret_key,
                  method=method, payload_form_field=payload_form_field)
     url <- .build_url(url, .apis['putSubscription'], NULL, args)
-    .hca_put(url, body)
+    .hca_put(url, body, include_token=TRUE)
 }
 
 .deleteSubscription <-
     function(uuid, replica=c('aws', 'gcp', 'azure'),
-        url = 'https://dss.data.humancellatlas.org/v1')
+        url = 'https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica)
@@ -295,12 +294,12 @@
 
 .getSubscription <-
     function(uuid, replica=c('aws', 'gcp', 'azure'),
-        url = 'https://dss.data.humancellatlas.org/v1')
+        url = 'https://dss.integration.data.humancellatlas.org/v1')
 {
     replica <- match.arg(replica)
     args <- list(replica=replica)
     url <- .build_url(url, .apis['getSubscription'], uuid, args)
-    .hca_get(url)
+    .hca_get(url, include_token=TRUE)
 }
 
 #' @name HCA API methods
