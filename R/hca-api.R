@@ -37,7 +37,7 @@
 {
     header <- list(
         `Content-Type` = "application/json",
-        `Accept` = "application/json",
+        `Accept` = "application/json"
     )
     if (include_token) {
         token <- get_token()
@@ -48,14 +48,45 @@
     do.call(add_headers, header)
 }
 
+.retrieve_BiocFileCache_dbpath <- function(url)
+{
+    if (is.null(dbpath))
+        dbpath <- BiocFileCache()
+    if (is(dbpath, "BiocFileCache")) {
+        nrec <- NROW(bfcquery(dbpath, url, "rname", exact = TRUE))
+        if (nrec == 0L)
+            dbpath <- bfcnew(dbpath, url)
+        else if (nrec == 1L)
+            dbpath <- bfrcpath(dbpath, url)
+        else
+            stop(
+                "\n  'bfc' contains duplicate Organism.dplyr record names",
+                    "\n      url: ", url,
+                    "\n      bfccache(): ", bfccache(dbpath),
+                    "\n      rname: ", txdb_name
+            )
+    }
+}
+
+.save_as_BiocFileCache <- function(dbpath, url)
+{
+    fname <- BiocFileCache::bfcrpath(rnames = url)
+    readr::read_tsv(fname)
+}
+
 #' @importFrom httr content stop_for_status
 #' @importFrom jsonlite fromJSON
-.return_response <-
-    function(response)
+#' @importFrom readr read_tsv
+.return_response_json <-
+    function(response, expected_response=c('json', 'text'))
 {
+    expected_response <- match.arg(expected_response)
     stop_for_status(response)
     response <- content(response, as = "text")
-    fromJSON(response, flatten=FALSE)
+    if (expected_response == 'json')
+        fromJSON(response, flatten=FALSE)
+    else if (expected_response == 'text')
+        readr::read_tsv(text=response, sep="\t")
 }
 
 #' @importFrom httr DELETE
@@ -69,11 +100,13 @@
 
 #' @importFrom httr GET
 .hca_get <-
-    function(url, include_token)
+    function(url, include_token, expected_response=c("json", "file"))
 {
     header <- .build_header(include_token)
-    response <- httr::GET(url, header)
-    .return_response(response)
+    expected_response <- match.arg(expected_response)
+    if(include_token) response <- httr::GET(url, header)
+    else response <- httr::GET(url)   
+    .return_response(response, expected_response)
 }
 
 #' @importFrom httr HEAD
@@ -218,7 +251,7 @@
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version, token=token)
     url <- .build_url(url, .apis['getFile'], uuid, args)
-    .hca_get(url, include_token=FALSE)
+    .hca_get(url, include_token=FALSE, expected_response="file")
 }
 
 .headFile <-

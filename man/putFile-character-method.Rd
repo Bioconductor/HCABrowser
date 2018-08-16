@@ -6,7 +6,7 @@
 \title{Create a new version of a file}
 \usage{
 \S4method{putFile}{character}(uuid, creator_uid, source_url, version = NULL,
-  url = "https://dss.data.humancellatlas.org/v1")
+  url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Create a new version of a file

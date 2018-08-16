@@ -7,7 +7,7 @@
 \usage{
 \S4method{putCollection}{character}(uuid, replica = c("aws", "gcp", "azure"),
   version, contents, description, details, name,
-  url = "https://dss.data.humancellatlas.org/v1")
+  url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Create a collection

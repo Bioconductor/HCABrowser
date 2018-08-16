@@ -6,7 +6,8 @@
 \title{Retrieve a file's metadata given an UUID and optionally a version}
 \usage{
 \S4method{headFile}{character}(uuid, replica = c("aws", "gcp", "azure"),
-  version = NULL, url = "https://dss.data.humancellatlas.org/v1")
+  version = NULL,
+  url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Retrieve a file's metadata given an UUID and optionally a version

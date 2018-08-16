@@ -7,7 +7,7 @@
 \usage{
 \S4method{patchCollection}{character}(uuid, replica = c("aws", "gcp",
   "azure"), version, add_contents, description, details, name, remove_contents,
-  url = "https://dss.data.humancellatlas.org/v1")
+  url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Update a collection

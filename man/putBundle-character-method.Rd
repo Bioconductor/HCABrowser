@@ -7,7 +7,7 @@
 \usage{
 \S4method{putBundle}{character}(uuid, replica = c("aws", "gcp", "azure"),
   version = NULL, creator_uid, files,
-  url = "https://dss.data.humancellatlas.org/v1")
+  url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Create a bundle

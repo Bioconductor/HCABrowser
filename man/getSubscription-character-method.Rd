@@ -6,7 +6,7 @@
 \title{Retrieve an event subscription given a UUID}
 \usage{
 \S4method{getSubscription}{character}(uuid, replica = c("aws", "gcp",
-  "azure"), url = "https://dss.data.humancellatlas.org/v1")
+  "azure"), url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Retrieve an event subscription given a UUID

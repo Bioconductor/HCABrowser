@@ -7,7 +7,7 @@
 \usage{
 \S4method{getFile}{character}(uuid, replica = c("aws", "gcp", "azure"),
   token = NULL, version = NULL,
-  url = "https://dss.data.humancellatlas.org/v1")
+  url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Retrieve a file given a UUID and optionally a version

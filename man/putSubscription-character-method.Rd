@@ -8,7 +8,7 @@
 \S4method{putSubscription}{character}(replica = c("aws", "gcp", "azure"),
   attachments, callback_url, encoding, es_query, form_fields, hmac_key_id,
   hmac_secret_key, method, payload_form_field,
-  url = "https://dss.data.humancellatlas.org/v1")
+  url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Creates an event subscription

@@ -7,7 +7,7 @@
 \usage{
 \S4method{deleteBundle}{character}(uuid, replica = c("aws", "gcp", "azure"),
   version = NULL, reason = NULL,
-  url = "https://dss.data.humancellatlas.org/v1")
+  url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Delete a bundle or a specific bundle version

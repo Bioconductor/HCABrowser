@@ -6,7 +6,7 @@
 \title{Delete a collection}
 \usage{
 \S4method{deleteCollection}{character}(uuid, replica = c("aws", "gcp",
-  "azure"), url = "https://dss.data.humancellatlas.org/v1")
+  "azure"), url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Delete a collection

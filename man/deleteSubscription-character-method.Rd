@@ -6,7 +6,7 @@
 \title{Delete an event subscription}
 \usage{
 \S4method{deleteSubscription}{character}(uuid, replica = c("aws", "gcp",
-  "azure"), url = "https://dss.data.humancellatlas.org/v1")
+  "azure"), url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Delete an event subscription

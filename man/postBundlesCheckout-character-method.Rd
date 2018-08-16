@@ -8,7 +8,7 @@ destination}
 \usage{
 \S4method{postBundlesCheckout}{character}(uuid, replica = c("aws", "gcp",
   "azure"), destination = NULL, email = NULL,
-  url = "https://dss.data.humancellatlas.org/v1")
+  url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Check out a bundle to DSS-namaged or user-managed cloud object storage

@@ -6,7 +6,7 @@
 \title{Retrieve a user's event Subscription}
 \usage{
 \S4method{getSubscriptions}{character}(replica = c("aws", "gcp", "azure"),
-  url = "https://dss.data.humancellatlas.org/v1")
+  url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Retrieve a user's event Subscription

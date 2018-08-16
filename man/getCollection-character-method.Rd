@@ -6,7 +6,8 @@
 \title{Retrieve a collection given a UUID}
 \usage{
 \S4method{getCollection}{character}(uuid, replica = c("aws", "gcp", "azure"),
-  version = NULL, url = "https://dss.data.humancellatlas.org/v1")
+  version = NULL,
+  url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Retrieve a collection given a UUID

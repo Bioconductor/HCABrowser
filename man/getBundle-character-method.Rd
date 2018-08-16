@@ -7,7 +7,7 @@
 \usage{
 \S4method{getBundle}{character}(uuid, replica = c("aws", "gcp", "azure"),
   version = NULL, directurls = NULL, presignedurls = FALSE,
-  token = NULL, url = "https://dss.data.humancellatlas.org/v1")
+  token = NULL, url = "https://dss.integration.data.humancellatlas.org/v1")
 }
 \description{
 Retrieve a bundle given a UUID and optionally a version

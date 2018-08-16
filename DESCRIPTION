@@ -3,8 +3,8 @@ Title: Browse the Human Cell Atlas data portal
 Version: 0.0.3
 Authors@R: c(
     person(
-        "Daniel", "van Twisk",
-        email = "Daniel.vanTwisk@RoswellPark.com",
+        "Daniel", "Van Twisk",
+        email = "Daniel.VanTwisk@RoswellPark.com",
         role = "aut"
     ),
     person(
@@ -21,11 +21,17 @@ Description: Search, browse, reference, and download resources from
     the Human Cell Atlas data portal. Development of this package is
     supported through funds from the Chan / Zuckerberg initiative.
 Depends: R (>= 3.5.0)
-Imports: dplyr, googleAuthR, httr, jsonlite
+Imports: BiocFileCache,
+         dplyr,
+         googleAuthR,
+         httr,
+         jsonlite,
+         readr,
+         rjson,
+         tibble
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/Bioconductor/HCABrowser
 RoxygenNote: 6.0.1
-Suggests: 
-    testthat
+Suggests: testthat
