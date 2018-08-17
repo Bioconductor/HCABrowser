@@ -77,7 +77,7 @@
 #' @importFrom httr content stop_for_status
 #' @importFrom jsonlite fromJSON
 #' @importFrom readr read_tsv
-.return_response_json <-
+.return_response <-
     function(response, expected_response=c('json', 'text'))
 {
     expected_response <- match.arg(expected_response)
