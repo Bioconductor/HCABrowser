@@ -20,18 +20,25 @@ Authors@R: c(
 Description: Search, browse, reference, and download resources from
     the Human Cell Atlas data portal. Development of this package is
     supported through funds from the Chan / Zuckerberg initiative.
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.5.0),
+         dplyr
 Imports: BiocFileCache,
-         dplyr,
          googleAuthR,
          httr,
          jsonlite,
          readr,
          rjson,
          tibble
+Collate: AllClasses.R
+         AllGenerics.R
+         authorization.R
+         filter-utilities.R
+         hca-api.R
+         iteration-utilities.R
+         json-utilities.R
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/Bioconductor/HCABrowser
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Suggests: testthat
