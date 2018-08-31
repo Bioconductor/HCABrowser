@@ -78,14 +78,14 @@
 #' @importFrom jsonlite fromJSON
 #' @importFrom readr read_tsv
 .return_response <-
-    function(response, expected_response=c('json', 'text'))
+    function(response, expected_response=c('json', 'file'))
 {
     expected_response <- match.arg(expected_response)
     stop_for_status(response)
     response <- content(response, as = "text")
     if (expected_response == 'json')
         fromJSON(response, flatten=FALSE)
-    else if (expected_response == 'text')
+    else if (expected_response == 'file')
         readr::read_tsv(text=response, sep="\t")
 }
 
@@ -141,169 +141,158 @@
     function(url, body, include_token)
 {
     header <- .build_header(include_token)
-    response <- httr::PUT(url, header, body, encode="json")
+    response <- httr::PUT(hca@url, header, body, encode="json")
     .return_response(response)
 }
 
 .getBundlesCheckout <-
-    function(checkout_job_id, replica=c('aws', 'gcp', 'azure'),
-        url='https://dss.integration.data.humancellatlas.org/')
+    function(hca, checkout_job_id, replica=c('aws', 'gcp', 'azure'))
 {
     replica <- match.arg(replica)
     args <- list=(replica=replica)
-    url <- .build_url(url, .apis['getBundlesCheckout'], checkout_job_id, args)
+    url <- .build_url(hca@url, .apis['getBundlesCheckout'], checkout_job_id, args)
     .hca_get(url, include_token=FALSE)
 }
 
 .deleteBundle <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        reason = NULL, url='https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
+        reason = NULL)
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
-    url <- .build_url(url, .apis['deleteBundle'], uuid, args)
+    url <- .build_url(hca@url, .apis['deleteBundle'], uuid, args)
     .hca_delete(url)
 }
 
 .getBundle <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        directurls=NULL, presignedurls=FALSE, token=NULL,
-        url='https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
+        directurls=NULL, presignedurls=FALSE, token=NULL)
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version, directurls=directurls,
                   presignedurls=presignedurls, token=token)
-    url <- .build_url(url, .apis['getBundle'], uuid, args)
+    url <- .build_url(hca@url, .apis['getBundle'], uuid, args)
     .hca_get(url, include_token=FALSE)
 }
 
 .putBundle <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        creator_uid, files, url='https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
+        creator_uid, files)
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
     body <- list(creator_uid=creator_uid, files=files)
-    url <- .build_url(url, .apis['putBundle'], uuid, args)
+    url <- .build_url(hca@url, .apis['putBundle'], uuid, args)
     .hca_put(url, body, include_token=FALSE)
 }
 
 .postBundlesCheckout <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), destination=NULL,
-        email=NULL, url='https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), destination=NULL,
+        email=NULL)
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
     body <- list(destination=destination, email=email)
-    url <- .build_url(url, .apis['postBundlesCheckout'], uuid, args)
+    url <- .build_url(hca@url, .apis['postBundlesCheckout'], uuid, args)
     .hca_post(url, body)
 }
 
 .putCollection <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), version, contents,
-        description, details, name,
-        url='https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version, contents,
+        description, details, name)
 {
     replica <- match.arg(replica)
     body <- list(contents=contents, description=description, details=details,
                  name=name)
-    url <- .build_url(url, .apis['putCollection'], uuid, NULL)
+    url <- .build_url(hca@url, .apis['putCollection'], uuid, NULL)
     .hca_put(url, body, include_token=TRUE)
 }
 
 .deleteCollection <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'),
-        url='https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'))
 {
     replica <- match.arg(replica)
     args <- list=(replica=replica)
-    url <- .build_url(url, .apis['deleteCollection'], uuid, args)
+    url <- .build_url(hca@url, .apis['deleteCollection'], uuid, args)
     .hca_delete(url)
 }
 
 .getCollection <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        url='https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version=NULL)
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
-    url <- .build_url(url, .apis['getCollection'], uuid, args)
+    url <- .build_url(hca@url, .apis['getCollection'], uuid, args)
     .hca_get(url, include_token=TRUE)
 }
 
 .patchCollection <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), version, add_contents,
-        description, details, name, remove_contents,
-        url = 'https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version, add_contents,
+        description, details, name, remove_contents)
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
     body <- list(add_contents=add_contents, description=description,
                  details=details, name=name, remove_contents=remove_contents)
-    url <- .build_url(url, .apis['patchCollection'], uuid, args)
+    url <- .build_url(hca@url, .apis['patchCollection'], uuid, args)
     .hca_patch(url, body)
 }
 
 .getFile <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), token=NULL, version=NULL,
-        url = 'https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), token=NULL, version=NULL)
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version, token=token)
-    url <- .build_url(url, .apis['getFile'], uuid, args)
+    url <- .build_url(hca@url, .apis['getFile'], uuid, args)
     .hca_get(url, include_token=FALSE, expected_response="file")
 }
 
 .headFile <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        url = 'https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version=NULL)
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version)
-    url <- .build_url(url, .apis['getFile'], uuid, args)
+    url <- .build_url(hca@url, .apis['getFile'], uuid, args)
     .hca_head(url)
 }
 
-.putFile <-
-    function(uuid, creator_uid, source_url, version=NULL,
-        url = 'https://dss.integration.data.humancellatlas.org/v1')
+.putFile <- 
+    function(hca, uuid, creator_uid, source_url, version=NULL)
 {
     replica <- match.arg(replica)
     args <- list(version=version)
     body <- list(creator_uid=creator_uid, source_url=source_url)
-    url <- .build_url(url, .apis['putFile'], uuid, args)
+    url <- .build_url(hca@url, .apis['putFile'], uuid, args)
     .hca_put(url, body, include_token=FALSE)
 }
 
 .postSearch <-
-    function(replica=c('aws', 'gcp', 'azure'),
+    function(hca, replica=c('aws', 'gcp', 'azure'),
         output_format=c('summary', 'raw'), es_query, per_page=100,
-        search_after=NULL, url = 'https://dss.integration.data.humancellatlas.org/v1')
+        search_after=NULL)
 {
     replica <- match.arg(replica)
     output_format <- match.arg(output_format)
     args <- list(replica=replica, output_format=output_format,
                  per_page=per_page, search_after=search_after)
     body <- list(es_query=es_query)
-    url <- .build_url(url, .apis['postSearch'], NULL, args)
+    url <- .build_url(hca@url, .apis['postSearch'], NULL, args)
     .hca_post(url, body)
 }
 
 .getSubscriptions <-
-    function(replica=c('aws', 'gcp', 'azure'),
-        url = 'https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, replica=c('aws', 'gcp', 'azure'))
 {
     replica <- match.arg(replica)
     args <- list(replica=replica)
-    url <- .build_url(url, .apis['getSubscriptions'], NULL, args)
+    url <- .build_url(hca@url, .apis['getSubscriptions'], NULL, args)
     .hca_get(url, include_token=TRUE)
 }
 
 .putSubscription <-
-    function(replica=c('aws', 'gcp', 'azure'), attachments, callback_url,
+    function(hca, replica=c('aws', 'gcp', 'azure'), attachments, callback_url,
         encoding, es_query, form_fields, hmac_key_id, hmac_secret_key,
-        method, payload_form_field,
-        url = 'https://dss.integration.data.humancellatlas.org/v1')
+        method, payload_form_field)
 {
     replica <- match.arg(replica)
     args <- list(replica=replica)
@@ -311,27 +300,25 @@
                  encoding=encoding, es_query=es_query, form_fields=form_fields,
                  hmac_key_id=hmac_key_id, hmac_secret_key=hmac_secret_key,
                  method=method, payload_form_field=payload_form_field)
-    url <- .build_url(url, .apis['putSubscription'], NULL, args)
+    url <- .build_url(hca@url, .apis['putSubscription'], NULL, args)
     .hca_put(url, body, include_token=TRUE)
 }
 
 .deleteSubscription <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'),
-        url = 'https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'))
 {
     replica <- match.arg(replica)
     args <- list(replica=replica)
-    url <- .build_url(url, .apis['deleteSubscription'], uuid, args)
+    url <- .build_url(hca@url, .apis['deleteSubscription'], uuid, args)
     .hca_delete(url)
 }
 
 .getSubscription <-
-    function(uuid, replica=c('aws', 'gcp', 'azure'),
-        url = 'https://dss.integration.data.humancellatlas.org/v1')
+    function(hca, uuid, replica=c('aws', 'gcp', 'azure'))
 {
     replica <- match.arg(replica)
     args <- list(replica=replica)
-    url <- .build_url(url, .apis['getSubscription'], uuid, args)
+    url <- .build_url(hca@url, .apis['getSubscription'], uuid, args)
     .hca_get(url, include_token=TRUE)
 }
 
@@ -503,86 +490,86 @@
 #' @author Daniel Van Twisk
 #'
 #' @export
-setMethod("getBundlesCheckout", "character", .getBundlesCheckout)
+setMethod("getBundlesCheckout", "HumanCellAtlas", .getBundlesCheckout)
 
 #' Delete a bundle or a specific bundle version
 #'
 #' @export
-setMethod("deleteBundle", "character", .deleteBundle)
+setMethod("deleteBundle", "HumanCellAtlas", .deleteBundle)
 
 #' Retrieve a bundle given a UUID and optionally a version
 #'
 #' @export
-setMethod("getBundle", "character", .getBundle)
+setMethod("getBundle", "HumanCellAtlas", .getBundle)
 
 #' Create a bundle
 #'
 #' @export
-setMethod("putBundle", "character", .putBundle)
+setMethod("putBundle", "HumanCellAtlas", .putBundle)
 
 #' Check out a bundle to DSS-namaged or user-managed cloud object storage
 #' destination
 #'
 #' @export
-setMethod("postBundlesCheckout", "character", .postBundlesCheckout)
+setMethod("postBundlesCheckout", "HumanCellAtlas", .postBundlesCheckout)
 
 #' Create a collection
 #'
 #' @export
-setMethod("putCollection", "character", .putCollection)
+setMethod("putCollection", "HumanCellAtlas", .putCollection)
 
 #' Delete a collection
 #'
 #' @export
-setMethod("deleteCollection", "character", .deleteCollection)
+setMethod("deleteCollection", "HumanCellAtlas", .deleteCollection)
 
 #' Retrieve a collection given a UUID
 #'
 #' @export
-setMethod("getCollection", "character", .getCollection)
+setMethod("getCollection", "HumanCellAtlas", .getCollection)
 
 #' Update a collection
 #'
 #' @export
-setMethod("patchCollection", "character", .patchCollection)
+setMethod("patchCollection", "HumanCellAtlas", .patchCollection)
 
 #' Retrieve a file given a UUID and optionally a version
 #'
 #' @export
-setMethod("getFile", "character", .getFile)
+setMethod("getFile", "HumanCellAtlas", .getFile)
 
 #' Retrieve a file's metadata given an UUID and optionally a version
 #'
 #' @export
-setMethod("headFile", "character", .headFile)
+setMethod("headFile", "HumanCellAtlas", .headFile)
 
 #' Create a new version of a file
 #'
 #' @export
-setMethod("putFile", "character", .putFile)
+setMethod("putFile", "HumanCellAtlas", .putFile)
 
 #' Find bundles by searching their metadata with an Elasticsearch query
 #'
 #' @export
-setMethod("postSearch", "character", .postSearch)
+setMethod("postSearch", "HumanCellAtlas", .postSearch)
 
 #' Retrieve a user's event Subscription
 #'
 #' @export
-setMethod("getSubscriptions", "character", .getSubscriptions)
+setMethod("getSubscriptions", "HumanCellAtlas", .getSubscriptions)
 
 #' Creates an event subscription
 #'
 #' @export
-setMethod("putSubscription", "character", .putSubscription)
+setMethod("putSubscription", "HumanCellAtlas", .putSubscription)
 
 #' Delete an event subscription
 #'
 #' @export
-setMethod("deleteSubscription", "character", .deleteSubscription)
+setMethod("deleteSubscription", "HumanCellAtlas", .deleteSubscription)
 
 #' Retrieve an event subscription given a UUID
 #'
 #' @export
-setMethod("getSubscription", "character", .getSubscription)
+setMethod("getSubscription", "HumanCellAtlas", .getSubscription)
 
