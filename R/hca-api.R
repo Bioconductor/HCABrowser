@@ -119,7 +119,7 @@
 }
 
 #' @importFrom httr PATCH
-.hca_post <-
+.hca_patch <-
     function(url, body)
 {
     header <- .build_header(include_token=TRUE)
@@ -127,13 +127,21 @@
     .return_response(response)
 }
 
-#' @importFrom httr POST
+#' @importFrom httr POST headers
+#' @importFrom stringr str_remove
 .hca_post <-
     function(url, body)
 {
     header <- .build_header(include_token=FALSE)
     response <- httr::POST(url, header, body=body, encode="json")
-    .return_response(response)
+    res <- list(.return_response(response))
+    while(!is.null(link <- httr::headers(response)[['link']])) {
+        link <- str_remove(link, "<")
+        link <- str_remove(link, ">.*")
+        response <- httr::POST(link, header, body=body, encode="json")
+        res <- c(res, list(.return_response(response)))
+    }
+    res
 }
 
 #' @importFrom httr PUT
@@ -256,7 +264,7 @@
     .hca_head(url)
 }
 
-.putFile <- 
+.putFile <-
     function(hca, uuid, creator_uid, source_url, version=NULL)
 {
     replica <- match.arg(replica)

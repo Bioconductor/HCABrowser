@@ -28,6 +28,7 @@ Imports: BiocFileCache,
          jsonlite,
          readr,
          rjson,
+         stringr,
          tibble
 Collate: AllClasses.R
          AllGenerics.R
