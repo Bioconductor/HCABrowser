@@ -138,10 +138,16 @@
     while(!is.null(link <- httr::headers(response)[['link']])) {
         link <- str_remove(link, "<")
         link <- str_remove(link, ">.*")
-        response <- httr::POST(link, header, body=body, encode="json")
+        response <- .hca_post_next(link, header, body, encode)
         res <- c(res, list(.return_response(response)))
     }
     res
+}
+
+.hca_post_next <-
+    function(link, header, body, encode)
+{
+    httr::POST(link, header, body=body, encode="json")
 }
 
 #' @importFrom httr PUT

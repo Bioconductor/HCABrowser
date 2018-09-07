@@ -24,16 +24,24 @@ filters <- list(
 setMethod("supportedFilters", "missing", .supportedFilters)
 
 #' @importFrom dplyr filter
+#' @export
 filter.HumanCellAtlas <- function(query, ...)
 {
+    message("hi")
 
 }
 
 #' @importFrom dplyr select
-select. <- function(query=list(), ...)
+#' @export
+select.HumanCellAtlas <- function(query=list(), ...)
 {
     query[['_source']] <- c(query[['_source']], list(...))
     query
+}
+
+.build_es_query <- function()
+{
+    
 }
 
 
