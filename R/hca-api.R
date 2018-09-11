@@ -60,7 +60,7 @@
             dbpath <- bfrcpath(dbpath, url)
         else
             stop(
-                "\n  'bfc' contains duplicate Organism.dplyr record names",
+                "\n  'bfc' contains duplicate record names",
                     "\n      url: ", url,
                     "\n      bfccache(): ", bfccache(dbpath),
                     "\n      rname: ", txdb_name
@@ -84,7 +84,8 @@
     stop_for_status(response)
     response <- content(response, as = "text")
     if (expected_response == 'json')
-        fromJSON(response, flatten=FALSE)
+        fromJSON(response, simplifyDataFrame=FALSE, simplifyMatrix=FALSE,
+            flatten=FALSE)
     else if (expected_response == 'file')
         readr::read_tsv(text=response, sep="\t")
 }
@@ -128,26 +129,26 @@
 }
 
 #' @importFrom httr POST headers
-#' @importFrom stringr str_remove
+#' @importFrom stringr str_replace
 .hca_post <-
-    function(url, body)
+    function(url, body, first_hit = 1L)
 {
     header <- .build_header(include_token=FALSE)
-    response <- httr::POST(url, header, body=body, encode="json")
-    res <- list(.return_response(response))
-    while(!is.null(link <- httr::headers(response)[['link']])) {
-        link <- str_remove(link, "<")
-        link <- str_remove(link, ">.*")
-        response <- .hca_post_next(link, header, body, encode)
-        res <- c(res, list(.return_response(response)))
-    }
-    res
+    response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
+    res <-  .return_response(response)
+    link <- httr::headers(response)[['link']]
+    if (is.null(link))
+        link <- character(0)
+    else
+        link <- str_replace(link, '<(.*)>.*', '\\1')
+    .SearchResult(es_query = res[['es_query']], results = res[['results']],
+        total_hits = res[['total_hits']], link=link, first_hit = first_hit)
 }
 
-.hca_post_next <-
-    function(link, header, body, encode)
+.nextResults <- function(result)
 {
-    httr::POST(link, header, body=body, encode="json")
+    .hca_post(link(result), body = list(es_query=es_query(result)),
+        first_hit = first_hit(result) + length(results(result)))
 }
 
 #' @importFrom httr PUT
@@ -587,3 +588,4 @@ setMethod("deleteSubscription", "HumanCellAtlas", .deleteSubscription)
 #' @export
 setMethod("getSubscription", "HumanCellAtlas", .getSubscription)
 
+setMethod("nextResults", "SearchResult", .nextResults)

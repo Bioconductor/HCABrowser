@@ -17,4 +17,6 @@ setGeneric("putSubscription", function(hca, ...) standardGeneric("putSubscriptio
 setGeneric("deleteSubscription", function(hca, ...) standardGeneric("deleteSubscription"))
 setGeneric("getSubscription", function(hca, ...) standardGeneric("getSubscription"))
 
+setGeneric("nextResults", function(result, ...) standardGeneric("nextResults"))
+
 setGeneric("supportedFilters", function(missing, ...) standardGeneric("supportedFilters"))
