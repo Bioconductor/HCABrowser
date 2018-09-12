@@ -142,7 +142,8 @@
     else
         link <- str_replace(link, '<(.*)>.*', '\\1')
     .SearchResult(es_query = res[['es_query']], results = res[['results']],
-        total_hits = res[['total_hits']], link=link, first_hit = first_hit)
+        total_hits = res[['total_hits']], link=link, first_hit = first_hit,
+        last_hit = length(res[['results']]) + first_hit - 1L)
 }
 
 .nextResults <- function(result)

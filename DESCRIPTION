@@ -27,7 +27,6 @@ Imports: BiocFileCache,
          httr,
          jsonlite,
          readr,
-         rjson,
          stringr,
          tibble
 Collate: AllClasses.R
