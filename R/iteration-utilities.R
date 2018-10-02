@@ -23,12 +23,29 @@
 #' @importFrom stringr str_sub
 .parse_postSearch_results <- function(results)
 {
-    results <- results(results)
+    #results <- results(results)
 
-    bundle_files <- lapply(results, function(i) {
-        a <- do.call(rbind.data.frame, i[['metadata']][['manifest']][['files']])
-        a <- a[!grepl('.json$', a$name),]
-        a[order(a['name']),]
+    json_files <- lapply(seq_along(results), function(i) {
+        field_names <- names(results[[i]][["metadata"]][["files"]])
+        field_names <- field_names[!field_names %in% .ignore_fields]
+        field_names <- field_names[grepl('file_json', field_names)]
+        dfs <- lapply(field_names, function(x) {
+            .obtain_files(results[[i]], x)
+        })
+        names(dfs) <- field_names
+        dfs
+    })
+
+    json_files <- lapply(seq_along(json_files), function(i) {
+        x <- do.call(plyr::rbind.fill, json_files[[i]])
+        if (!is.null(x))
+            x[order(x['file_core.file_name']),]
+    })
+
+    bundle_files <- lapply(seq_along(results), function(i) {
+        a <- do.call(rbind.data.frame, results[[i]][['metadata']][['manifest']][['files']])
+        a <- a[a$name %in% json_files[[i]]$file_core.file_name,]
+        a[order(a$name),]
     })
 
     ## aquire bundle ids
@@ -51,18 +68,21 @@
     json_bundles <- lapply(seq_along(results), function(i) {
         field_names <- names(results[[i]][["metadata"]][["files"]])
         field_names <- field_names[!field_names %in% .ignore_fields]
+        field_names <- field_names[!grepl('file_json', field_names)]
         dfs <- lapply(field_names, function(x) {
-            .obtain_content(results[[i]], x, length(bundle_files[[i]][['name']]))
+            .obtain_content(results[[i]], x, nrow(json_files[[i]]))
         })
         names(dfs) <- field_names
         dfs
     })
 
-    browser()
+    json_bundles <- lapply(seq_along(json_bundles), function(i) {
+        do.call(cbind, json_bundles[[i]])
+    })
 
     all_files <- lapply(seq_along(bundle_files), function(i) {
         do.call(cbind.data.frame, c(list(bundle_files[[i]], bundle_fqids[[i]],
-            bundle_urls[[i]]), json_bundles[[i]]))
+            bundle_urls[[i]]), json_files[[i]], json_bundles[[i]]))
     })
     
     all_files <- do.call(plyr::rbind.fill, all_files)
@@ -70,19 +90,21 @@
     all_files
 }
 
+.obtain_files <- function(results, field_name)
+{
+#    browser()
+    content_dir <- results[["metadata"]][["files"]][[field_name]]
+    files <- lapply(seq_along(content_dir), function(i) {
+        data.frame(as.list(unlist(content_dir[[i]])))
+    })
+    x <- do.call(plyr::rbind.fill, files)
+    x <- x[!duplicated(x),]
+}
+
 .obtain_content <- function(results, field_name, n)
 {
-    sub <- .field_sub_directory[[field_name]]
-    if (field_name %in% 'file_json') {
-        content_dir <- results[["metadata"]][["files"]][[field_name]][[sub]]
-        content <- lapply(seq_along(content_dir), function(i) {
-            data.frame(as.list(unlist(content_dir[[i]][['content']])))
-        })
-        x <- do.call(plyr::rbind.fill, content)
-        x <- x[!duplicated(x),]
-        x[order(x['file_core.file_name']),]
-    }
-    else if (field_name %in% c('project_json')) {
+#    sub <- .field_sub_directory[[field_name]]
+#    if (field_name %in% c('project_json')) {
         x <- results[["metadata"]][["files"]][[field_name]]
         x <- unlist(x)
         nam <- paste0(basename(x['describedBy']), '.', names(x))
@@ -90,16 +112,16 @@
         x <- as.data.frame(as.list(x))
         x <- x[rep(seq_len(nrow(x)), n), ]
         x
-    }
-    else {
-        content_dir <- results[["metadata"]][["files"]][[field_name]][[sub]]
-        res <- lapply(content_dir, function(x) {
-            x <- unlist(x)
-            nam <- paste0(basename(x['content.describedBy']), '.', names(x))
-            names(x) <- nam
-            x
-        })
-        res <- as.data.frame(as.list(unlist(res)))
-        res[rep(seq_len(nrow(res)), n), ]
-    }
+#    }
+#    else {
+#        content_dir <- results[["metadata"]][["files"]][[field_name]][[sub]]
+#        res <- lapply(content_dir, function(x) {
+#            x <- unlist(x)
+#            nam <- paste0(basename(x['content.describedBy']), '.', names(x))
+#            names(x) <- nam
+#            x
+#        })
+#        res <- as.data.frame(as.list(unlist(res)))
+#        res[rep(seq_len(nrow(res)), n), ]
+#    }
 }

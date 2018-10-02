@@ -87,7 +87,7 @@
         fromJSON(response, simplifyDataFrame=FALSE, simplifyMatrix=FALSE,
             flatten=FALSE)
     else if (expected_response == 'file')
-        readr::read_tsv(text=response, sep="\t")
+        readr::read_tsv(file=response)#, sep="\t")
 }
 
 #' @importFrom httr DELETE
@@ -141,7 +141,8 @@
         link <- character(0)
     else
         link <- str_replace(link, '<(.*)>.*', '\\1')
-    .SearchResult(es_query = res[['es_query']], results = res[['results']],
+    results <- .parse_postSearch_results(res[['results']])
+    .SearchResult(es_query = res[['es_query']], results = results,
         total_hits = res[['total_hits']], link=link, first_hit = first_hit,
         last_hit = length(res[['results']]) + first_hit - 1L)
 }

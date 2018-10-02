@@ -23,11 +23,13 @@ Description: Search, browse, reference, and download resources from
 Depends: R (>= 3.5.0),
          dplyr
 Imports: BiocFileCache,
+         SummarizedExperiment,
          googleAuthR,
          httr,
          jsonlite,
          plyr,
          readr,
+         rlang,
          stringr,
          tibble
 Collate: AllClasses.R
