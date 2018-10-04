@@ -43,8 +43,9 @@
     })
 
     bundle_files <- lapply(seq_along(results), function(i) {
+        #browser()
         a <- do.call(rbind.data.frame, results[[i]][['metadata']][['manifest']][['files']])
-        a <- a[a$name %in% json_files[[i]]$file_core.file_name,]
+        a <- a[a$name %in% json_files[[i]]$file_core.file_name | grepl('file', a$name),]
         a[order(a$name),]
     })
 
@@ -79,6 +80,8 @@
     json_bundles <- lapply(seq_along(json_bundles), function(i) {
         do.call(cbind, json_bundles[[i]])
     })
+
+    browser()
 
     all_files <- lapply(seq_along(bundle_files), function(i) {
         do.call(cbind.data.frame, c(list(bundle_files[[i]], bundle_fqids[[i]],

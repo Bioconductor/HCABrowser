@@ -57,44 +57,48 @@ filter.HumanCellAtlas <- function(hca, ...)
     if(q_head %in% names(.range_ops))
         range <- .range_ops[[q_head]]
 
-    query <- hca@es_query$query
+    filter <- hca@es_query@query@bool@filter
+    must_not <- hca@es_query@query@bool@must_not
 
-    if(is.null(hca@es_query$query))
-        #hca@es_query
-        query <- list(query=list(bool=list(must=list())))
-    else
-        query <- hca@esquery
-
-    q_tail_1 <- .filters[[q_tail_1]]
+#    q_tail_1 <- .filters[[q_tail_1]]
 
     if(is.null(range)) {
-        a <- list(q_tail_2)
-        names(a) <- q_tail_1
-        a <- list(match = a)
-        #hca@es_query$query$bool$must$match <-
-        c(hca@es_query$query$bool$must$match, a)
+        entries <- filter@entries
+        term <- .Term(field=q_tail_1, operator=q_head, value=q_tail_2)
+#        a <- list(q_tail_2)
+#        names(a) <- q_tail_1
+#        a <- list(match = a)
+        entries <- c(entries, term)
+        hca@es_query@query@bool@filter@entries <- entries
     }
     else {
-        a <- list(q_tail_2)
-        names(a) <- range
-        a <- list(a)
-        names(a) <- q_tail_1
+        entries <- filter@entries
+        range <- .Range(field=q_tail_1, operator=q_head, value=q_tail_2)
+#        a <- list(q_tail_2)
+#        names(a) <- range
+#        a <- list(a)
+#        names(a) <- q_tail_1
+        entries <- c(entries, range)
         #hca@es_query$query$bool$must$range <-
-        query <- c(query$es_query$query$bool$must$range, a)
+        hca@es_query@query@bool@filter@entries <- entries
     }
-    hca@es_query <- list('bonin')
+
+    hca <- select(hca, q_tail_1)
+
+    hca
 }
 
 #' @importFrom dplyr select
 #' @export
-select.HumanCellAtlas <- function(hca, ...)
+select.HumanCellAtlas <- function(hca, sources)
 {
-    .dots <- quo(...)
+    #sources <- list(...)
 
-    
-
-    query[['_source']] <- c(query[['_source']], list(...))
-    query
+    sources <- as.character(sources)
+    hca@es_query@es_source@entries <- c(hca@es_query@es_source@entries, sources)
+    #query[['_source']] <- c(query[['_source']], list(...))
+    #query
+    hca
 }
 
 .build_es_query <- function()

@@ -1,25 +1,22 @@
 
-.EsElement <- setClass("EsElement",
-    contains = "VIRTUAL"
-)
-
 .Term <- setClass("Term",
-    contains = "EsElement",
     slots = c(
-        entries = "list"
+        field = "character",
+        operator = "character",
+        value = "character"
     )
 )
 
 .Range <- setClass("Range",
-    contains = "EsElement",
     slots = c(
-        entries = "list"
+        field = "character",
+        operator = "character",
+        value = "character"
     )
 )
 
 ## Score agnostic
 .Filter <- setClass("Filter",
-    contains = "EsElement",
     slots = c(
         entries = "list"
     )
@@ -27,45 +24,103 @@
 
 ## Score agnostic
 .MustNot <- setClass("MustNot",
-    contains = "EsElement",
     slots = c(
         entries = "list"
     )
 )
 
 .Bool <- setClass("Bool",
-    contains = "EsElement",
     slots = c(
-        must = "Filter",
+        filter = "Filter",
         must_not = "MustNot"
     )
 )
 
 .Query <- setClass("Query",
-    contains = "EsElement",
     slots = c(
         bool = "Bool"
     )
 )
 
 .EsSource <- setClass("EsSource",
-    contains = "EsElement",
     slots = c(
         entries = "character"
     )
 )
 
 .EsQuery <- setClass("EsQuery",
-    contains = "EsElement",
     slots = c(
         query = 'Query',
         es_source = 'EsSource'
     )
 )
 
+setMethod('show', 'EsQuery', function(object) {
+    filter <- object@query@bool@filter@entries
+    must_not <- object@query@bool@must_not@entries
+    es_source <- object@es_source@entries
+    cat('EsQuery:\n',
+        '  Query:\n',
+        '    Bool:\n')
+    if (length(filter) > 0) {
+        cat('      Filter:\n')
+        for (i in filter)
+            cat('        ', class(i), ':', i@field, i@operator, i@value, '\n')
+    }
+    if (length(must_not) > 0) {
+        cat('      Must Not:\n')
+        for (i in filter)
+            cat('        ', class(i), ':', i@field, i@operator, i@value, '\n')
+    }
+    if (length(es_source) > 0) {
+        cat('  Source:\n')
+        for (i in es_source)
+            cat('    ', i, '\n')
+    }
+})
+
 .init_EsQuery <- function()
 {
-    
+}
+
+.parse_term_range <- function(x)
+{
+    if(is(x, "Term")) {
+        a <- list(x@value)
+        names(a) <- x@field
+        list(term = a)
+    }
+    else {
+        a <- list(x@value)
+        names(a) <- .range_ops[[x@operator]]
+        a <- list(a)
+        names(a) <- x@field
+        list(range = a)
+    }
+}
+
+.convert_to_query <- function(es)
+{
+    filter <- es@query@bool@filter@entries
+    must_not <- es@query@bool@must_not@entries
+    es_source <- es@es_source
+
+    filter <- lapply(filter, .parse_term_range)
+    must_not <- lapply(must_not, .parse_term_range)
+
+    es_query <-list(query = list(bool = list()))
+    if (length(filter) > 0)
+        es_query$query$bool$filter <- filter
+    if (length(must_not) > 0)
+        es_query$query$bool$must_not <- must_not
+    if (length(filter) == 0 && length(must_not) == 0)
+        es_query <- list(query = NULL)
+
+    es_source <- as.list(es_source@entries)
+    if (length(es_source) > 0)
+        es_query@es_source <- es_source
+
+    es_query
 }
 
 .SearchResult <- setClass("SearchResult",
@@ -131,23 +186,11 @@ setMethod('.updateEsQuery', 'HumanCellAtlas', .update_es_query)
 setMethod('resetEsQuery', 'HumanCellAtlas', .reset_es_query)
 
 
-#.show_es_query <- function(object) {
-#    cat(
-#        '  es_query:\n',
-#        '    filter: ', object@es_query_filter, '\n',
-#        '    select: ', object@es_query_select, '\n',
-#    )
-#}
-
 .show_SearchResult <- function(object)
 {
     cat('class: ', class(object), "\n", 
-#        '  es_query:\n',
-#        '    filter: ', object@es_query_filter, '\n',
-#        '    select: ', object@es_query_select, '\n',
         "  bundle ", first_hit(object), " - ", last_hit(object), " of ",
             total_hits(object), "\n",
-        #"  results: ", length(results(object)), "\n",
         "  link: ", length(link(object))>0, "\n",
         sep = ''
     )
