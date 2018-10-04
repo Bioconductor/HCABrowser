@@ -43,10 +43,20 @@
     })
 
     bundle_files <- lapply(seq_along(results), function(i) {
-        #browser()
         a <- do.call(rbind.data.frame, results[[i]][['metadata']][['manifest']][['files']])
-        a <- a[a$name %in% json_files[[i]]$file_core.file_name | grepl('file', a$name),]
+        a <- a[a$name %in% json_files[[i]]$file_core.file_name,]
         a[order(a$name),]
+    })
+
+    bundle_files <- lapply(seq_along(json_files), function(i) {
+        #if((offset <- nrow(json_files[[i]]) - nrow(bundle_files[[i]])) > 0) {
+        offset <- nrow(json_files[[i]]) - nrow(bundle_files[[i]])
+            dd <- as.data.frame(matrix(NA, offset, ncol(bundle_files[[i]])))
+            colnames(dd) <- colnames(bundle_files[[i]])
+            rbind(bundle_files[[i]], dd)
+        #}
+        #else
+        #    bundle_files[[i]]
     })
 
     ## aquire bundle ids
@@ -81,8 +91,6 @@
         do.call(cbind, json_bundles[[i]])
     })
 
-    browser()
-
     all_files <- lapply(seq_along(bundle_files), function(i) {
         do.call(cbind.data.frame, c(list(bundle_files[[i]], bundle_fqids[[i]],
             bundle_urls[[i]]), json_files[[i]], json_bundles[[i]]))
@@ -110,8 +118,8 @@
 #    if (field_name %in% c('project_json')) {
         x <- results[["metadata"]][["files"]][[field_name]]
         x <- unlist(x)
-        nam <- paste0(basename(x['describedBy']), '.', names(x))
-        names(x) <- nam
+#        nam <- paste0(basename(x['describedBy']), '.', names(x))
+#        names(x) <- nam
         x <- as.data.frame(as.list(x))
         x <- x[rep(seq_len(nrow(x)), n), ]
         x

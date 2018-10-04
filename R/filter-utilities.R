@@ -1,5 +1,5 @@
 .filters <- list(
-    organ = 'files.biomaterial_json.biomaterials.content.organ.text',
+    organ = 'specimen_from_organism_json.organ.text',
     organ_part = 'files.biomaterial_json.biomaterials.content.organ_part.text',
     genus_species = 'files.biomaterial_json.biomaterials.content.genus_species', # NOT WORKING
     organism_age = 'files.biomaterial_json.biomaterials',
@@ -85,7 +85,9 @@ filter.HumanCellAtlas <- function(hca, ...)
 
     hca <- select(hca, q_tail_1)
 
-    hca
+    postSearch(hca, 'aws', 'raw', per_page=10)
+
+    #hca
 }
 
 #' @importFrom dplyr select
@@ -98,7 +100,8 @@ select.HumanCellAtlas <- function(hca, sources)
     hca@es_query@es_source@entries <- c(hca@es_query@es_source@entries, sources)
     #query[['_source']] <- c(query[['_source']], list(...))
     #query
-    hca
+    #hca
+    postSearch(hca, 'aws', 'raw', per_page=10)
 }
 
 .build_es_query <- function()

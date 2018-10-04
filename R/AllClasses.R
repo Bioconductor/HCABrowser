@@ -79,8 +79,10 @@ setMethod('show', 'EsQuery', function(object) {
     }
 })
 
-.init_EsQuery <- function()
+.init_EsSource <- function(hca)
 {
+    #select(hca, c('manifest', 'file_core.))
+    hca
 }
 
 .parse_term_range <- function(x)
@@ -118,7 +120,7 @@ setMethod('show', 'EsQuery', function(object) {
 
     es_source <- as.list(es_source@entries)
     if (length(es_source) > 0)
-        es_query@es_source <- es_source
+        es_query$"_source" <- es_source
 
     es_query
 }
@@ -128,7 +130,6 @@ setMethod('show', 'EsQuery', function(object) {
         first_hit = 'integer',
         last_hit = 'integer',
         total_hits = 'integer',
-        es_query = 'list',
         results = 'data.frame',
         link = 'character'
     )
@@ -148,9 +149,12 @@ HumanCellAtlas <-
     function(url='https://dss.integration.data.humancellatlas.org/v1')
 {
     hca <- .HumanCellAtlas(url=url)
-    hca@results <- postSearch(hca, 'aws', 'raw', es_query=list(query=NULL), per_page=10)
-    hca
+    hca <- .init_EsSource(hca)
+    es_query <- .convert_to_query(hca@es_query)
+    postSearch(hca, 'aws', 'raw', per_page=10)
 }
+
+.show_HumanCellAtlas <- function(object)
 
 .first_hit <- function(object) object@first_hit
 .last_hit <- function(object) object@last_hit

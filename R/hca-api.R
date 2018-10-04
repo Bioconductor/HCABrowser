@@ -133,6 +133,7 @@
 .hca_post <-
     function(url, body, first_hit = 1L)
 {
+#    browser()
     header <- .build_header(include_token=FALSE)
     response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
     res <-  .return_response(response)
@@ -142,7 +143,7 @@
     else
         link <- str_replace(link, '<(.*)>.*', '\\1')
     results <- .parse_postSearch_results(res[['results']])
-    .SearchResult(es_query = res[['es_query']], results = results,
+    .SearchResult(results = results,
         total_hits = res[['total_hits']], link=link, first_hit = first_hit,
         last_hit = length(res[['results']]) + first_hit - 1L)
 }
@@ -151,6 +152,13 @@
 {
     .hca_post(link(result), body = list(es_query=es_query(result)),
         first_hit = first_hit(result) + length(results(result)))
+}
+
+.nextResults_HumanCellAtlas <- function(result)
+{
+    sr <- result@results
+    .hca_post(link(sr), body = list(es_query=.convert_to_query(result@es_query)),
+        first_hit = first_hit(sr) + length(results(sr)))
 }
 
 #' @importFrom httr PUT
@@ -285,16 +293,19 @@
 
 .postSearch <-
     function(hca, replica=c('aws', 'gcp', 'azure'),
-        output_format=c('summary', 'raw'), es_query, per_page=100,
+        output_format=c('summary', 'raw'), es_query=NULL, per_page=100,
         search_after=NULL)
 {
     replica <- match.arg(replica)
     output_format <- match.arg(output_format)
     args <- list(replica=replica, output_format=output_format,
                  per_page=per_page, search_after=search_after)
+    if (is.null(es_query))
+        es_query <- .convert_to_query(hca@es_query)
     body <- list(es_query=es_query)
     url <- .build_url(hca@url, .apis['postSearch'], NULL, args)
-    .hca_post(url, body)
+    hca@results <- .hca_post(url, body)
+    hca
 }
 
 .getSubscriptions <-
@@ -590,4 +601,4 @@ setMethod("deleteSubscription", "HumanCellAtlas", .deleteSubscription)
 #' @export
 setMethod("getSubscription", "HumanCellAtlas", .getSubscription)
 
-setMethod("nextResults", "SearchResult", .nextResults)
+setMethod("nextResults", "HumanCellAtlas", .nextResults_HumanCellAtlas)
