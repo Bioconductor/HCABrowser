@@ -56,9 +56,15 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     force(sep)
     function(e1, e2) {
-        browser()
         field <- as.character(substitute(e1))
-        field
+        value <- as.character(substitute(e2))
+
+        #
+        # Translate field to decide whether Range or Term
+        #
+
+        leaf <- .Term(field = field, operator = sep, value = value)
+        .Filter(entries = list(leaf))
     }
 }
 
@@ -82,30 +88,33 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     force(sep)
     function(e1, e2) {
-        field <- as.character(substitute(e1))
+        list(e1, e2)
     }
 }
 
-.hca_filter_loop <- function(hca, expr)
+.hca_filter_loop <- function(li, expr)
 {
-    browser()
     expr <- lazyeval::lazy_(expr, env = environment())
     res <- lazyeval::lazy_eval(expr, data = .LOG_OP_REG)
-    res
+    c(li, res)
 }
 
 #' @importFrom dplyr filter
 #' @importFrom rlang quo lang_head lang_tail
 #' @export
-.new.filter.HumanCellAtlas <- function(hca, ...)
+filter.HumanCellAtlas <- function(hca, ...)
 {
     .dots <- quos(...)
     .dots <- lapply(.dots, rlang::quo_get_expr)
-    re <- Reduce(.hca_filter_loop, .dots, init = hca)
-    re
+    res <- Reduce(.hca_filter_loop, .dots, init = list())
+    bool <- .Bool(entries = res)
+    query <- .Query(bool = bool)
+    es_query <- .EsQuery(query = query)
+    hca@es_query <- es_query 
+    postSearch(hca, 'aws', 'raw', per_page = 10)
 }
 
-filter.HumanCellAtlas <- function(hca, ...)
+.old.filter.HumanCellAtlas <- function(hca, ...)
 {
     .dots <- quo(...)
     
@@ -145,24 +154,29 @@ filter.HumanCellAtlas <- function(hca, ...)
 
     hca <- select(hca, q_tail_1)
 
-    hca
+    #hca
 
     #hca
 }
 
 #' @importFrom dplyr select
 #' @export
-select.HumanCellAtlas <- function(hca, sources)
+select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
 {
     #sources <- list(...)
 
-    sources <- as.character(sources)
+    sources <- quos(...)
+    sources <- lapply(sources, rlang::quo_get_expr)
+    sources <- lapply(sources, as.character)
+    sources <- unlist(sources)
+    sources <- sources[!sources %in% 'c']
 
     hca@es_query@es_source@entries <- c(hca@es_query@es_source@entries, sources)
-    #query[['_source']] <- c(query[['_source']], list(...))
-    #query
-    #hca
-    postSearch(hca, 'aws', 'raw', per_page=10)
+    
+    if (.search)
+        postSearch(hca, 'aws', 'raw', per_page = 10)
+    else
+        hca
 }
 
 .convert_names_to_filters <- function(sources)

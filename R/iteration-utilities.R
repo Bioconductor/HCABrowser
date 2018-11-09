@@ -116,7 +116,6 @@
 
 .obtain_files <- function(results, field_name)
 {
-#    browser()
     content_dir <- results[["metadata"]][["files"]][[field_name]]
     files <- lapply(seq_along(content_dir), function(i) {
         data.frame(as.list(unlist(content_dir[[i]])))

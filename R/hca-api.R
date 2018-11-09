@@ -129,11 +129,13 @@
 }
 
 #' @importFrom httr POST headers
+#' @importFrom rjson toJSON
 #' @importFrom stringr str_replace
 .hca_post <-
     function(url, body, first_hit = 1L)
 {
     header <- .build_header(include_token=FALSE)
+    body <- rjson::toJSON(body)
     response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
     res <-  .return_response(response)
     link <- httr::headers(response)[['link']]

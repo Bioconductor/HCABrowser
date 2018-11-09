@@ -45,8 +45,7 @@
 
 .Bool <- setClass("Bool",
     slots = c(
-        filter = "Filter",
-        must_not = "MustNot"
+        entries = "list"
     )
 )
 
@@ -69,29 +68,29 @@
     )
 )
 
-setMethod('show', 'EsQuery', function(object) {
-    filter <- object@query@bool@filter@entries
-    must_not <- object@query@bool@must_not@entries
-    es_source <- object@es_source@entries
-    cat('EsQuery:\n',
-        ' Query:\n',
-        '   Bool:\n')
-    if (length(filter) > 0) {
-        cat('      Filter:\n')
-        for (i in filter)
-            cat(paste0('        ', class(i), ': ', i@field, ' ', i@operator, ' ', i@value, '\n'))
-    }
-    if (length(must_not) > 0) {
-        cat('      Must Not:\n')
-        for (i in filter)
-            cat('        ', class(i), ':', i@field, i@operator, i@value, '\n')
-    }
-    if (length(es_source) > 0) {
-        cat('  Columns selected:\n')
-        for (i in es_source)
-            cat('   ', i, '\n')
-    }
-})
+#setMethod('show', 'EsQuery', function(object) {
+#    filter <- object@query@bool@filter@entries
+#    must_not <- object@query@bool@must_not@entries
+#    es_source <- object@es_source@entries
+#    cat('EsQuery:\n',
+#        ' Query:\n',
+#        '   Bool:\n')
+#    if (length(filter) > 0) {
+#        cat('      Filter:\n')
+#        for (i in filter)
+#            cat(paste0('        ', class(i), ': ', i@field, ' ', i@operator, ' ', i@value, '\n'))
+#    }
+#    if (length(must_not) > 0) {
+#        cat('      Must Not:\n')
+#        for (i in filter)
+#            cat('        ', class(i), ':', i@field, i@operator, i@value, '\n')
+#    }
+#    if (length(es_source) > 0) {
+#        cat('  Columns selected:\n')
+#        for (i in es_source)
+#            cat('   ', i, '\n')
+#    }
+#})
 
 .init_HumanCellAtlas <- function(hca)
 {
@@ -120,19 +119,19 @@ setMethod('show', 'EsQuery', function(object) {
 
 .convert_to_query <- function(es)
 {
-    filter <- es@query@bool@filter@entries
-    must_not <- es@query@bool@must_not@entries
+    bool <- es@query@bool@entries
     es_source <- es@es_source
 
-    filter <- lapply(filter, .parse_term_range)
-    must_not <- lapply(must_not, .parse_term_range)
-
     es_query <-list(query = list(bool = list()))
-    if (length(filter) > 0)
-        es_query$query$bool$filter <- filter
-    if (length(must_not) > 0)
-        es_query$query$bool$must_not <- must_not
-    if (length(filter) == 0 && length(must_not) == 0)
+    if(length(bool) > 0) {
+        names <- lapply(bool, class)
+        bool <- lapply(bool, function(x) {
+            lapply(x@entries, .parse_term_range)
+        })
+        names(bool) <- tolower(names)
+        es_query$query$bool <- bool
+    }
+    else
         es_query <- list(query = NULL)
 
     es_source <- .convert_names_to_filters(es_source@entries)
@@ -229,4 +228,4 @@ setMethod('show', 'SearchResult', .show_SearchResult)
     show(object@results)
 }
 
-setMethod('show', 'HumanCellAtlas', .show_HumanCellAtlas)
+#setMethod('show', 'HumanCellAtlas', .show_HumanCellAtlas)
