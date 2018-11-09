@@ -133,7 +133,6 @@
 .hca_post <-
     function(url, body, first_hit = 1L)
 {
-#    browser()
     header <- .build_header(include_token=FALSE)
     response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
     res <-  .return_response(response)
@@ -148,17 +147,13 @@
         last_hit = length(res[['results']]) + first_hit - 1L)
 }
 
-.nextResults <- function(result)
-{
-    .hca_post(link(result), body = list(es_query=es_query(result)),
-        first_hit = first_hit(result) + length(results(result)))
-}
-
 .nextResults_HumanCellAtlas <- function(result)
 {
     sr <- result@results
-    .hca_post(link(sr), body = list(es_query=.convert_to_query(result@es_query)),
-        first_hit = first_hit(sr) + length(results(sr)))
+    result@results <- .hca_post(link(sr),
+        body = list(es_query=.convert_to_query(result@es_query)),
+        first_hit = last_hit(sr) + 1L)
+    result
 }
 
 #' @importFrom httr PUT

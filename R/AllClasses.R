@@ -7,6 +7,14 @@
     )
 )
 
+.Terms <- setClass("Terms",
+    slots = c(
+        field = "character",
+        operator = "character",
+        value = "character"
+    )
+)
+
 .Range <- setClass("Range",
     slots = c(
         field = "character",
@@ -17,6 +25,12 @@
 
 ## Score agnostic
 .Filter <- setClass("Filter",
+    slots = c(
+        entries = "list"
+    )
+)
+
+.TermsSet <- setClass("TermsSet",
     slots = c(
         entries = "list"
     )
@@ -60,12 +74,12 @@ setMethod('show', 'EsQuery', function(object) {
     must_not <- object@query@bool@must_not@entries
     es_source <- object@es_source@entries
     cat('EsQuery:\n',
-        '  Query:\n',
-        '    Bool:\n')
+        ' Query:\n',
+        '   Bool:\n')
     if (length(filter) > 0) {
         cat('      Filter:\n')
         for (i in filter)
-            cat('        ', class(i), ':', i@field, i@operator, i@value, '\n')
+            cat(paste0('        ', class(i), ': ', i@field, ' ', i@operator, ' ', i@value, '\n'))
     }
     if (length(must_not) > 0) {
         cat('      Must Not:\n')
@@ -73,30 +87,33 @@ setMethod('show', 'EsQuery', function(object) {
             cat('        ', class(i), ':', i@field, i@operator, i@value, '\n')
     }
     if (length(es_source) > 0) {
-        cat('  Source:\n')
+        cat('  Columns selected:\n')
         for (i in es_source)
-            cat('    ', i, '\n')
+            cat('   ', i, '\n')
     }
 })
 
-.init_EsSource <- function(hca)
+.init_HumanCellAtlas <- function(hca)
 {
-    #select(hca, c('manifest', 'file_core.))
-    hca
+    select(hca,
+           c("manifest.files.name", "manifest.files.uuid",
+             "manifest.files.content.type", "manifest.files.size")
+    )
+    #postSearch(hca, 'aws', 'raw', per_page=10)
 }
 
 .parse_term_range <- function(x)
 {
     if(is(x, "Term")) {
         a <- list(x@value)
-        names(a) <- x@field
+        names(a) <- .convert_names_to_filters(x@field)
         list(term = a)
     }
     else {
         a <- list(x@value)
         names(a) <- .range_ops[[x@operator]]
         a <- list(a)
-        names(a) <- x@field
+        names(a) <- .convert_names_to_filters(x@field)
         list(range = a)
     }
 }
@@ -118,7 +135,8 @@ setMethod('show', 'EsQuery', function(object) {
     if (length(filter) == 0 && length(must_not) == 0)
         es_query <- list(query = NULL)
 
-    es_source <- as.list(es_source@entries)
+    es_source <- .convert_names_to_filters(es_source@entries)
+    es_source <- as.list(es_source)
     if (length(es_source) > 0)
         es_query$"_source" <- es_source
 
@@ -141,7 +159,8 @@ setMethod('show', 'EsQuery', function(object) {
     slots = c(
         url = "character",
         es_query = "EsQuery",
-        results = "SearchResult"
+        results = "SearchResult",
+        expression = "call"
     )
 )
 
@@ -149,12 +168,10 @@ HumanCellAtlas <-
     function(url='https://dss.integration.data.humancellatlas.org/v1')
 {
     hca <- .HumanCellAtlas(url=url)
-    hca <- .init_EsSource(hca)
-    es_query <- .convert_to_query(hca@es_query)
-    postSearch(hca, 'aws', 'raw', per_page=10)
+    .init_HumanCellAtlas(hca)
 }
 
-.show_HumanCellAtlas <- function(object)
+#.show_HumanCellAtlas <- function(object)
 
 .first_hit <- function(object) object@first_hit
 .last_hit <- function(object) object@last_hit
@@ -170,7 +187,9 @@ setGeneric('es_query', function(object, ...) standardGeneric('es_query'))
 setGeneric('results', function(object, ...) standardGeneric('results'))
 setGeneric('link', function(object, ...) standardGeneric('link'))
 
-setMethod('results', 'HumanCellAtlas', .results)
+setMethod('results', 'HumanCellAtlas', function(object) {
+    object@results@results
+})
 
 setMethod('first_hit', 'SearchResult', .first_hit)
 setMethod('last_hit', 'SearchResult', .last_hit)
@@ -201,3 +220,13 @@ setMethod('resetEsQuery', 'HumanCellAtlas', .reset_es_query)
 }
 
 setMethod('show', 'SearchResult', .show_SearchResult)
+
+.show_HumanCellAtlas <- function(object)
+{
+    cat('Using hca-dcp at:\n  ', object@url, '\n\n')
+    show(object@es_query)
+    cat('\n')
+    show(object@results)
+}
+
+setMethod('show', 'HumanCellAtlas', .show_HumanCellAtlas)

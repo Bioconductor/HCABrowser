@@ -43,20 +43,23 @@
     })
 
     bundle_files <- lapply(seq_along(results), function(i) {
+        if (is.null(results[[i]][['metadata']][['manifest']]))
+            return(NULL)
         a <- do.call(rbind.data.frame, results[[i]][['metadata']][['manifest']][['files']])
-        a <- a[a$name %in% json_files[[i]]$file_core.file_name,]
+        if (!is.null(json_files[[i]]))
+            a <- a[a$name %in% json_files[[i]]$file_core.file_name,]
         a[order(a$name),]
     })
 
     bundle_files <- lapply(seq_along(json_files), function(i) {
-        #if((offset <- nrow(json_files[[i]]) - nrow(bundle_files[[i]])) > 0) {
+        if (is.null(bundle_files[[i]]))
+            return(NULL)
         offset <- nrow(json_files[[i]]) - nrow(bundle_files[[i]])
-            dd <- as.data.frame(matrix(NA, offset, ncol(bundle_files[[i]])))
-            colnames(dd) <- colnames(bundle_files[[i]])
-            rbind(bundle_files[[i]], dd)
-        #}
-        #else
-        #    bundle_files[[i]]
+        if (length(offset) == 0)
+            offset <- 0
+        dd <- as.data.frame(matrix(NA, offset, ncol(bundle_files[[i]])))
+        colnames(dd) <- colnames(bundle_files[[i]])
+        rbind(bundle_files[[i]], dd)
     })
 
     ## aquire bundle ids
@@ -77,17 +80,24 @@
 
     ## acquire rest of json schema information for bundles
     json_bundles <- lapply(seq_along(results), function(i) {
+        n <- NULL
+        if(!is.null(bundle_files[[i]]))
+            n <- nrow(bundle_files[[i]])
+        if (is.null(n))
+            return(NULL)
         field_names <- names(results[[i]][["metadata"]][["files"]])
         field_names <- field_names[!field_names %in% .ignore_fields]
         field_names <- field_names[!grepl('file_json', field_names)]
         dfs <- lapply(field_names, function(x) {
-            .obtain_content(results[[i]], x, nrow(json_files[[i]]))
+            .obtain_content(results[[i]], x, n)
         })
         names(dfs) <- field_names
         dfs
     })
 
     json_bundles <- lapply(seq_along(json_bundles), function(i) {
+        if (is.null(json_bundles[[i]]))
+            return(NULL)
         do.call(cbind, json_bundles[[i]])
     })
 
@@ -97,6 +107,9 @@
     })
     
     all_files <- do.call(plyr::rbind.fill, all_files)
+
+    if (is.null(all_files))
+        all_files <- data.frame()
 
     all_files
 }
@@ -120,8 +133,8 @@
         x <- unlist(x)
 #        nam <- paste0(basename(x['describedBy']), '.', names(x))
 #        names(x) <- nam
-        x <- as.data.frame(as.list(x))
-        x <- x[rep(seq_len(nrow(x)), n), ]
+        x <- as.data.frame(as.list(x), stringsAsFactors=FALSE)
+        x <- x[rep(seq_len(nrow(x)), n), , drop=FALSE]
         x
 #    }
 #    else {
