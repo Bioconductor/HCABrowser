@@ -26,6 +26,8 @@
 .filters <- as.character(.filters_list)
 names(.filters) <- names(.filters_list)
 
+.select_values <<- c()
+
 .range_ops = list(
     '<' = "lt",
     '<=' = "lte",
@@ -62,6 +64,8 @@ setMethod("supportedFilters", "missing", .supportedFilters)
         #
         # Translate field to decide whether Range or Term
         #
+
+        .select_values <<- c(.select_values, field)
 
         leaf <- .Term(field = field, operator = sep, value = value)
         .Filter(entries = list(leaf))
@@ -107,11 +111,17 @@ filter.HumanCellAtlas <- function(hca, ...)
     .dots <- quos(...)
     .dots <- lapply(.dots, rlang::quo_get_expr)
     res <- Reduce(.hca_filter_loop, .dots, init = list())
+
+    hca_bool <- hca@es_query@query@bool@entries
+    hca_source <- hca@es_query@es_source@entries
+
+    bool <- c(hca_bool, res)
     bool <- .Bool(entries = res)
-    query <- .Query(bool = bool)
-    es_query <- .EsQuery(query = query)
-    hca@es_query <- es_query 
-    postSearch(hca, 'aws', 'raw', per_page = 10)
+#    query <- .Query(bool = bool)
+#    es_query <- .EsQuery(query = query)
+    hca@es_query@query@bool <- bool
+    
+    select(hca)
 }
 
 .old.filter.HumanCellAtlas <- function(hca, ...)
@@ -170,9 +180,15 @@ select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
     sources <- lapply(sources, as.character)
     sources <- unlist(sources)
     sources <- sources[!sources %in% 'c']
+    if (length(.select_values) > 0) {
+        sources <- c(sources, .select_values)
+        .select_values <<- c()
+    }
+    sources <- c(hca@es_query@es_source@entries, sources)
+    sources <- unique(sources)
 
-    hca@es_query@es_source@entries <- c(hca@es_query@es_source@entries, sources)
-    
+    hca@es_query@es_source@entries <- sources
+
     if (.search)
         postSearch(hca, 'aws', 'raw', per_page = 10)
     else

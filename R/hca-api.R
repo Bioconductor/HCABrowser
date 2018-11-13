@@ -135,8 +135,12 @@
     function(url, body, first_hit = 1L)
 {
     header <- .build_header(include_token=FALSE)
-    body <- rjson::toJSON(body)
-    response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
+    if (is.null(body$es_query$query)) {
+        response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
+    } else {
+        body <- rjson::toJSON(body)
+        response <- httr::POST(url, header, body=body, encode="raw", httr::verbose())
+    }
     res <-  .return_response(response)
     link <- httr::headers(response)[['link']]
     if (is.null(link))
