@@ -30,7 +30,7 @@
     )
 )
 
-.TermsSet <- setClass("TermsSet",
+.Should <- setClass("Should",
     slots = c(
         entries = "list"
     )
@@ -103,7 +103,16 @@
 
 .parse_term_range <- function(x)
 {
-    if(is(x, "Term")) {
+    if(is(x, "Bool") || is(x, "Filter") || is(x, "MustNot") || is(x, "Should")) {
+        #browser()
+        name <- class(x) #vapply(x@entries, class, character(1))
+        x <- lapply(x@entries, function(y) {
+            .parse_term_range(y)
+        })
+        names(x) <- rep(tolower(name), length(x))
+        list(bool = x)
+    }
+    else if(is(x, "Term")) {
         a <- list(x@value)
         names(a) <- .convert_names_to_filters(x@field)
         list(term = a)
@@ -119,17 +128,18 @@
 
 .convert_to_query <- function(es)
 {
-    bool <- es@query@bool@entries
+    bool <- es@query@bool
     es_source <- es@es_source
 
     es_query <-list(query = list(bool = list()))
-    if(length(bool) > 0) {
-        names <- lapply(bool, class)
-        bool <- lapply(bool, function(x) {
-            lapply(x@entries, .parse_term_range)
-        })
-        names(bool) <- tolower(names)
-        es_query$query$bool <- bool
+    if(length(bool@entries) > 0) {
+        #names <- lapply(bool, class)
+        #bool <- lapply(bool, function(x) {
+        #    lapply(x@entries, .parse_term_range)
+        #})
+        bool <- .parse_term_range(bool)
+        #names(bool) <- tolower(names)
+        es_query$query$bool <- bool$bool$bool$bool
     }
     else
         es_query <- list(query = NULL)
@@ -159,14 +169,14 @@
         url = "character",
         es_query = "EsQuery",
         results = "SearchResult",
-        expression = "call"
+        per_page = "numeric"
     )
 )
 
 HumanCellAtlas <-
-    function(url='https://dss.integration.data.humancellatlas.org/v1')
+    function(url='https://dss.integration.data.humancellatlas.org/v1', per_page=10)
 {
-    hca <- .HumanCellAtlas(url=url)
+    hca <- .HumanCellAtlas(url=url, per_page=per_page)
     .init_HumanCellAtlas(hca)
 }
 
@@ -189,6 +199,10 @@ setGeneric('link', function(object, ...) standardGeneric('link'))
 setMethod('results', 'HumanCellAtlas', function(object) {
     object@results@results
 })
+
+#setMethod('per_page', 'HumanCellAtlas', function(hca) {
+#    object@per_page
+#})
 
 setMethod('first_hit', 'SearchResult', .first_hit)
 setMethod('last_hit', 'SearchResult', .last_hit)

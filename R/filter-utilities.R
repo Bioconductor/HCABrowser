@@ -1,21 +1,26 @@
 .filters_list <- list(
     organ = 'files.specimen_from_organism_json.organ.text',
-    organ_part = 'files.specimen_from_organism_son.organ_part.text',
+    organ_part = 'files.specimen_from_organism_json.organ_part.text',
     genus_species = c('files.cell_line_json.genus_species.text',
                       'files.cell_suspension_json.genus_species.text', 
                       'files.donor_organism_json.genus_species.text', 
                       'files.organoid_json.genus_species.text', 
                       'files.specimen_from_organism_json.genus_species.text'),
-    organism_age = 'files.donor_organism_json.organism_age.txt',
-    instrument_manufacturer_model = 'files.protocol_json.protocols.content.instrument_manufacturer_model.text',
+    organism_age = 'files.donor_organism_json.organism_age_unit.txt',
+    instrument_manufacturer_model = 'files.sequencing_protocol_json.instrument_manufacturer_model.text',
     storage_method = 1,
-    library_construction_approach = 'files.protocol_json.protocols.content.library_construction_approach.text',
-    organism_age_unit = 'files.biomaterial_json.biomaterials',
-    biological_sex = 'files.biomaterial_json.biomaterials',
-    disease = 'files.specimen_from_organism.diseases.text',
+    paired_end = 'files.sequencing_protocol_json.paired_end',
+    ncbi_taxon_id = 'files.donor_organism_json.biomaterial_core.ncbi_taxon_id',
+    process_type = 'files.analysis_process_json.process_type.text',
+    library_construction_approach = 'files.library_preparation_protocol_json.library_construction_approach.text',
+    organism_age_unit = 'files.donor_organism_json.organism_age_unit.text',
+    biological_sex = 'files.donor_organism_json.biological_sex',
+    disease = 'files.specimen_from_organism.disease.text',
+    disease = c('files.specimen_from_organism.diseases.text',
+                'files.donor_organism_json.diseases.text'),
     versions = 'manifest.version',
-    laboratory = 'files.project_json.projects.content.contact.laboratory',
-    protocol = 1,
+    laboratory = 'files.project_json.contributors.laboratory',
+    protocol = 1, # not clear if right
     file_format = c('files.analysis_file_json.file_core.file_format',
                     'files.image_file_json.file_core.file_format',
                     'files.reference_file_json.file_core.file_format',
@@ -23,6 +28,7 @@
                     'files.supplementary_file_json.file_core.file_format'),
     input_aggregate_cell_count = 1
 )
+
 .filters <- as.character(.filters_list)
 names(.filters) <- names(.filters_list)
 
@@ -92,7 +98,7 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     force(sep)
     function(e1, e2) {
-        list(e1, e2)
+        .Filter(entries = list(e1, e2))
     }
 }
 
@@ -190,7 +196,7 @@ select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
     hca@es_query@es_source@entries <- sources
 
     if (.search)
-        postSearch(hca, 'aws', 'raw', per_page = 10)
+        postSearch(hca, 'aws', 'raw', per_page = hca@per_page)
     else
         hca
 }
