@@ -104,12 +104,14 @@
 .parse_term_range <- function(x)
 {
     if(is(x, "Bool") || is(x, "Filter") || is(x, "MustNot") || is(x, "Should")) {
-        #browser()
         name <- class(x) #vapply(x@entries, class, character(1))
         x <- lapply(x@entries, function(y) {
             .parse_term_range(y)
         })
-        names(x) <- rep(tolower(name), length(x))
+	
+        name <- rep(tolower(name), length(x))
+	name[name == 'mustnot'] <- 'must_not' 
+	names(x) <- name
         list(bool = x)
     }
     else if(is(x, "Term")) {
@@ -132,6 +134,7 @@
     es_source <- es@es_source
 
     es_query <-list(query = list(bool = list()))
+
     if(length(bool@entries) > 0) {
         #names <- lapply(bool, class)
         #bool <- lapply(bool, function(x) {
