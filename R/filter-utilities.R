@@ -41,6 +41,8 @@ names(.filters) <- names(.filters_list)
     '>=' = 'gte'
 )
 
+.range <- c('<', '<=', '>', '>=')
+
 .match_ops = list(
     '==' = '='
 )
@@ -71,9 +73,14 @@ setMethod("supportedFilters", "missing", .supportedFilters)
         # Translate field to decide whether Range or Term
         #
 
+        fun <- .Term
+
+        if (sep %in% .range)
+            fun <- .Range
+
         .select_values <<- c(.select_values, field)
 
-        leaf <- .Term(field = field, operator = sep, value = value)
+        leaf <- fun(field = field, operator = sep, value = value)
         .Filter(entries = list(leaf))
     }
 }
@@ -81,16 +88,16 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 .not_op <- function(sep)
 {
     force(sep)
-    function(e1, e2) {
-        field <- as.character(substitute(e1))
+    function(e1) {
+        .MustNot(entries = list(e1))
     }
 }
 
 .parenthesis_op <- function(sep)
 {
     force(sep)
-    function(e1, e2) {
-        field <- as.character(substitute(e1))
+    function(e1) {
+        .Filter(entries = list(e1))
     }
 }
 
@@ -98,7 +105,10 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     force(sep)
     function(e1, e2) {
-        .Filter(entries = list(e1, e2))
+        if (sep == '&')
+            .Filter(entries = list(e1, e2))
+        if (sep == '|')
+            .Should(entries = list(e1, e2))
     }
 }
 
