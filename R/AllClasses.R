@@ -103,28 +103,52 @@
 
 .parse_term_range <- function(x)
 {
-    if(is(x, "Bool") || is(x, "Filter") || is(x, "MustNot") || is(x, "Should")) {
+    if(is(x, "Filter") || is(x, "MustNot") || is(x, "Should")) {
         name <- class(x) #vapply(x@entries, class, character(1))
+
+        names <- vapply(x@entries, class, character(1))
+        names <- tolower(names)
+
+        x <- lapply(x@entries, function(y) {
+            names <- tolower(class(y))
+            li <- list(.parse_term_range(y))
+            names(li) <- names
+            li
+        })
+	
+        name <- tolower(name) #rep(tolower(name), length(x))
+        name[name == 'mustnot'] <- 'must_not' 
+        #names(x) <- names
+        #list(bool = x)
+        x
+    }
+    else if (is(x, "Bool")) {
+        name <- class(x) #vapply(x@entries, class, character(1))
+
+        names <- vapply(x@entries, class, character(1))
+        names <- tolower(names)
+
         x <- lapply(x@entries, function(y) {
             .parse_term_range(y)
         })
 	
-        name <- rep(tolower(name), length(x))
-	name[name == 'mustnot'] <- 'must_not' 
-	names(x) <- name
-        list(bool = x)
+        name <- tolower(name) #rep(tolower(name), length(x))
+        name[name == 'mustnot'] <- 'must_not' 
+        names(x) <- names
+        #list(bool = x)
+        x
     }
     else if(is(x, "Term")) {
         a <- list(x@value)
         names(a) <- .convert_names_to_filters(x@field)
-        list(term = a)
+        a
     }
-    else {
+    else if(is(x, "Range")){
         a <- list(x@value)
         names(a) <- .range_ops[[x@operator]]
         a <- list(a)
         names(a) <- .convert_names_to_filters(x@field)
-        list(range = a)
+        a
     }
 }
 
@@ -141,8 +165,12 @@
         #    lapply(x@entries, .parse_term_range)
         #})
         bool <- .parse_term_range(bool)
+#        bool <- bool$bool$bool$bool
+#        bool['must'] <- bool
         #names(bool) <- tolower(names)
-        es_query$query$bool <- bool$bool$bool$bool
+        es_query$query$bool <- bool #bool$bool$bool$bool
+        
+        #es_query$query <- list(list(bool=es_query$query$bool))
     }
     else
         es_query <- list(query = NULL)

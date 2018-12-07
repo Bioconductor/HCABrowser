@@ -1,6 +1,6 @@
 Package: HCABrowser
 Title: Browse the Human Cell Atlas data portal
-Version: 0.0.7
+Version: 0.0.8
 Authors@R: c(
     person(
         "Daniel", "Van Twisk",

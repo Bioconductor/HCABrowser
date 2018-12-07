@@ -12,11 +12,12 @@
     paired_end = 'files.sequencing_protocol_json.paired_end',
     ncbi_taxon_id = 'files.donor_organism_json.biomaterial_core.ncbi_taxon_id',
     process_type = 'files.analysis_process_json.process_type.text',
-    library_construction_approach = 'files.library_preparation_protocol_json.library_construction_approach.text',
+    library_construction_approach = 'files.library_preparation_protocol_json.library_construction_approach.ontology',
+    #library_construction_approach = 'files.library_preparation_protocol_json.library_construction_approach.text',
     organism_age_unit = 'files.donor_organism_json.organism_age_unit.text',
     biological_sex = 'files.donor_organism_json.biological_sex',
     disease = 'files.specimen_from_organism.disease.text',
-    disease = c('files.specimen_from_organism.diseases.text',
+    diseases = c('files.specimen_from_organism.diseases.text',
                 'files.donor_organism_json.diseases.text'),
     versions = 'manifest.version',
     laboratory = 'files.project_json.contributors.laboratory',
@@ -89,7 +90,7 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     force(sep)
     function(e1) {
-        .MustNot(entries = list(e1))
+        .MustNot(entries = e1@entries)
     }
 }
 
@@ -105,10 +106,11 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     force(sep)
     function(e1, e2) {
-        if (sep == '&')
-            .Filter(entries = list(e1, e2))
-        if (sep == '|')
-            .Should(entries = list(e1, e2))
+        if (sep == '&') {
+            .Filter(entries = c(e1@entries, e2@entries))
+        }
+        else if (sep == '|')
+            .Should(entries = c(e1@entries, e2@entries))
     }
 }
 
@@ -116,7 +118,7 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     expr <- lazyeval::lazy_(expr, env = environment())
     res <- lazyeval::lazy_eval(expr, data = .LOG_OP_REG)
-    c(li, res)
+    .Filter(entries = c(li@entries, res@entries))
 }
 
 #' @importFrom dplyr filter
@@ -126,13 +128,13 @@ filter.HumanCellAtlas <- function(hca, ...)
 {
     .dots <- quos(...)
     .dots <- lapply(.dots, rlang::quo_get_expr)
-    res <- Reduce(.hca_filter_loop, .dots, init = list())
+    res <- Reduce(.hca_filter_loop, .dots, init = .Filter(entries = list()))
 
     hca_bool <- hca@es_query@query@bool@entries
     hca_source <- hca@es_query@es_source@entries
 
-    bool <- c(hca_bool, res)
-    bool <- .Bool(entries = res)
+    bool <- .Filter(entries = c(hca_bool, res@entries))
+    bool <- .Bool(entries = list(bool))
 #    query <- .Query(bool = bool)
 #    es_query <- .EsQuery(query = query)
     hca@es_query@query@bool <- bool

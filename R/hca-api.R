@@ -134,13 +134,17 @@
 .hca_post <-
     function(url, body, first_hit = 1L)
 {
+    browser()
     header <- .build_header(include_token=FALSE)
-    if (is.null(body$es_query$query)) {
-        response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
-    } else {
-        body <- rjson::toJSON(body)
+#    if (is.null(body$es_query$query)) {
+    if (is.character(body))
         response <- httr::POST(url, header, body=body, encode="raw", httr::verbose())
-    }
+    else
+        response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
+#    } else {
+#        body <- rjson::toJSON(body)
+#        response <- httr::POST(url, header, body=body, encode="raw", httr::verbose())
+#    }
     res <-  .return_response(response)
     link <- httr::headers(response)[['link']]
     if (is.null(link))
@@ -295,7 +299,7 @@
 .postSearch <-
     function(hca, replica=c('aws', 'gcp', 'azure'),
         output_format=c('summary', 'raw'), es_query=NULL, per_page=100,
-        search_after=NULL)
+        search_after=NULL, json=NULL)
 {
     replica <- match.arg(replica)
     output_format <- match.arg(output_format)
@@ -304,6 +308,8 @@
     if (is.null(es_query))
         es_query <- .convert_to_query(hca@es_query)
     body <- list(es_query=es_query)
+    if (!is.null(json))
+        body <- json
     url <- .build_url(hca@url, .apis['postSearch'], NULL, args)
     hca@results <- .hca_post(url, body)
     hca
