@@ -60,6 +60,11 @@ names(.filters) <- names(.filters_list)
     names(.filters)
 }
 
+.is_bool_connector <- function(x)
+{
+    is(x, "Filter") | is(x, "MustNot") | is(x, "Should")
+}
+
 #' @export
 setMethod("supportedFilters", "missing", .supportedFilters)
 
@@ -82,7 +87,9 @@ setMethod("supportedFilters", "missing", .supportedFilters)
         .select_values <<- c(.select_values, field)
 
         leaf <- fun(field = field, operator = sep, value = value)
-        .Filter(entries = list(leaf))
+        #.Filter(entries = list(leaf))
+        #list(leaf)
+        leaf
     }
 }
 
@@ -90,7 +97,7 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     force(sep)
     function(e1) {
-        .MustNot(entries = e1@entries)
+        .MustNot(entries = list(e1))
     }
 }
 
@@ -98,7 +105,10 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     force(sep)
     function(e1) {
-        .Filter(entries = list(e1))
+        if(.is_bool_connector(e1))
+            .Bool(entries = list(e1))
+        else
+            .Bool(entries = list(.Filter(entries = list(e1))))
     }
 }
 
@@ -106,11 +116,16 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     force(sep)
     function(e1, e2) {
-        if (sep == '&') {
-            .Filter(entries = c(e1@entries, e2@entries))
-        }
-        else if (sep == '|')
-            .Should(entries = c(e1@entries, e2@entries))
+        fun <- .Should
+        if (sep == '&')
+            fun <- .Filter
+
+        if(.is_bool_connector(e1))
+            e1 <- .Bool(entries = list(e1))
+        if(.is_bool_connector(e2))
+            e2 <- .Bool(entries = list(e2))
+
+        fun(entries = list(e1, e2))
     }
 }
 
@@ -118,7 +133,10 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     expr <- lazyeval::lazy_(expr, env = environment())
     res <- lazyeval::lazy_eval(expr, data = .LOG_OP_REG)
-    .Filter(entries = c(li@entries, res@entries))
+    if(.is_bool_connector(res))
+        .Filter(entries = c(li@entries, list(.Bool(entries = list(res)))))
+    else
+        .Filter(entries = c(li@entries, list(res)))
 }
 
 #' @importFrom dplyr filter
@@ -130,11 +148,14 @@ filter.HumanCellAtlas <- function(hca, ...)
     .dots <- lapply(.dots, rlang::quo_get_expr)
     res <- Reduce(.hca_filter_loop, .dots, init = .Filter(entries = list()))
 
-    hca_bool <- hca@es_query@query@bool@entries
+    hca_bool <- hca@es_query@query@bool
     hca_source <- hca@es_query@es_source@entries
 
-    bool <- .Filter(entries = c(hca_bool, res@entries))
-    bool <- .Bool(entries = list(bool))
+    initial <- list()
+    if(length(hca_bool@entries) > 0)
+        initial <- hca_bool@entries[[1]]@entries
+    bool <- .Bool(entries = list(.Filter(entries = c(initial, res@entries))))
+#    bool <- .Bool(entries = list(bool))
 #    query <- .Query(bool = bool)
 #    es_query <- .EsQuery(query = query)
     hca@es_query@query@bool <- bool

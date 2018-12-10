@@ -51,7 +51,7 @@
 
 .Query <- setClass("Query",
     slots = c(
-        bool = "Bool"
+        bool =  "Bool"
     )
 )
 
@@ -110,17 +110,12 @@
         names <- tolower(names)
 
         x <- lapply(x@entries, function(y) {
-            names <- tolower(class(y))
-            li <- list(.parse_term_range(y))
+            names <- tolower(as.character(class(y)))
+            li <- .parse_term_range(y)
             names(li) <- names
             li
         })
-	
-        name <- tolower(name) #rep(tolower(name), length(x))
-        name[name == 'mustnot'] <- 'must_not' 
-        #names(x) <- names
-        #list(bool = x)
-        x
+        list(x)
     }
     else if (is(x, "Bool")) {
         name <- class(x) #vapply(x@entries, class, character(1))
@@ -129,19 +124,19 @@
         names <- tolower(names)
 
         x <- lapply(x@entries, function(y) {
-            .parse_term_range(y)
+            li <- .parse_term_range(y)
+            name <- tolower(as.character(class(y)))
+            name[name == 'mustnot'] <- 'must_not' 
+            names(li) <- name
+            li
         })
 	
-        name <- tolower(name) #rep(tolower(name), length(x))
-        name[name == 'mustnot'] <- 'must_not' 
-        names(x) <- names
-        #list(bool = x)
         x
     }
     else if(is(x, "Term")) {
         a <- list(x@value)
         names(a) <- .convert_names_to_filters(x@field)
-        a
+        list(a)
     }
     else if(is(x, "Range")){
         a <- list(x@value)
@@ -165,6 +160,7 @@
         #    lapply(x@entries, .parse_term_range)
         #})
         bool <- .parse_term_range(bool)
+        bool <- bool[[1]]
 #        bool <- bool$bool$bool$bool
 #        bool['must'] <- bool
         #names(bool) <- tolower(names)

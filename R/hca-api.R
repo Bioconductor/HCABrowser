@@ -134,7 +134,6 @@
 .hca_post <-
     function(url, body, first_hit = 1L)
 {
-    browser()
     header <- .build_header(include_token=FALSE)
 #    if (is.null(body$es_query$query)) {
     if (is.character(body))
