@@ -87,8 +87,10 @@ setMethod("supportedFilters", "missing", .supportedFilters)
         .select_values <<- c(.select_values, field)
 
         leaf <- fun(field = field, operator = sep, value = value)
-        #.Filter(entries = list(leaf))
-        #list(leaf)
+
+        if(sep == "!=")
+            leaf <- .MustNot(entries = list(leaf))
+
         leaf
     }
 }
