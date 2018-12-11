@@ -7,6 +7,14 @@
     )
 )
 
+.Match <- setClass("Match",
+    slots = c(
+        field = "character",
+        operator = "character",
+        value = "character"
+    )
+)
+
 .Terms <- setClass("Terms",
     slots = c(
         field = "character",
@@ -25,6 +33,12 @@
 
 ## Score agnostic
 .Filter <- setClass("Filter",
+    slots = c(
+        entries = "list"
+    )
+)
+
+.Must <- setClass("Must",
     slots = c(
         entries = "list"
     )
@@ -68,29 +82,32 @@
     )
 )
 
-#setMethod('show', 'EsQuery', function(object) {
-#    filter <- object@query@bool@filter@entries
-#    must_not <- object@query@bool@must_not@entries
-#    es_source <- object@es_source@entries
-#    cat('EsQuery:\n',
-#        ' Query:\n',
-#        '   Bool:\n')
-#    if (length(filter) > 0) {
-#        cat('      Filter:\n')
-#        for (i in filter)
-#            cat(paste0('        ', class(i), ': ', i@field, ' ', i@operator, ' ', i@value, '\n'))
-#    }
-#    if (length(must_not) > 0) {
-#        cat('      Must Not:\n')
-#        for (i in filter)
-#            cat('        ', class(i), ':', i@field, i@operator, i@value, '\n')
-#    }
-#    if (length(es_source) > 0) {
-#        cat('  Columns selected:\n')
-#        for (i in es_source)
-#            cat('   ', i, '\n')
-#    }
-#})
+.nested_query_show <- function(object, depth) {
+    classname <- as.character(class(object))
+    if (classname %in% c("Term", "Terms", "Range"))
+        cat(rep(' ', depth), classname, ':', object@field, object@operator, object@value, '\n') 
+    else{
+        cat(rep(' ', depth), classname, '\n')
+        for(i in object@entries)
+            .nested_query_show(i, depth + 1)
+    }
+}
+
+setMethod('show', 'EsQuery', function(object) {
+    query <- object@query@bool@entries
+    es_source <- object@es_source@entries
+    cat('EsQuery:\n',
+        ' Query:\n',
+        '   Bool:\n')
+    
+    for (i in query)
+        .nested_query_show(i, 3)
+    if (length(es_source) > 0) {
+        cat('  Columns selected:\n')
+        for (i in es_source)
+            cat('   ', i, '\n')
+    }
+})
 
 .init_HumanCellAtlas <- function(hca)
 {
@@ -117,7 +134,7 @@
         })
         list(x)
     }
-    else if (is(x, "Bool")) {
+    else if(is(x, "Bool")) {
         name <- class(x) #vapply(x@entries, class, character(1))
 
         names <- vapply(x@entries, class, character(1))
@@ -133,12 +150,17 @@
 	
         x
     }
-    else if(is(x, "Term")) {
+    else if (is(x, "Term")) {
         a <- list(x@value)
         names(a) <- .convert_names_to_filters(x@field)
         list(a)
     }
-    else if(is(x, "Range")){
+    else if (is(x, "Terms")){
+        a <- list(x@value)
+        names(a) <- .convert_names_to_filters(x@field)
+        list(a)
+    }
+    else if (is(x, "Range")){
         a <- list(x@value)
         names(a) <- .range_ops[[x@operator]]
         a <- list(a)

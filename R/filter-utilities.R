@@ -31,6 +31,7 @@
 )
 
 .filters <- as.character(.filters_list)
+.filters_unlist <- unlist(.filters_list)
 names(.filters) <- names(.filters_list)
 
 .select_values <<- c()
@@ -47,13 +48,6 @@ names(.filters) <- names(.filters_list)
 .match_ops = list(
     '==' = '='
 )
-
-.parse_EsQuery <- function(es_query)
-{
-    if (is.null(es_query))
-        return(list(query=NULL))
-    
-}
 
 .supportedFilters <- function()
 {
@@ -74,14 +68,15 @@ setMethod("supportedFilters", "missing", .supportedFilters)
     function(e1, e2) {
         field <- as.character(substitute(e1))
         value <- as.character(substitute(e2))
-
-        #
-        # Translate field to decide whether Range or Term
-        #
+        if(value[1] == 'c')
+            value <- value[-1]
 
         fun <- .Term
 
-        if (sep %in% .range)
+        if(length(value) > 1)
+            fun <- .Terms
+
+        if(sep %in% .range)
             fun <- .Range
 
         .select_values <<- c(.select_values, field)
@@ -220,7 +215,8 @@ select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
     sources <- lapply(sources, rlang::quo_get_expr)
     sources <- lapply(sources, as.character)
     sources <- unlist(sources)
-    sources <- sources[!sources %in% 'c']
+    if (length(sources) && sources[1] == 'c')
+        sources <- sources[-1]
     if (length(.select_values) > 0) {
         sources <- c(sources, .select_values)
         .select_values <<- c()
@@ -239,10 +235,25 @@ select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
 .convert_names_to_filters <- function(sources)
 {
     sources <- vapply(sources, function(x) {
-        if (x %in% names(.filters))
+        if (x %in% names(.filters)) {
             .filters[x]
-        else
+        }
+        else if (length(matched_filters <- .filters_unlist[grep(x, .filters_unlist)]) > 0){
+            if (length(matched_filters) > 1) {
+                txt <- vapply(matched_filters, function(y) {
+                    paste0(y, '\n')
+                }, character(1))
+                mes <- paste0("Field ", x, " matched more than one field. Please select one:\n")  
+                txt <- c(mes, txt)
+                stop(txt)
+            }
+            matched_filters
+        }
+        else {
+            if (!x %in% .filters) 
+                message(paste0(".filter ", x, "not supported."))
             x
+        }
     }, character(1))
     names(sources) <- NULL
     sources
