@@ -12,9 +12,11 @@
     paired_end = 'files.sequencing_protocol_json.paired_end',
     ncbi_taxon_id = 'files.donor_organism_json.biomaterial_core.ncbi_taxon_id',
     process_type = 'files.analysis_process_json.process_type.text',
-    library_construction_approach = 'files.library_preparation_protocol_json.library_construction_approach.ontology',
-    #library_construction_approach = 'files.library_preparation_protocol_json.library_construction_approach.text',
+    library_construction_approach.ontology = 'files.library_preparation_protocol_json.library_construction_approach.ontology',
+    library_construction_approach.text = 'files.library_preparation_protocol_json.library_construction_approach.text',
     organism_age_unit = 'files.donor_organism_json.organism_age_unit.text',
+    project_title = 'files.project_json.project_core.project_title',
+    project_shortname = 'files.project_json.project_core.project_shortname',
     biological_sex = 'files.donor_organism_json.biological_sex',
     disease = 'files.specimen_from_organism.disease.text',
     diseases = c('files.specimen_from_organism.diseases.text',
@@ -126,6 +128,7 @@ setMethod("supportedFilters", "missing", .supportedFilters)
     }
 }
 
+#' importFrom lazyeval lazy_ lazy_eval
 .hca_filter_loop <- function(li, expr)
 {
     expr <- lazyeval::lazy_(expr, env = environment())
@@ -137,7 +140,7 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 }
 
 #' @importFrom dplyr filter
-#' @importFrom rlang quo lang_head lang_tail
+#' @importFrom rlang quo_get_expr quos
 #' @export
 filter.HumanCellAtlas <- function(hca, ...)
 {
@@ -152,57 +155,9 @@ filter.HumanCellAtlas <- function(hca, ...)
     if(length(hca_bool@entries) > 0)
         initial <- hca_bool@entries[[1]]@entries
     bool <- .Bool(entries = list(.Filter(entries = c(initial, res@entries))))
-#    bool <- .Bool(entries = list(bool))
-#    query <- .Query(bool = bool)
-#    es_query <- .EsQuery(query = query)
     hca@es_query@query@bool <- bool
     
     select(hca)
-}
-
-.old.filter.HumanCellAtlas <- function(hca, ...)
-{
-    .dots <- quo(...)
-    
-    q_head <- as.character(lang_head(.dots))
-    q_tail_1 <- as.character(lang_tail(.dots)[[1]])
-    q_tail_2 <- as.character(lang_tail(.dots)[[2]])
-
-    range <- NULL
-    if(q_head %in% names(.range_ops))
-        range <- .range_ops[[q_head]]
-
-    filter <- hca@es_query@query@bool@filter
-    must_not <- hca@es_query@query@bool@must_not
-
-#    q_tail_1 <- .filters[[q_tail_1]]
-
-    if(is.null(range)) {
-        entries <- filter@entries
-        term <- .Term(field=q_tail_1, operator=q_head, value=q_tail_2)
-#        a <- list(q_tail_2)
-#        names(a) <- q_tail_1
-#        a <- list(match = a)
-        entries <- c(entries, term)
-        hca@es_query@query@bool@filter@entries <- entries
-    }
-    else {
-        entries <- filter@entries
-        range <- .Range(field=q_tail_1, operator=q_head, value=q_tail_2)
-#        a <- list(q_tail_2)
-#        names(a) <- range
-#        a <- list(a)
-#        names(a) <- q_tail_1
-        entries <- c(entries, range)
-        #hca@es_query$query$bool$must$range <-
-        hca@es_query@query@bool@filter@entries <- entries
-    }
-
-    hca <- select(hca, q_tail_1)
-
-    #hca
-
-    #hca
 }
 
 #' @importFrom dplyr select
@@ -270,11 +225,6 @@ select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
     }, character(1))
     names(sources) <- NULL
     sources
-}
-
-.build_es_query <- function()
-{
-    
 }
 
 .LOG_OP_REG <- list()

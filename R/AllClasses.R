@@ -112,10 +112,15 @@ setMethod('show', 'EsQuery', function(object) {
 .init_HumanCellAtlas <- function(hca)
 {
     select(hca,
-           c("manifest.files.name", "manifest.files.uuid",
-             "manifest.files.content.type", "manifest.files.size")
+#           c("manifest.files.name", "manifest.files.uuid",
+#            "manifest.files.content.type", "manifest.files.size")
+           c("project_title", "project_shortname", "organ",
+             "library_construction_approach.text",
+             "specimen_from_organism_json.genus_species.text",
+             "files.donor_organism_json.diseases.text")
+#              "specimen_from_organ_json.genus_species.text", "disease")
     )
-    #postSearch(hca, 'aws', 'raw', per_page=10)
+#    postSearch(hca, 'aws', 'raw', per_page=10)
 }
 
 .parse_term_range <- function(x)
@@ -177,18 +182,9 @@ setMethod('show', 'EsQuery', function(object) {
     es_query <-list(query = list(bool = list()))
 
     if(length(bool@entries) > 0) {
-        #names <- lapply(bool, class)
-        #bool <- lapply(bool, function(x) {
-        #    lapply(x@entries, .parse_term_range)
-        #})
         bool <- .parse_term_range(bool)
         bool <- bool[[1]]
-#        bool <- bool$bool$bool$bool
-#        bool['must'] <- bool
-        #names(bool) <- tolower(names)
         es_query$query$bool <- bool #bool$bool$bool$bool
-        
-        #es_query$query <- list(list(bool=es_query$query$bool))
     }
     else
         es_query <- list(query = NULL)
@@ -201,20 +197,21 @@ setMethod('show', 'EsQuery', function(object) {
     es_query
 }
 
+#' @importFrom tibble tibble
+setOldClass('tbl_df')
 .SearchResult <- setClass("SearchResult",
     slots = c(
         first_hit = 'integer',
         last_hit = 'integer',
         total_hits = 'integer',
-        results = 'data.frame',
+        results = 'tbl_df',
         link = 'character'
     )
 )
 
-#' @importFrom tibble tibble
 .HumanCellAtlas <- setClass("HumanCellAtlas",
-#    contains = "tibble",
     slots = c(
+        activated = "logical",
         url = "character",
         es_query = "EsQuery",
         results = "SearchResult",
@@ -225,11 +222,9 @@ setMethod('show', 'EsQuery', function(object) {
 HumanCellAtlas <-
     function(url='https://dss.integration.data.humancellatlas.org/v1', per_page=10)
 {
-    hca <- .HumanCellAtlas(url=url, per_page=per_page)
+    hca <- .HumanCellAtlas(url=url, per_page=per_page, activated=FALSE)
     .init_HumanCellAtlas(hca)
 }
-
-#.show_HumanCellAtlas <- function(object)
 
 .first_hit <- function(object) object@first_hit
 .last_hit <- function(object) object@last_hit
@@ -245,8 +240,12 @@ setGeneric('es_query', function(object, ...) standardGeneric('es_query'))
 setGeneric('results', function(object, ...) standardGeneric('results'))
 setGeneric('link', function(object, ...) standardGeneric('link'))
 
+#' importFrom dplyr distinct
 setMethod('results', 'HumanCellAtlas', function(object) {
-    object@results@results
+    res <- object@results@results
+    if (!object@activated)
+        res <- res %>% distinct(bundle_fqid, .keep_all = TRUE)
+    res
 })
 
 #setMethod('per_page', 'HumanCellAtlas', function(hca) {
@@ -266,10 +265,51 @@ setMethod('link', 'SearchResult', .link)
 setGeneric('.updateEsQuery', function(object, ...) standardGeneric('.updateEsQuery'))
 setGeneric('resetEsQuery', function(object, ...) standardGeneric('resetEsQuery'))
 
+setGeneric('showBundles', function(hca, bundle_fqids, ...) standardGeneric('showBundles'))
+setGeneric('downloadHCA', function(hca, ...) standardGeneric('downloadHCA'))
+
 setMethod('.updateEsQuery', 'HumanCellAtlas', .update_es_query)
 #' @export
 setMethod('resetEsQuery', 'HumanCellAtlas', .reset_es_query)
 
+#' @importFrom tidygraph activate
+#' @export
+activate.HumanCellAtlas <-
+    function(object, ...)
+{
+    if(object@activated) {
+        message("Displaying results by bundle")
+        object@activated <- FALSE
+    }
+    else {
+        message("Displaying results by file")
+        object@activated <- TRUE
+    }
+    object
+}
+
+.download.HumanCellAtlas <-
+    function(hca, ...)
+{
+    res <- results(hca)
+    while (!is.null(hca <- nextResults(hca))) {
+        res <- rbind.fill(res, results(hca))
+    }
+    res
+}
+
+#' @export
+setMethod("downloadHCA", "HumanCellAtlas", .download.HumanCellAtlas)
+
+.showBundles <- function(hca, bundle_fqids, ...)
+{
+    if(!hca@activated)
+        hca@activated <- TRUE
+    hca %>% downloadHCA() %>% filter(bundle_fqid %in% bundle_fqids)
+}
+
+#' @export
+setMethod('showBundles', 'HumanCellAtlas', .showBundles)
 
 .show_SearchResult <- function(object)
 {
@@ -279,16 +319,30 @@ setMethod('resetEsQuery', 'HumanCellAtlas', .reset_es_query)
         "  link: ", length(link(object))>0, "\n",
         sep = ''
     )
+    print(results(object))
 }
 
 setMethod('show', 'SearchResult', .show_SearchResult)
 
 .show_HumanCellAtlas <- function(object)
 {
+    cat('class:', class(object), '\n')
     cat('Using hca-dcp at:\n  ', object@url, '\n\n')
     show(object@es_query)
     cat('\n')
-    show(object@results)
+    sho <- 'bundles'
+    if (object@activated)
+        sho <- 'files'
+    cat('class: ', class(object@results), "\n", 
+        "  bundle ", first_hit(object@results), " - ", last_hit(object@results), " of ",
+            total_hits(object@results), "\n",
+        "  link: ", length(link(object@results))>0, "\n",
+        sep = ''
+    )
+    cat('\n')
+    cat('Showing', sho, 'with', object@per_page ,'results per page\n')
+    print(results(object))
 }
 
-#setMethod('show', 'HumanCellAtlas', .show_HumanCellAtlas)
+setMethod('show', 'HumanCellAtlas', .show_HumanCellAtlas)
+

@@ -48,6 +48,7 @@
     do.call(add_headers, header)
 }
 
+#' importFrom BiocFileCache BiocFileCache bfcnew bfcrpath bfccache
 .retrieve_BiocFileCache_dbpath <- function(url)
 {
     if (is.null(dbpath))
@@ -57,7 +58,7 @@
         if (nrec == 0L)
             dbpath <- bfcnew(dbpath, url)
         else if (nrec == 1L)
-            dbpath <- bfrcpath(dbpath, url)
+            dbpath <- bfcrpath(dbpath, url)
         else
             stop(
                 "\n  'bfc' contains duplicate record names",
@@ -68,6 +69,7 @@
     }
 }
 
+#' importFrom readr read_tsv
 .save_as_BiocFileCache <- function(dbpath, url)
 {
     fname <- BiocFileCache::bfcrpath(rnames = url)
@@ -76,7 +78,6 @@
 
 #' @importFrom httr content stop_for_status
 #' @importFrom jsonlite fromJSON
-#' @importFrom readr read_tsv
 .return_response <-
     function(response, expected_response=c('json', 'file'))
 {
@@ -87,7 +88,7 @@
         fromJSON(response, simplifyDataFrame=FALSE, simplifyMatrix=FALSE,
             flatten=FALSE)
     else if (expected_response == 'file')
-        readr::read_tsv(file=response)#, sep="\t")
+        readr::read_tsv(file=response)
 }
 
 #' @importFrom httr DELETE
@@ -128,22 +129,17 @@
     .return_response(response)
 }
 
+#' @importFrom dplyr as_tibble
 #' @importFrom httr POST headers
-#' @importFrom rjson toJSON
 #' @importFrom stringr str_replace
 .hca_post <-
     function(url, body, first_hit = 1L)
 {
     header <- .build_header(include_token=FALSE)
-#    if (is.null(body$es_query$query)) {
     if (is.character(body))
         response <- httr::POST(url, header, body=body, encode="raw", httr::verbose())
     else
         response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
-#    } else {
-#        body <- rjson::toJSON(body)
-#        response <- httr::POST(url, header, body=body, encode="raw", httr::verbose())
-#    }
     res <-  .return_response(response)
     link <- httr::headers(response)[['link']]
     if (is.null(link))
@@ -151,7 +147,7 @@
     else
         link <- str_replace(link, '<(.*)>.*', '\\1')
     results <- .parse_postSearch_results(res[['results']])
-    .SearchResult(results = results,
+    .SearchResult(results = as_tibble(results),
         total_hits = res[['total_hits']], link=link, first_hit = first_hit,
         last_hit = length(res[['results']]) + first_hit - 1L)
 }
@@ -159,10 +155,14 @@
 .nextResults_HumanCellAtlas <- function(result)
 {
     sr <- result@results
-    result@results <- .hca_post(link(sr),
-        body = list(es_query=.convert_to_query(result@es_query)),
-        first_hit = last_hit(sr) + 1L)
-    result
+    if (length(sr@link) > 0) {
+        result@results <- .hca_post(link(sr),
+            body = list(es_query=.convert_to_query(result@es_query)),
+            first_hit = last_hit(sr) + 1L)
+        result
+    }
+    else
+        NULL
 }
 
 #' @importFrom httr PUT
@@ -523,48 +523,48 @@
 #'
 #' @author Daniel Van Twisk
 #'
-#' @export
+###' @export
 setMethod("getBundlesCheckout", "HumanCellAtlas", .getBundlesCheckout)
 
 #' Delete a bundle or a specific bundle version
 #'
-#' @export
+###' @export
 setMethod("deleteBundle", "HumanCellAtlas", .deleteBundle)
 
 #' Retrieve a bundle given a UUID and optionally a version
 #'
-#' @export
+###' @export
 setMethod("getBundle", "HumanCellAtlas", .getBundle)
 
 #' Create a bundle
 #'
-#' @export
+###' @export
 setMethod("putBundle", "HumanCellAtlas", .putBundle)
 
 #' Check out a bundle to DSS-namaged or user-managed cloud object storage
 #' destination
 #'
-#' @export
+###' @export
 setMethod("postBundlesCheckout", "HumanCellAtlas", .postBundlesCheckout)
 
 #' Create a collection
 #'
-#' @export
+###' @export
 setMethod("putCollection", "HumanCellAtlas", .putCollection)
 
 #' Delete a collection
 #'
-#' @export
+###' @export
 setMethod("deleteCollection", "HumanCellAtlas", .deleteCollection)
 
 #' Retrieve a collection given a UUID
 #'
-#' @export
+###' @export
 setMethod("getCollection", "HumanCellAtlas", .getCollection)
 
 #' Update a collection
 #'
-#' @export
+###' @export
 setMethod("patchCollection", "HumanCellAtlas", .patchCollection)
 
 #' Retrieve a file given a UUID and optionally a version
@@ -574,12 +574,12 @@ setMethod("getFile", "HumanCellAtlas", .getFile)
 
 #' Retrieve a file's metadata given an UUID and optionally a version
 #'
-#' @export
+###' @export
 setMethod("headFile", "HumanCellAtlas", .headFile)
 
 #' Create a new version of a file
 #'
-#' @export
+###' @export
 setMethod("putFile", "HumanCellAtlas", .putFile)
 
 #' Find bundles by searching their metadata with an Elasticsearch query
@@ -589,22 +589,23 @@ setMethod("postSearch", "HumanCellAtlas", .postSearch)
 
 #' Retrieve a user's event Subscription
 #'
-#' @export
+###' @export
 setMethod("getSubscriptions", "HumanCellAtlas", .getSubscriptions)
 
 #' Creates an event subscription
 #'
-#' @export
+###' @export
 setMethod("putSubscription", "HumanCellAtlas", .putSubscription)
 
 #' Delete an event subscription
 #'
-#' @export
+###' @export
 setMethod("deleteSubscription", "HumanCellAtlas", .deleteSubscription)
 
 #' Retrieve an event subscription given a UUID
 #'
-#' @export
+###' @export
 setMethod("getSubscription", "HumanCellAtlas", .getSubscription)
 
+#' @export
 setMethod("nextResults", "HumanCellAtlas", .nextResults_HumanCellAtlas)
