@@ -157,7 +157,7 @@
     sr <- result@results
     if (length(sr@link) > 0) {
         result@results <- .hca_post(link(sr),
-            body = list(es_query=.convert_to_query(result@es_query)),
+            body = result@search_term,
             first_hit = last_hit(sr) + 1L)
         result
     }
@@ -304,9 +304,12 @@
     output_format <- match.arg(output_format)
     args <- list(replica=replica, output_format=output_format,
                  per_page=per_page, search_after=search_after)
-    if (is.null(es_query))
-        es_query <- .convert_to_query(hca@es_query)
-    body <- list(es_query=es_query)
+    if (is.null(es_query)) {
+        es_query <- hca@search_term
+        if (length(es_query) == 0)
+            es_query <- list(es_query = list(query = list(bool = NULL)))
+    }
+    body <- es_query
     if (!is.null(json))
         body <- json
     url <- .build_url(hca@url, .apis['postSearch'], NULL, args)

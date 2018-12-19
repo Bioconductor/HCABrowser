@@ -29,14 +29,16 @@
                     'files.reference_file_json.file_core.file_format',
                     'files.sequence_file_json.file_core.file_format',
                     'files.supplementary_file_json.file_core.file_format'),
-    input_aggregate_cell_count = 1
+    input_aggregate_cell_count = 1,
+    file_names = 'manifest.files.name',
+    file_uuids = 'manifest.files.uuid',
+    file_content_type = 'manifest.files.content.type',
+    file_sizes = 'manifest.files.size'
 )
 
 .filters <- as.character(.filters_list)
 .filters_unlist <- unlist(.filters_list)
 names(.filters) <- names(.filters_list)
-
-.select_values <<- c()
 
 .range_ops = list(
     '<' = "lt",
@@ -58,7 +60,8 @@ names(.filters) <- names(.filters_list)
 
 .is_bool_connector <- function(x)
 {
-    is(x, "Filter") | is(x, "MustNot") | is(x, "Should")
+    names <- names(x)
+    names %in% c("filter", "should", "must_not") 
 }
 
 #' @export
@@ -69,24 +72,34 @@ setMethod("supportedFilters", "missing", .supportedFilters)
     force(sep)
     function(e1, e2) {
         field <- as.character(substitute(e1))
-        value <- as.character(substitute(e2))
-        if(value[1] == 'c')
-            value <- value[-1]
 
-        fun <- .Term
+        value <- try({
+            e2
+        }, silent = TRUE)
+        if (inherits(value, "try-error")) {
+            value <- as.character(substitute(e2))
+            if(value[1] == 'c')
+                value <- value[-1]
+            value
+        }
+
+        fun <- "term"
 
         if(length(value) > 1)
-            fun <- .Terms
+            fun <- "terms"
 
         if(sep %in% .range)
-            fun <- .Range
+            fun <- "range"
 
-        .select_values <<- c(.select_values, field)
+        field <- .convert_names_to_filters(field)
 
-        leaf <- fun(field = field, operator = sep, value = value)
+        leaf <- list(value)
+        names(leaf) <- field
+        leaf <- list(leaf)
+        names(leaf) <- fun
 
         if(sep == "!=")
-            leaf <- .MustNot(entries = list(leaf))
+            leaf <- list(must_not = leaf)
 
         leaf
     }
@@ -96,7 +109,7 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     force(sep)
     function(e1) {
-        .MustNot(entries = list(e1))
+        list(must_not = list(e1))
     }
 }
 
@@ -105,9 +118,9 @@ setMethod("supportedFilters", "missing", .supportedFilters)
     force(sep)
     function(e1) {
         if(.is_bool_connector(e1))
-            .Bool(entries = list(e1))
+            list(bool = e1)
         else
-            .Bool(entries = list(.Filter(entries = list(e1))))
+            list(bool = list(filter = list(e1)))
     }
 }
 
@@ -115,28 +128,39 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     force(sep)
     function(e1, e2) {
-        fun <- .Should
+        fun <- "should"
         if (sep == '&')
-            fun <- .Filter
+            fun <- "filter"
 
         if(.is_bool_connector(e1))
-            e1 <- .Bool(entries = list(e1))
+            e1 <- list(bool = e1)
         if(.is_bool_connector(e2))
-            e2 <- .Bool(entries = list(e2))
+            e2 <- list(bool = e2)
 
-        fun(entries = list(e1, e2))
+        con <- list(list(e1, e2))
+        names(con) <- fun
+        con
     }
 }
 
-#' importFrom lazyeval lazy_ lazy_eval
+.get_selections <- function(x, ret_next = FALSE)
+{
+    if (ret_next)
+        return(names(x))
+    if(!is.null(names(x)) && names(x) %in% c("term", "terms", "range"))
+        lapply(x, .get_selections, TRUE)
+    else
+        lapply(x, .get_selections, FALSE)
+}
+
+#' importFrom rlang eval_tidy f_rhs f_env
 .hca_filter_loop <- function(li, expr)
 {
-    expr <- lazyeval::lazy_(expr, env = environment())
-    res <- lazyeval::lazy_eval(expr, data = .LOG_OP_REG)
+    res <- rlang::eval_tidy(expr, data= .LOG_OP_REG)
     if(.is_bool_connector(res))
-        .Filter(entries = c(li@entries, list(.Bool(entries = list(res)))))
+        list(filter = list(c(li, list(bool = res))))
     else
-        .Filter(entries = c(li@entries, list(res)))
+        list(filter = list(c(li, res)))
 }
 
 #' @importFrom dplyr filter
@@ -144,42 +168,41 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 #' @export
 filter.HumanCellAtlas <- function(hca, ...)
 {
-    .dots <- quos(...)
-    .dots <- lapply(.dots, rlang::quo_get_expr)
-    res <- Reduce(.hca_filter_loop, .dots, init = .Filter(entries = list()))
+    dots <- quos(...)
+    es_query <- c(hca@es_query, dots)
 
-    hca_bool <- hca@es_query@query@bool
-    hca_source <- hca@es_query@es_source@entries
+    res <- Reduce(.hca_filter_loop, dots, init =  list())
 
-    initial <- list()
-    if(length(hca_bool@entries) > 0)
-        initial <- hca_bool@entries[[1]]@entries
-    bool <- .Bool(entries = list(.Filter(entries = c(initial, res@entries))))
-    hca@es_query@query@bool <- bool
+    selected <- unlist(.get_selections(res))
+
+    bool <- list(es_query = list(query = list(bool = res)))
+    hca@es_query <- es_query
+    hca@search_term <- bool
     
-    select(hca)
+    select(hca, selected)
 }
 
 #' @importFrom dplyr select
 #' @export
 select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
 {
-    #sources <- list(...)
-
     sources <- quos(...)
-    sources <- lapply(sources, rlang::quo_get_expr)
+    sources <- c(hca@es_source, sources)
+    hca@es_source <- sources
+    sources <- unlist(lapply(sources, rlang::eval_tidy))
     sources <- lapply(sources, as.character)
     sources <- unlist(sources)
     if (length(sources) && sources[1] == 'c')
         sources <- sources[-1]
-    if (length(.select_values) > 0) {
-        sources <- c(sources, .select_values)
-        .select_values <<- c()
-    }
-    sources <- c(hca@es_query@es_source@entries, sources)
     sources <- unique(sources)
 
-    hca@es_query@es_source@entries <- sources
+    sources <- .convert_names_to_filters(sources)
+
+    search_term <- hca@search_term
+    if(length(search_term) == 0)
+        search_term <- list(es_query = list(query = NULL))
+    search_term$es_query$"_source" <- sources
+    hca@search_term <- search_term
 
     if (.search)
         postSearch(hca, 'aws', 'raw', per_page = hca@per_page)
@@ -206,7 +229,7 @@ select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
         }
         else {
             if (!x %in% .filters) 
-                message(paste0(".filter ", x, "not supported."))
+                message(paste0(".filter ", x, " not supported."))
             x
         }
     }, character(1))

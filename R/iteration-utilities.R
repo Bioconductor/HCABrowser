@@ -19,6 +19,7 @@
 #' @importFrom stringr str_sub
 .parse_postSearch_results <- function(results)
 {
+    browser()
     json_files <- lapply(seq_along(results), function(i) {
         field_names <- names(results[[i]][["metadata"]][["files"]])
         field_names <- field_names[!field_names %in% .ignore_fields]
@@ -42,14 +43,17 @@
         if (is.null(results[[i]][['metadata']][['manifest']]))
             return(NULL)
         a <- do.call(rbind.data.frame, results[[i]][['metadata']][['manifest']][['files']])
-        if (!is.null(json_files[[i]]))
+        if (length(json_files[[i]]) > 0)
             a <- a[a$name %in% json_files[[i]]$file_core.file_name,]
-        a[order(a$name),]
+        a[order(a$name), , drop = FALSE]
     })
 
+    ## Correct potential offset if more json_files exist than meta data files
     bundle_files <- lapply(seq_along(json_files), function(i) {
         if (is.null(bundle_files[[i]]))
             return(data.frame(matrix(nrow=1, ncol=0)))
+        if (length(json_files[[i]]) == 0)
+            return(bundle_files[[i]])
         offset <- nrow(json_files[[i]]) - nrow(bundle_files[[i]])
         if (length(offset) == 0)
             offset <- 0
