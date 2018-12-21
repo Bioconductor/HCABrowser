@@ -1,0 +1,3270 @@
+{"files.donor_organism_json.describedBy": [
+    "https://schema.humancellatlas.org/type/biomaterial/10.1.2/donor_organism",
+    "https://schema.humancellatlas.org/type/biomaterial/10.1.1/donor_organism"
+  ],
+  "files.donor_organism_json.schema_type": [
+    "biomaterial"
+  ],
+  "files.donor_organism_json.biomaterial_core.ncbi_taxon_id": [
+    "9606",
+    "10090"
+  ],
+  "files.donor_organism_json.genus_species.text": [
+    "Homo sapiens",
+    "Mus musculus"
+  ],
+  "files.donor_organism_json.genus_species.ontology": [
+    "NCBITaxon:9606",
+    "NCBITaxon:10090"
+  ],
+  "files.donor_organism_json.genus_species.ontology_label": [
+    "Homo sapiens",
+    "Mus musculus"
+  ],
+  "files.donor_organism_json.is_living": [
+    "no",
+    "yes"
+  ],
+  "files.donor_organism_json.sex": [
+    "female",
+    "male",
+    "unknown"
+  ],
+  "files.donor_organism_json.diseases.text": [
+    "normal",
+    "subcutaneous melanoma",
+    "type II diabetes mellitus",
+    "asymptomatic dengue",
+    "ESRD",
+    "hemolytic uremic syndrome",
+    "isolated hip osteoarthritis"
+  ],
+  "files.donor_organism_json.diseases.ontology": [
+    "PATO:0000461",
+    "MONDO:0005105",
+    "MONDO:0005148",
+    "MONDO:0000259",
+    "MONDO:0004375",
+    "MONDO:0001549"
+  ],
+  "files.donor_organism_json.diseases.ontology_label": [
+    "normal",
+    "melanoma (disease)",
+    "type 2 diabetes mellitus",
+    "asymptomatic dengue",
+    "end stage renal failure",
+    "hemolytic-uremic syndrome"
+  ],
+  "files.donor_organism_json.organism_age": [
+    "38",
+    "6-12",
+    "22",
+    "55",
+    "5",
+    "37",
+    "18",
+    "39",
+    "50",
+    "25",
+    "27",
+    "18-60",
+    "57",
+    "52",
+    "48",
+    "26",
+    "29",
+    "54",
+    "6",
+    "23",
+    "44",
+    "1",
+    "21",
+    "43",
+    "36",
+    "55-59",
+    "45-49",
+    "40-44",
+    "65-69",
+    "35",
+    "40-45",
+    "20-25",
+    "28",
+    "55-60",
+    "0",
+    "32",
+    "19",
+    "68",
+    "85",
+    "78",
+    "49",
+    "73",
+    "76",
+    "53",
+    "50-55",
+    "63",
+    "69",
+    "80"
+  ],
+  "files.donor_organism_json.organism_age_unit.text": [
+    "year",
+    "week",
+    "day",
+    "month"
+  ],
+  "files.donor_organism_json.organism_age_unit.ontology": [
+    "UO:0000036",
+    "UO:0000034",
+    "UO:0000033",
+    "UO:0000035"
+  ],
+  "files.donor_organism_json.organism_age_unit.ontology_label": [
+    "year",
+    "week",
+    "day",
+    "month"
+  ],
+  "files.donor_organism_json.human_specific.body_mass_index": [
+    "29.5",
+    "32.9",
+    "29.8",
+    "24.8",
+    "17.6",
+    "39.6",
+    "24.7",
+    "31.8",
+    "24",
+    "34.4",
+    "35",
+    "27.3",
+    "28.4",
+    "21.5",
+    "23.8",
+    "13.7",
+    "30.8"
+  ],
+  "files.donor_organism_json.human_specific.ethnicity.text": [
+    "European",
+    "Asian",
+    "Caucasian",
+    "African-american",
+    "African American/Afro-Caribbean",
+    "European, White, British",
+    "White - other, Ad Mixed American",
+    "African American, Hispanic",
+    "YORUBA"
+  ],
+  "files.donor_organism_json.human_specific.ethnicity.ontology": [
+    "hancestro:0005",
+    "hancestro:0008",
+    "HANCESTRO:0005",
+    "HANCESTRO:0568",
+    "hancestro:0016",
+    "HANCESTRO:0462",
+    "HANCESTRO:0463",
+    "hancestro:0014",
+    "HANCESTRO:0008",
+    "HANCESTRO:0575"
+  ],
+  "files.donor_organism_json.human_specific.ethnicity.ontology_label": [
+    "European",
+    "Asian",
+    "African American",
+    "African American or Afro-Caribbean",
+    "British",
+    "American",
+    "Yoruban"
+  ],
+  "files.donor_organism_json.death.cause_of_death": [
+    "stroke",
+    "head trauma",
+    "auto accident",
+    "anoxia",
+    "not provided",
+    "Hypoxic brain damage"
+  ],
+  "files.cell_suspension_json.describedBy": [
+    "https://schema.humancellatlas.org/type/biomaterial/8.6.1/cell_suspension"
+  ],
+  "files.cell_suspension_json.schema_type": [
+    "biomaterial"
+  ],
+  "files.cell_suspension_json.biomaterial_core.ncbi_taxon_id": [
+    "9606",
+    "10090"
+  ],
+  "files.cell_suspension_json.genus_species.text": [
+    "Homo sapiens",
+    "Mus musculus"
+  ],
+  "files.cell_suspension_json.genus_species.ontology": [
+    "NCBITaxon:9606",
+    "NCBITaxon:10090"
+  ],
+  "files.cell_suspension_json.genus_species.ontology_label": [
+    "Homo sapiens",
+    "Mus musculus"
+  ],
+  "files.analysis_file_json.describedBy": [
+    "https://schema.humancellatlas.org/type/file/5.3.4/analysis_file"
+  ],
+  "files.analysis_file_json.schema_type": [
+    "file"
+  ],
+  "files.analysis_file_json.file_core.file_format": [
+    "txt",
+    "csv",
+    "unknown",
+    "results",
+    "bam",
+    "matrix",
+    "bai",
+    "tsv",
+    "h5",
+    "mtx"
+  ],
+  "files.dissociation_protocol_json.describedBy": [
+    "https://schema.humancellatlas.org/type/protocol/biomaterial_collection/5.0.3/dissociation_protocol"
+  ],
+  "files.dissociation_protocol_json.schema_type": [
+    "protocol"
+  ],
+  "files.dissociation_protocol_json.protocol_core.protocol_id": [
+    "dissociation_protocol_1",
+    "tissue_dissociation_protocol",
+    "P-GSE93593-2",
+    "dissociation_process_1",
+    "Cerebral_organoid_dissociation",
+    "SOP-Mechanical_Human_Spleen_Dissociation_19.02.17",
+    "SOP-Human_Oesophagus_Dissociation_19.02.18",
+    "dissociation_1",
+    "single_cell_dissociation_1"
+  ],
+  "files.dissociation_protocol_json.protocol_core.publication_doi": [
+    "https://doi.org/10.1101/108043",
+    "10.1016/j.cmet.2016.08.020",
+    "10.1126/sciimmunol.aan8664"
+  ],
+  "files.dissociation_protocol_json.dissociation_method.text": [
+    "fluorescence-activated cell sorting",
+    "mechanical dissociation",
+    "enzymatic dissociation",
+    "10x v2",
+    "Papain-based enzymatic dissociation",
+    "mechanical",
+    "enzymatic",
+    "enzymatic dissociation using DNAse1 and Liberase",
+    "10x_v2"
+  ],
+  "files.dissociation_protocol_json.dissociation_method.ontology": [
+    "EFO:0009108",
+    "EFO:0009129",
+    "EFO:0009128",
+    "EFO:0009310"
+  ],
+  "files.dissociation_protocol_json.dissociation_method.ontology_label": [
+    "fluorescence-activated cell sorting",
+    "mechanical dissociation",
+    "enzymatic dissociation",
+    "10X v2 sequencing"
+  ],
+  "files.dissociation_protocol_json.provenance.document_id": [
+    "31e708d3-79df-49b8-a3df-b1d694963468",
+    "32ba49cf-3950-4e3c-841a-181d47e3802e",
+    "9f90f02c-ee8b-4451-aa7e-185bb05cf167",
+    "c62d463f-efdf-4cf0-862a-22ecf95c5777",
+    "516829d4-62b6-4053-b670-650b8b56c4e1",
+    "856bf334-2ce9-46bc-a567-4700f45ff5e1",
+    "7571bffa-11ec-4921-bfad-ece0afc0dc70",
+    "f28243fd-0364-4642-9103-25f5bbb6e7e5",
+    "2a3a10ec-5b96-42f4-8905-3c2c669a00ab",
+    "7b14aa40-08bd-42e9-8d20-8a3928233cd6",
+    "c106b991-66ef-4ecc-8a8e-cef14a457636",
+    "0374784b-60a7-4661-bb0d-fbd70f4371be",
+    "86adf030-415d-4c97-bbe9-999f510f337f",
+    "9f71066b-3422-4a56-8f56-44c3f816e873",
+    "d362f895-9c75-470b-8c37-fcd3386c2786",
+    "d263e359-08c7-4085-b227-4d2ac5d071cd",
+    "4711dc7a-2a3f-465b-b1fb-ce5ff5199869",
+    "e10e02fb-5fb6-4476-8ed8-6dc696f874fc",
+    "028e8015-e9b6-4593-8cb8-59357085a746",
+    "9dad361c-b4de-4a0e-94e8-c8fca80634c8",
+    "91ac4ffa-a8ef-47f4-8b34-ef0cc074a901"
+  ],
+  "files.dissociation_protocol_json.provenance.submission_date": [
+    "2018-11-02T10:05:05.532Z",
+    "2018-11-06T16:26:47.268Z",
+    "2018-12-03T15:25:26.085Z",
+    "2018-11-21T10:59:30.292Z",
+    "2018-12-04T18:58:24.536Z",
+    "2018-11-29T09:16:07.501Z",
+    "2018-12-03T16:34:56.941Z",
+    "2018-10-30T15:29:07.655Z",
+    "2018-11-12T20:36:38.510Z",
+    "2018-11-12T20:36:38.517Z",
+    "2018-11-12T20:36:38.502Z",
+    "2018-09-18T18:03:48.888Z",
+    "2018-10-23T17:24:34.749Z",
+    "2018-10-29T16:16:43.540Z",
+    "2018-12-05T14:34:47.064Z",
+    "2018-12-05T14:34:47.071Z",
+    "2018-12-04T18:25:52.663Z",
+    "2018-12-04T18:11:31.565Z",
+    "2018-12-04T16:22:45.860Z",
+    "2018-11-28T21:23:56.230Z",
+    "2018-12-05T14:34:47.056Z"
+  ],
+  "files.dissociation_protocol_json.provenance.update_date": [
+    "2018-11-02T10:05:10.315Z",
+    "2018-11-06T16:26:57.632Z",
+    "2018-12-03T15:25:31.252Z",
+    "2018-11-21T10:59:37.184Z",
+    "2018-12-04T18:58:30.979Z",
+    "2018-11-29T09:16:12.374Z",
+    "2018-12-03T16:35:02.866Z",
+    "2018-10-30T15:29:18.494Z",
+    "2018-11-12T20:36:44.258Z",
+    "2018-11-12T20:36:44.227Z",
+    "2018-11-12T20:36:44.256Z",
+    "2018-09-18T18:03:52.648Z",
+    "2018-10-23T17:24:39.421Z",
+    "2018-10-29T16:16:53.588Z",
+    "2018-12-05T14:34:53.124Z",
+    "2018-12-05T14:34:53.088Z",
+    "2018-12-04T18:26:02.275Z",
+    "2018-12-04T18:11:35.367Z",
+    "2018-12-04T16:22:50.457Z",
+    "2018-11-28T21:24:01.200Z",
+    "2018-12-05T14:34:52.919Z"
+  ],
+  "files.process_json.schema_type": [
+    "process"
+  ],
+  "files.process_json.describedBy": [
+    "https://schema.humancellatlas.org/type/process/6.0.2/process"
+  ],
+  "files.sequencing_protocol_json.describedBy": [
+    "https://schema.humancellatlas.org/type/protocol/sequencing/9.0.3/sequencing_protocol",
+    "https://schema.humancellatlas.org/type/protocol/sequencing/9.0.2/sequencing_protocol"
+  ],
+  "files.sequencing_protocol_json.schema_type": [
+    "protocol"
+  ],
+  "files.sequencing_protocol_json.protocol_core.protocol_id": [
+    "sequencing_protocol_1",
+    "SmartSeq2_sequencing_protocol",
+    "P-GSE93593-4",
+    "10x_v2_sequencing_protocol_1",
+    "10x_v2_sequencing_protocol_2",
+    "10x_scRNASeq",
+    "HS_BM_P1_Seq1",
+    "HS_BM_P2_Seq2",
+    "10x_v2_sequencing_protocol_3",
+    "10x_v2_sequencing_protocol_4",
+    "assay_1",
+    "HS_BM_P3_Seq3",
+    "seq_process_2",
+    "seq_process_1",
+    "illumina_sequencing",
+    "sequencing_protocol_2",
+    "MARS_seq"
+  ],
+  "files.sequencing_protocol_json.instrument_manufacturer_model.text": [
+    "Illumina NextSeq 500",
+    "Illumina HiSeq 2500",
+    "Illumina HiSeq 2000",
+    "Illumina HiSeq 4000",
+    "Illumina Hiseq X 10",
+    "Illumina Hiseq 2500",
+    "Illumina NextSeq500"
+  ],
+  "files.sequencing_protocol_json.instrument_manufacturer_model.ontology": [
+    "EFO:0008566",
+    "EFO:0008567",
+    "EFO:0004203",
+    "EFO:0008565",
+    "EFO:0008563",
+    "EFO:0009173"
+  ],
+  "files.sequencing_protocol_json.instrument_manufacturer_model.ontology_label": [
+    "Illumina NextSeq 500",
+    "Illumina HiSeq 2500",
+    "Illumina HiSeq 2000",
+    "Illumina HiSeq 4000",
+    "Illumina Hiseq 2500"
+  ],
+  "files.sequencing_protocol_json.paired_end": [
+    "true",
+    "false"
+  ],
+  "files.sequencing_protocol_json.sequencing_approach.text": [
+    "RNA-Seq",
+    "Smart-seq2",
+    "full length single cell RNA sequencing",
+    "tag based single cell RNA sequencing",
+    "10X sequencing",
+    "InDrops",
+    "CITE-seq",
+    "Drop-seq",
+    "DroNc-seq"
+  ],
+  "files.sequencing_protocol_json.sequencing_approach.ontology": [
+    "EFO:0008896",
+    "EFO:0008931",
+    "EFO:0008441",
+    "EFO:0008440",
+    "EFO:0008780",
+    "EFO:0008995",
+    "EFO:0009294",
+    "EFO:0008722",
+    "EFO:0008720"
+  ],
+  "files.sequencing_protocol_json.sequencing_approach.ontology_label": [
+    "RNA-Seq",
+    "Smart-seq2",
+    "full length single cell RNA sequencing",
+    "tag based single cell RNA sequencing",
+    "inDrop",
+    "CITE-seq",
+    "Drop-Seq",
+    "DroNc-Seq"
+  ],
+  "files.sequencing_protocol_json.provenance.document_id": [
+    "61e629ed-0135-4492-ac8a-5c4ab3ccca8a",
+    "c2bd27da-d132-4833-a5f7-a7b19aabc6a0",
+    "92c2c573-6871-4c9c-920f-49ae32078c72",
+    "c5bd5499-17d2-46a9-a8f8-179d0df3c732",
+    "3decd8d5-5990-43cd-84cc-6c7796b8a76d",
+    "89cb35ca-037e-4c71-b90a-3dd660dfc4cd",
+    "3705fd55-8d36-430b-a625-68b87a66f4c3",
+    "14f22cf1-7b86-46c9-bdce-19426e4747c4",
+    "06c58151-def5-4f32-a7b0-b187f07bdcb3",
+    "fa3c332a-6c9c-4a8f-ba6b-c0c65e891bd3",
+    "262a1e10-a692-483e-93d6-6232f827a2ea",
+    "78afe138-c99a-427a-8a6e-e01d512856ad",
+    "0e65df8f-2ed9-4371-a59c-111c65231c43",
+    "bd49fde8-ec2f-481f-b6dc-d627b24d2bbc",
+    "2bd003d7-5de5-4d9d-bec7-9a998a873066",
+    "06534f7d-9175-41ed-b243-5811e2448c91",
+    "828ddf56-d042-450c-aefe-67d1a56956e6",
+    "f2ab14b0-0c2d-4636-b580-d7c3eb529931",
+    "eedd7bce-b670-44f6-b4df-93a15bf4db9a",
+    "128b8a30-187d-4131-8c46-bebceaf58f5e",
+    "8b598cd6-a403-4e9e-9dd7-2515c3f55ddd",
+    "06020aee-6152-4e1d-8d28-aebbfa154230",
+    "b5663dff-b3d6-4f6b-a2d3-aefd1f4a0cd2",
+    "136b0087-5d19-471c-8272-9f6128008409",
+    "d5b36969-1466-48da-840e-129250f267ec",
+    "2ea1f5b3-d137-43f5-98b6-268d82f682aa",
+    "77cba830-86bf-4d6e-98c2-0684067e5eb4",
+    "b0ffe93e-19b3-4b89-b472-8d556f925534",
+    "f008d24d-892a-4302-940e-c57b0adbaf0f",
+    "f777e397-cd28-444c-a690-d9121819a7b8"
+  ],
+  "files.sequencing_protocol_json.provenance.submission_date": [
+    "2018-11-02T10:05:05.555Z",
+    "2018-11-06T16:26:47.366Z",
+    "2018-12-03T15:25:26.101Z",
+    "2018-11-21T10:59:30.323Z",
+    "2018-12-04T18:58:24.552Z",
+    "2018-11-29T09:16:07.516Z",
+    "2018-12-03T16:34:57.043Z",
+    "2018-11-29T09:16:07.524Z",
+    "2018-10-30T15:29:07.671Z",
+    "2018-11-20T11:36:21.483Z",
+    "2018-11-12T20:36:38.531Z",
+    "2018-11-20T11:36:21.582Z",
+    "2018-11-29T09:16:07.532Z",
+    "2018-11-29T09:16:07.539Z",
+    "2018-09-18T18:03:48.930Z",
+    "2018-10-23T17:24:34.810Z",
+    "2018-10-29T16:16:43.565Z",
+    "2018-11-20T11:36:21.592Z",
+    "2018-12-05T14:34:47.103Z",
+    "2018-12-04T18:25:52.695Z",
+    "2018-12-04T18:25:52.681Z",
+    "2018-12-04T19:02:13.835Z",
+    "2018-12-04T18:11:31.595Z",
+    "2018-12-04T16:22:45.897Z",
+    "2018-12-04T19:02:13.851Z",
+    "2018-12-04T16:22:45.904Z",
+    "2018-11-28T08:12:51.919Z",
+    "2018-11-28T21:23:56.255Z",
+    "2018-11-28T21:23:56.247Z",
+    "2018-12-04T19:02:13.842Z"
+  ],
+  "files.sequencing_protocol_json.provenance.update_date": [
+    "2018-11-02T10:05:10.376Z",
+    "2018-11-06T16:26:58.116Z",
+    "2018-12-03T15:25:31.215Z",
+    "2018-11-21T10:59:37.108Z",
+    "2018-12-04T18:58:30.949Z",
+    "2018-11-29T09:16:19.566Z",
+    "2018-12-03T16:35:02.891Z",
+    "2018-11-29T09:16:11.380Z",
+    "2018-10-30T15:29:18.469Z",
+    "2018-11-20T11:36:28.708Z",
+    "2018-11-12T20:36:44.210Z",
+    "2018-11-20T11:36:28.709Z",
+    "2018-11-29T09:16:12.364Z",
+    "2018-11-29T09:16:12.372Z",
+    "2018-09-18T18:03:52.703Z",
+    "2018-10-23T17:24:39.421Z",
+    "2018-10-29T16:16:53.594Z",
+    "2018-11-20T11:36:28.707Z",
+    "2018-12-05T14:34:52.916Z",
+    "2018-12-04T18:26:02.300Z",
+    "2018-12-04T18:26:02.294Z",
+    "2018-12-04T19:02:19.850Z",
+    "2018-12-04T18:11:35.458Z",
+    "2018-12-04T16:22:50.648Z",
+    "2018-12-04T19:02:19.560Z",
+    "2018-12-04T16:22:50.628Z",
+    "2018-11-28T08:13:02.366Z",
+    "2018-11-28T21:24:01.190Z",
+    "2018-11-28T21:24:01.103Z",
+    "2018-12-04T19:02:19.629Z"
+  ],
+  "files.sequence_file_json.describedBy": [
+    "https://schema.humancellatlas.org/type/file/6.5.2/sequence_file"
+  ],
+  "files.sequence_file_json.schema_type": [
+    "file"
+  ],
+  "files.sequence_file_json.file_core.file_format": [
+    "fastq.gz",
+    "fastq"
+  ],
+  "files.sequence_file_json.read_index": [
+    "read2",
+    "read1",
+    "index1"
+  ],
+  "files.sequence_file_json.read_length": [
+    "75",
+    "43",
+    "8",
+    "26",
+    "114",
+    "98",
+    "50",
+    "100",
+    "36",
+    "49",
+    "55",
+    "45",
+    "30",
+    "62",
+    "20",
+    "66"
+  ],
+  "files.analysis_protocol_json.computational_method": [
+    "SmartSeq2SingleCell",
+    "10x"
+  ],
+  "files.analysis_protocol_json.describedBy": [
+    "https://schema.humancellatlas.org/type/protocol/analysis/8.0.3/analysis_protocol"
+  ],
+  "files.analysis_protocol_json.protocol_core.protocol_id": [
+    "smartseq2_v2.1.0",
+    "cellranger_v1.0.2"
+  ],
+  "files.analysis_protocol_json.protocol_type.text": [
+    "analysis"
+  ],
+  "files.analysis_protocol_json.schema_type": [
+    "protocol"
+  ],
+  "files.enrichment_protocol_json.describedBy": [
+    "https://schema.humancellatlas.org/type/protocol/biomaterial_collection/2.2.5/enrichment_protocol"
+  ],
+  "files.enrichment_protocol_json.schema_type": [
+    "protocol"
+  ],
+  "files.enrichment_protocol_json.protocol_core.protocol_id": [
+    "enrichment_protocol_1",
+    "FACS5",
+    "FACS8",
+    "FACS_enrichment_protocol",
+    "FACS1",
+    "FACS7",
+    "FACS2",
+    "FACS9",
+    "FACS3",
+    "FACS4",
+    "enrichment_protocol_2",
+    "enrichment_protocol_8",
+    "FACS6",
+    "FACS11",
+    "FACS10",
+    "enrichment_protocol_5",
+    "enrichment_protocol_3",
+    "enrichment_protocol_4",
+    "enrichment_protocol_7",
+    "enrichment_protocol_6",
+    "HS_BM_P1_Enrichment1",
+    "Miltenyi_MACS_dead_cell_removal",
+    "HS_BM_P2_Enrichment2",
+    "enrichment1",
+    "HS_BM_P3_Enrichment3",
+    "BM_Ficoll"
+  ],
+  "files.enrichment_protocol_json.protocol_core.publication_doi": [
+    "https://doi.org/10.1101/108043",
+    "10.1073/pnas.1305227110",
+    "10.1126/sciimmunol.aan8664"
+  ],
+  "files.enrichment_protocol_json.enrichment_method.text": [
+    "FACS",
+    "fluorescence-activated cell sorting",
+    "Ficoll-Hypaque method",
+    "magnetic affinity cell sorting"
+  ],
+  "files.enrichment_protocol_json.enrichment_method.ontology": [
+    "EFO:0009108",
+    "EFO:0009110",
+    "EFO:0009109"
+  ],
+  "files.enrichment_protocol_json.enrichment_method.ontology_label": [
+    "fluorescence-activated cell sorting",
+    "Ficoll-Hypaque method",
+    "magnetic affinity cell sorting"
+  ],
+  "files.enrichment_protocol_json.markers": [
+    "HPx1+ HPi2+ CD133/1+ CD133/2+",
+    "CD45+ CD3e+ CD4+",
+    "CD45- GFP+ CD31+",
+    "DAPI",
+    "CD45+ CD3e+ CD8a+",
+    "CD45+ IL7Ra+",
+    "CD45+ CD3e- B220- CD11c+",
+    "CD45- GFP+ CD31-",
+    "CD45+ CD3e- B220- CD11b+",
+    "CD45+ CD3e- B220- CD11b+ CD11c+",
+    "CD3+ CD4+ CD8alpha/CD14/CD19- CD45RA+ CCR7-",
+    "CD3+ CD4+ CD8alpha/CD14/CD19- CD45RA- CCR7- IFNgamma+",
+    "CD45+ B220+",
+    "CD45- CD31+",
+    "CD45- CD31-",
+    "CD3+ CD4+ CD8alpha/CD14/CD19- CD45RA+ CCR7- IFNgamma+",
+    "CD3+ CD4+ CD8alpha/CD14/CD19- CD45RA- CCR7+",
+    "CD3+ CD4+ CD8alpha/CD14/CD19- CD45RA- CCR7-",
+    "CD3+ CD4+ CD8alpha/CD14/CD19- CD45RA+ CCR7- CD127-",
+    "CD3+ CD4+ CD8alpha/CD14/CD19- CD45RA+ CCR7- CD127high",
+    "CD34+",
+    "LiveCells",
+    "CD38+ CD138+"
+  ],
+  "files.enrichment_protocol_json.provenance.document_id": [
+    "5bd4ba68-4c0e-4d22-840d-afc025e7badc",
+    "eb18fd34-8c5e-43d9-b01c-168294c2ec65",
+    "a6d7efea-8a42-4f7e-9f77-358dfb9ed5e2",
+    "21be6fb9-f4f1-47d6-a5e9-4954ef71f852",
+    "d0d44b0b-9852-41f2-9087-ca1eb95b367e",
+    "2cd47ea5-74c1-401d-86d5-70f90255c9be",
+    "4ec49808-90c1-4b91-b07e-b54b83409598",
+    "db73da89-f2af-4f27-9953-98ff7f626ecc",
+    "dee8a98f-ac07-45c8-9161-fad5b9b85725",
+    "fb9b03eb-4a81-4f78-82d0-2eb4a208bdf5",
+    "715f3d79-c9c2-475a-a59f-5b56ed8dfafb",
+    "d2c44393-1cd7-4c53-a6bd-b06cdea13d5e",
+    "185567ec-e30e-4d9c-b828-e545f01b508e",
+    "c5d4f298-7843-4642-8eaa-6ecee093c7c3",
+    "ea7fac25-5278-442f-8702-34f7e0879303",
+    "08521aac-c03e-43ca-a5d6-57d28caac545",
+    "1265c9bf-0eb7-47a4-81e3-5ea695defe35",
+    "7f196008-324a-4a43-899c-95fb8464510a",
+    "1490c803-8bea-4c5f-b7bb-135f5a014937",
+    "50ede1a4-75f9-4ab4-88de-699e94740f07",
+    "ca77cb4f-cb13-4972-bbcc-5516af7f67c3",
+    "f41410f3-81c8-4937-a93f-9892256b9b55",
+    "a8478c9c-99f7-4754-bec4-82d57450f235",
+    "eda0f4a0-efc2-404b-8a99-9c23dacf26d9",
+    "28d45a4c-b571-40ce-b0cd-331c972d9cbd",
+    "64082668-65e9-41c5-8620-1dd426691ee3",
+    "6a2b793a-4cd0-4b64-a6c4-7995540d33b4",
+    "17d30ca7-e278-4214-988b-044c1cf38fd0",
+    "6b3513f6-4586-404a-8a45-87733a2515c0",
+    "fa67c716-2cd8-4e8e-99bc-e153d39b3d1e",
+    "fd588b5b-1c54-40f5-9b80-e3e75bcf39a0",
+    "49a3749f-225b-440f-ba28-e8bcc4d1749a",
+    "7d00fc0d-2d51-469a-a333-69e4ec4f7ee4",
+    "4829585e-34a2-4e1e-b498-d1a797d198dc",
+    "f41b69e3-bf8b-42f0-9b84-09f77ec140d9"
+  ],
+  "files.enrichment_protocol_json.provenance.submission_date": [
+    "2018-11-02T10:05:05.540Z",
+    "2018-11-06T16:26:47.307Z",
+    "2018-11-06T16:26:47.329Z",
+    "2018-11-21T10:59:30.309Z",
+    "2018-11-06T16:26:47.276Z",
+    "2018-11-06T16:26:47.322Z",
+    "2018-11-06T16:26:47.283Z",
+    "2018-11-06T16:26:47.336Z",
+    "2018-11-06T16:26:47.291Z",
+    "2018-11-06T16:26:47.299Z",
+    "2018-12-03T16:34:56.952Z",
+    "2018-12-03T16:34:56.962Z",
+    "2018-12-03T16:34:57.027Z",
+    "2018-11-06T16:26:47.315Z",
+    "2018-11-06T16:26:47.351Z",
+    "2018-11-06T16:26:47.343Z",
+    "2018-12-03T16:34:56.996Z",
+    "2018-12-03T16:34:56.970Z",
+    "2018-12-03T16:34:56.984Z",
+    "2018-12-03T16:34:57.015Z",
+    "2018-12-03T16:34:57.005Z",
+    "2018-11-20T11:36:21.436Z",
+    "2018-11-12T20:36:38.495Z",
+    "2018-11-20T11:36:21.443Z",
+    "2018-11-12T20:36:38.487Z",
+    "2018-09-18T18:03:48.897Z",
+    "2018-10-23T17:24:34.773Z",
+    "2018-10-29T16:16:43.548Z",
+    "2018-11-20T11:36:21.449Z",
+    "2018-12-05T14:34:47.049Z",
+    "2018-12-04T19:02:13.787Z",
+    "2018-12-04T19:02:13.803Z",
+    "2018-11-28T08:12:51.905Z",
+    "2018-12-04T19:02:13.795Z",
+    "2018-12-05T14:34:47.035Z"
+  ],
+  "files.enrichment_protocol_json.provenance.update_date": [
+    "2018-11-02T10:05:10.335Z",
+    "2018-11-06T16:26:57.637Z",
+    "2018-11-06T16:26:57.343Z",
+    "2018-11-21T10:59:37.036Z",
+    "2018-11-06T16:26:57.464Z",
+    "2018-11-06T16:26:57.790Z",
+    "2018-11-06T16:26:57.580Z",
+    "2018-11-06T16:26:58.258Z",
+    "2018-11-06T16:26:57.573Z",
+    "2018-11-06T16:26:57.668Z",
+    "2018-12-03T16:35:02.913Z",
+    "2018-12-03T16:35:02.872Z",
+    "2018-12-03T16:35:02.898Z",
+    "2018-11-06T16:26:57.622Z",
+    "2018-11-06T16:26:57.384Z",
+    "2018-11-06T16:26:58.920Z",
+    "2018-12-03T16:35:02.896Z",
+    "2018-12-03T16:35:02.891Z",
+    "2018-12-03T16:35:02.120Z",
+    "2018-12-03T16:35:02.902Z",
+    "2018-12-03T16:35:02.921Z",
+    "2018-11-20T11:36:28.095Z",
+    "2018-11-12T20:36:44.209Z",
+    "2018-11-20T11:36:28.097Z",
+    "2018-11-12T20:36:44.184Z",
+    "2018-09-18T18:03:52.635Z",
+    "2018-10-23T17:24:39.396Z",
+    "2018-10-29T16:16:53.546Z",
+    "2018-11-20T11:36:27.851Z",
+    "2018-12-05T14:34:53.050Z",
+    "2018-12-04T19:02:19.409Z",
+    "2018-12-04T19:02:19.750Z",
+    "2018-11-28T08:12:59.429Z",
+    "2018-12-04T19:02:19.556Z",
+    "2018-12-05T14:34:53.368Z"
+  ],
+  "files.library_preparation_protocol_json.describedBy": [
+    "https://schema.humancellatlas.org/type/protocol/sequencing/4.3.3/library_preparation_protocol",
+    "https://schema.humancellatlas.org/type/protocol/sequencing/4.3.2/library_preparation_protocol"
+  ],
+  "files.library_preparation_protocol_json.schema_type": [
+    "protocol"
+  ],
+  "files.library_preparation_protocol_json.protocol_core.protocol_id": [
+    "library_preparation_protocol_1",
+    "SmartSeq2_RTPCR_protocol",
+    "P-GSE93593-3",
+    "10x_3'_library_preparation",
+    "HS_BM_P1_LibPrep1",
+    "HS_BM_P2_LibPrep2",
+    "preparation1",
+    "HS_BM_P3_LibPrep3",
+    "library_prep_1 ",
+    "hto_prep",
+    "rna_prep",
+    "library_preparation_protocol_2",
+    "cite_prep",
+    "MARS_prep"
+  ],
+  "files.library_preparation_protocol_json.nucleic_acid_source": [
+    "single cell"
+  ],
+  "files.library_preparation_protocol_json.input_nucleic_acid_molecule.text": [
+    "polyA RNA",
+    "mRNA"
+  ],
+  "files.library_preparation_protocol_json.input_nucleic_acid_molecule.ontology": [
+    "OBI:0000869",
+    "CHEBI:33699"
+  ],
+  "files.library_preparation_protocol_json.library_construction_approach.text": [
+    "Smart-seq2",
+    "10x_v2",
+    "10X v2 sequencing",
+    "Chromium 3' Single Cell v2",
+    "High-throughput single-cell labeling with indexing droplets",
+    "Drop-seq ",
+    "DroNc-seq ",
+    "MARS-seq"
+  ],
+  "files.library_preparation_protocol_json.library_construction_approach.ontology": [
+    "EFO:0008931",
+    "EFO:0009310",
+    "EFO:0008780",
+    "EFO:0008722",
+    "EFO:0008720",
+    "EFO:0008796"
+  ],
+  "files.library_preparation_protocol_json.library_construction_approach.ontology_label": [
+    "Smart-seq2",
+    "10X v2 sequencing",
+    "inDrop",
+    "Drop-Seq ",
+    "DroNc-Seq "
+  ],
+  "files.library_preparation_protocol_json.library_construction_kit.retail_name": [
+    "Nextera XT kit",
+    "Nextera XT library preparation kit",
+    "10X Chromium Single Cell 3' Solution v2 Chemistry",
+    "inDrop\u2122 Single Cell RNA Seq Kit",
+    "Nextera XT DNA Library Preparation Kit"
+  ],
+  "files.library_preparation_protocol_json.library_construction_kit.manufacturer": [
+    "Illumina",
+    "10X Genomics",
+    "1Cellbio"
+  ],
+  "files.library_preparation_protocol_json.end_bias": [
+    "full length",
+    "3 prime tag",
+    "5 prime end bias",
+    "3 prime end bias"
+  ],
+  "files.library_preparation_protocol_json.primer": [
+    "poly-dT",
+    "random"
+  ],
+  "files.library_preparation_protocol_json.strand": [
+    "unstranded",
+    "second",
+    "first",
+    "not provided"
+  ],
+  "files.library_preparation_protocol_json.provenance.document_id": [
+    "9c32cf70-3ed7-4720-badc-5ee71e8a38af",
+    "a2d7bd71-df3e-4a67-a671-b965c061bb8b",
+    "d4d412af-9a10-40fb-9103-3cbea6989a40",
+    "6c21812c-ed31-4697-b5c2-28215158736b",
+    "3c2d6162-f086-4cf4-bd01-fb46c1b04990",
+    "6f367bb6-7fc6-4099-a053-005f38e690cb",
+    "9d6450e9-cd79-4191-98cc-09a1279d9760",
+    "62e199e9-8772-4cb7-b56e-4307d3306c6e",
+    "eed81389-c99d-4255-b99d-213e79d8b4e5",
+    "a0ca6f61-0d68-45f8-bf0b-b3c11a7a237c",
+    "38c85f33-06be-4835-bb2e-8a298d84387f",
+    "75d56ce8-f73b-4ae3-b270-8cc732d1a76e",
+    "c541d9a2-4256-422c-9da4-88dce4388515",
+    "cacf5387-9a1a-4596-96d1-fda4e094fb0f",
+    "08d0b9d2-0914-4e0d-ab4c-4348309c819d",
+    "85579bf6-2d77-48ab-a829-b2f789b76fd0",
+    "5b3454e6-d183-4ce2-b40b-d16874019964",
+    "540b6b3b-9609-4251-94c8-88724b8a7136",
+    "58007c5e-bf89-41af-a062-0e35e90b9cfd",
+    "d9a39c3e-c874-4fef-bacf-76d410b1bef7",
+    "c9eb661d-cee1-423b-b307-56c082560982",
+    "e83064bd-1b9f-4257-b372-283a3d058ec3",
+    "7a7788ce-ba24-431b-bd4b-dc02dcee1547",
+    "56f05888-6bc1-40b0-b026-c7bf4a004149",
+    "e073292b-99e9-4326-b1c9-41581641ae0b",
+    "7bea72a5-8769-4eed-96bb-fb9d0cc2dca2",
+    "5a21f00f-2761-4a7d-b6a4-7219713372c2"
+  ],
+  "files.library_preparation_protocol_json.provenance.submission_date": [
+    "2018-11-02T10:05:05.547Z",
+    "2018-11-06T16:26:47.359Z",
+    "2018-12-03T15:25:26.093Z",
+    "2018-11-21T10:59:30.316Z",
+    "2018-12-04T18:58:24.544Z",
+    "2018-11-29T09:16:07.509Z",
+    "2018-12-03T16:34:57.035Z",
+    "2018-10-30T15:29:07.663Z",
+    "2018-11-20T11:36:21.456Z",
+    "2018-11-12T20:36:38.524Z",
+    "2018-11-20T11:36:21.463Z",
+    "2018-09-18T18:03:48.913Z",
+    "2018-10-23T17:24:34.797Z",
+    "2018-10-29T16:16:43.557Z",
+    "2018-11-20T11:36:21.470Z",
+    "2018-12-05T14:34:47.092Z",
+    "2018-12-04T18:25:52.674Z",
+    "2018-12-04T19:02:13.810Z",
+    "2018-12-04T18:11:31.581Z",
+    "2018-12-04T16:22:45.875Z",
+    "2018-12-04T18:11:31.572Z",
+    "2018-12-04T19:02:13.826Z",
+    "2018-12-04T16:22:45.888Z",
+    "2018-12-04T18:11:31.588Z",
+    "2018-11-28T08:12:51.913Z",
+    "2018-11-28T21:23:56.237Z",
+    "2018-12-04T19:02:13.819Z"
+  ],
+  "files.library_preparation_protocol_json.provenance.update_date": [
+    "2018-11-02T10:05:10.360Z",
+    "2018-11-06T16:26:58.929Z",
+    "2018-12-03T15:25:31.243Z",
+    "2018-11-21T10:59:37.059Z",
+    "2018-12-04T18:58:29.682Z",
+    "2018-11-29T09:16:12.585Z",
+    "2018-12-03T16:35:02.922Z",
+    "2018-10-30T15:29:18.463Z",
+    "2018-11-20T11:36:28.811Z",
+    "2018-11-12T20:36:44.249Z",
+    "2018-11-20T11:36:28.814Z",
+    "2018-09-18T18:03:52.776Z",
+    "2018-10-23T17:24:39.419Z",
+    "2018-10-29T16:16:53.584Z",
+    "2018-11-20T11:36:28.810Z",
+    "2018-12-05T14:34:52.861Z",
+    "2018-12-04T18:26:02.286Z",
+    "2018-12-04T19:02:19.400Z",
+    "2018-12-04T18:11:35.433Z",
+    "2018-12-04T16:22:50.685Z",
+    "2018-12-04T18:11:35.410Z",
+    "2018-12-04T19:02:19.449Z",
+    "2018-12-04T16:22:50.620Z",
+    "2018-12-04T18:11:35.450Z",
+    "2018-11-28T08:12:59.539Z",
+    "2018-11-28T21:24:01.188Z",
+    "2018-12-04T19:02:19.562Z"
+  ],
+  "files.project_json.describedBy": [
+    "https://schema.humancellatlas.org/type/project/9.0.3/project",
+    "https://schema.humancellatlas.org/type/project/9.0.2/project"
+  ],
+  "files.project_json.schema_type": [
+    "project"
+  ],
+  "files.project_json.project_core.project_short_name": [
+    "Single cell transcriptome analysis of human pancreas",
+    "Mouse Melanoma",
+    "Healthy and type 2 diabetes pancreas",
+    "An in vitro model of human inhibitory interneuron differentiation produced over time",
+    "1M Neurons",
+    "1M Immune Cells",
+    "CD4+ cytotoxic T lymphocytes",
+    "HPSI human cerebral organoids",
+    "Human Hematopoietic Profiling",
+    "Tissue stability",
+    "Q4_DEMO-project_PRJNA248302",
+    "DCP_Infrastructure_Test_Do_Not_Use",
+    "Kidney biopsy scRNA-seq",
+    "Multiplexed scRNA-seq with barcoded antibodies",
+    "Drop-seq, DroNc-seq, Fluidigm C1 Comparison",
+    "BM_PC"
+  ],
+  "files.project_json.project_core.project_title": [
+    "Single cell transcriptome analysis of human pancreas reveals transcriptional signatures of aging and somatic mutation patterns.",
+    "Melanoma infiltration of stromal and immune cells",
+    "Single-cell RNA-seq analysis of human pancreas from healthy individuals and type 2 diabetes patients",
+    "Single-cell RNA-seq analysis  throughout a 125-day differentiation protocol that converted H1 human embryonic stem cells to a variety of ventrally-derived cell types.",
+    "1.3 Million Brain Cells from E18 Mice",
+    "Census of Immune Cells",
+    "Precursors of human CD4+ cytotoxic T lymphocytes identified by single-cell transcriptome analysis",
+    "Assessing the relevance of organoids to model inter-individual variation",
+    "Profiling of CD34+ cells from human bone marrow to understand hematopoiesis",
+    "Ischaemic sensitivity of human tissue by single cell RNA seq",
+    "Q4_DEMO-Single cell RNA-seq of primary human glioblastomas",
+    "Test 2018/10/23 production DCP release",
+    "Single Cell Transcriptomics of a Human Kidney Allograft Biopsy Defines a Diverse Inflammatory Response",
+    "Cell hashing with barcoded antibodies enables multiplexing and doublet detection for single cell genomics ",
+    "Comparison, calibration, and benchmarking of high-throughput single cell RNA-Seq techniques for unbiased cell-type classification",
+    "Bone marrow plasma cells from hip replacement surgeries"
+  ],
+  "files.project_json.project_core.project_description": [
+    "As organisms age, cells accumulate genetic and epigenetic changes that eventually lead to impaired organ function or catastrophic failure such as cancer. Here we describe a single-cell transcriptome analysis of 2544 human pancreas cells from donors, spanning six decades of life. We find that islet cells from older donors have increased levels of disorder as measured both by noise in the transcriptome and by the number of cells which display inappropriate hormone expression, revealing a transcriptional instability associated with aging. By analyzing the spectrum of somatic mutations in single cells from previously-healthy donors, we find a specific age-dependent mutational signature characterized by C to A and C to G transversions, indicators of oxidative stress, which is absent in single cells from human brain tissue or in a tumor cell line. Cells carrying a high load of such mutations also express higher levels of stress and senescence markers, including FOS, JUN, and the cytoplasmic superoxide dismutase SOD1, markers previously linked to pancreatic diseases with substantial age-dependent risk, such as type 2 diabetes mellitus and adenocarcinoma. Thus, our single-cell approach unveils gene expression changes and somatic mutations acquired in aging human tissue, and identifies molecular pathways induced by these genetic changes that could influence human disease. Also, our results demonstrate the feasibility of using single-cell RNA-seq data from primary cells to derive meaningful insights into the genetic processes that operate on aging human tissue and to determine which molecular mechanisms are coordinated with these processes. Examination of single cells from primary human pancreas tissue",
+    "The cancer microenvironment is a complex ecosystem characterized by dynamic interactions between diverse cell types, including malignant, immune and stromal cells. Here, we performed single-cell RNA sequencing on CD45+ and CD45- cells isolated from tumour and lymph nodes during a mouse model of melanoma. The transcriptional profiles of these individual cells taken at different time points coupled with assembled T cell receptor sequences, allowed us to identify distinct immune subpopulations and delineate their developmental trajectory. Our study provides insights into the complex interplay among cells within the tumour microenvironment and presents a valuable resource for future translational applications.",
+    "We used single-cell RNA-sequencing to generate transcriptional profiles of endocrine and exocrine cell types of the human pancreas. Pancreatic tissue and islets were obtained from six healthy and four T2D cadaveric donors. Islets were cultured and dissociated into single-cell suspension. Viable individual cells were distributed via fluorescence-activated cell sorted (FACS) into 384-well plates containing lysis buffer. Single-cell cDNA libraries were generated using the Smart-seq2 protocol. Gene expression was quantified as reads per kilobase transcript and per million mapped reads (RPKM) using rpkmforgenes. Bioinformatics analysis was used to classify cells into cell types without knowledge of cell types or prior purification of cell populations. We revealed subpopulations in endocrine and exocrine cell types, identified genes with interesting correlations to body mass index (BMI) in specific cell types and found transcriptional alterations in T2D.  Complementary whole-islet RNA-seq data have also been deposited at ArrayExpress under accession number E-MTAB-5060 (http://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-5060).",
+    "Diverse cell types are produced from dorsal and ventral regions of the developing neural tube. In this study we describe a system for generating human inhibitory interneurons by ventralizing human embryonic stem cells in vitro and characterizing the gene expression of the cell types produced over time. We engineered a DCX-Citrine/Y hESC line to sort and characterize progenitor and neuron transcriptomics separately at both the subpopulation and single cell level. The cells generated in vitro were compared to similar populations present in human fetal brain samples by mapping gene expression data from human fetal cells onto the principal component analysis (PCA) space of in vitro-derived populations. Weighted gene co-expression network analysis (WGCNA) was used to determine the discreet cell types present at D24, D54, D100 and D125 of culture, and describe the gene expression changes that occur in progenitor and neuron populations over time. Immature lateral ganglionic eminence and medial ganglionic eminence cells are present at early timepoints, along with MGE-like and dorsal pallium-like neuronal progenitors. At later timepoints we observe the emergence of SST-expressing interneurons, as well as oligodendrocyte and astrocyte progenitors. We also identified genes that were upregulated in somatostatin-expressing interneurons as they mature. The transcriptomes of 1732 ventralized single cells were profiled by SmartSeq2 at different timepoints throughout a 125-day differentiation protocol that converted H1 human embryonic stem cells to a variety of ventrally-derived cell types.",
+    "Cortex, hippocampus, and subventricular zone were purchased from BrainBits (C57EHCV). They were from 2 E18 C57BL/6 mice dissected on the same day, shipped overnight on ice, and stored at 4C until being prepared for scRNA-Seq. Brain tissues were dissociated following the Demonstrated Protocol for Mouse Embryonic Neural Tissue (https://support.10xgenomics.com/single-cell/sample-prep/doc/demonstrated-protocol-dissociation-of-mouse-embryonic-neural-tissue-for-single-cell-rna-sequencing). 69 scRNA-Seq libraries were made from first mouse brain 2 days after the dissection. Another 64 scRNA-Seq libraries were made from second mouse brain 6 days after the dissection.",
+    "Diverse cells of the immune system maintain and protect tissue function, integrity, and homeostasis upon changes in functional demands and diverse perturbations. Recent advances such as massively parallel single-cell RNA-sequencing and sophisticated computational methods help shed new light on this complexity. This immune cell census aims to profile up to 2M immunocytes, the first tranche of this is currently available. With computational methods optimized to a massive scale, we can readily identify cell types and markers, as well as the process of hematopoietic differentiation. The high quality and comprehensive reference map is provided as an open community resource for understanding human health and disease.",
+    "CD4+ cytotoxic T lymphocytes (CD4-CTLs) have been reported to play a protective role in several viral infections. However, little is known in humans about the biology of CD4-CTL generation, their functional properties, heterogeneity and clonal diversity, especially in relation to other well-described CD4+ memory T cell subsets. We performed single-cell RNA-seq in over 9000 cells to unravel CD4-CTL heterogeneity, transcriptional profile and clonality in humans. The single-cell differential gene expression analysis, revealed a spectrum of known transcripts, including several linked to cytotoxic and co-stimulatory function, and transcripts of unknown cytotoxicity-related function that are expressed at higher levels in the TEMRA subset, which is highly enriched for CD4-CTLs, compared to cells in the central and effector memory subsets (TCM, TEM). Simultaneous T cells antigen receptor (TCR) analysis in single-cells and bulk subsets revealed that CD4-TEMRA cells show marked clonal expansion compared to TCM and TEM cells and that the majority of CD4-TEMRA were dengue virus (DENV)-specific in subjects with previous DENV infection. The profile of CD4-TEMRA was highly heterogeneous across subjects, with four distinct clusters identified by the single-cell analysis. Most importantly, we identified distinct clusters of CD4-CTL effector and precursor cells in the TEMRA subset; the precursor cells shared TCR clonotypes with CD4-CTL effectors and were distinguished by high expression of the interleukin-7 receptor. Our identification of a CD4-CTL precursor population may allow further investigation of how CD4-CTLs arise in humans and thus could provide insights into the mechanisms that may be utilized to generate durable and effective CD4-CTL immunity.",
+    "The purpose of this project is to assess the relevance of pluripotent stem cell-derived cerebral and liver organoids to recapitulate the variation in cell-type specific gene expression programs between individuals. Towards this aim, we will generate reference atlases of the developing cortex and liver from multiple individuals, derive iPSC lines from these same individuals, and determine if inter-individual gene expression variation is recapitulated in cerebral and liver organoids from the same individual from which we have reference maps. In parallel we will assess the genetic contribution to variablity between organoids from different iPSCs of multiple human individuals that are available in existing iPSC resources (e.g. HipSci).",
+    "Differentiation is among the most fundamental processes in cell biology. Single cell RNA-seq studies have demonstrated that differentiation is a continuous process and in particular cell states are observed to reside on largely continuous spaces. We have developed Palantir, a graph based algorithm to model continuities in cell state transitions and cell fate choices. Modeling differentiation as a Markov chain, Palantir determines probabilities of reaching terminal states from cells in each intermediate state. The entropy of these probabilities represent the differentiation potential of the cell in the corresponding state. Applied to single cell RNA-seq dataset of CD34+ hematopoietic cells from human bone marrows, Palantir accurately identified key events leading up to cell fate commitment. Integration with ATAC-seq data from bulk sorted populations helped identify key regulators that correlate with cell fate specification and commitment.",
+    "Assessment of ischaemic sensitivity of human tissues using 10x 3' single cell RNA sequencing. Currently, this project contains data for spleen and oesophagus. Ultimately we aim to collect data from three tissues expected to have different sensitivity to ischaemia: spleen (expected least sensitive), oesophagus (in the middle), and lung. Samples will be collected fresh (i.e. as soon as possible) and at 12h, 24h, and 72h post onset of ischaemia in the donor. Single cell RNA sequencing data will be generated at each time point using the 10x genomics single cell 3' method.",
+    "Q4_DEMO-We report transcriptomes from 430 single glioblastoma cells isolated from 5 individual tumors and 102 single cells from gliomasphere cells lines generated using SMART-seq. In addition, we report population RNA-seq from the five tumors as well as RNA-seq from cell lines derived from 3 tumors (MGH26, MGH28, MGH31) cultured under serum free (GSC) and differentiated (DGC) conditions. This dataset highlights intratumoral heterogeneity with regards to the expression of de novo derived transcriptional modules and established subtype classifiers. Overall design: Operative specimens from five glioblastoma patients (MGH26, MGH28, MGH29, MGH30, MGH31) were acutely dissociated, depleted for CD45+ inflammatory cells and then sorted as single cells (576 samples). Population controls for each tumor were isolated by sorting 2000-10000 cells and processed in parallel (5 population control samples). Single cells from two established cell lines, GBM6 and GBM8, were also sorted as single cells (192 samples). SMART-seq protocol was implemented to generate single cell full length transcriptomes (modified from Shalek, et al Nature 2013) and sequenced using 25 bp paired end reads. Single cell cDNA libraries for MGH30 were resequenced using 100 bp paired end reads to allow for isoform and splice junction reconstruction (96 samples, annotated MGH30L). Cells were also cultured in serum free conditions to generate gliomasphere cell lines for MGH26, MGH28, and MGH31 (GSC) which were then differentiated using 10% serum (DGC). Population RNA-seq was performed on these samples (3 GSC, 3 DGC, 6 total). The initial dataset included 875 RNA-seq libraries (576 single glioblastoma cells, 96 resequenced MGH30L, 192 single gliomasphere cells, 5 tumor population controls, 6 population libraries from GSC and DGC samples). Data was processed as described below using RSEM for quantification of gene expression. 5,948 genes with the highest composite expression either across all single cells combined (average log2(TPM)>4.5) or within a single tumor (average log2(TPM)>6 in at least one tumor) were included. Cells expressing less than 2,000 of these 5,948 genes were excluded. The final processed dataset then included 430 primary single cell glioblastoma transcriptomes, 102 single cell transcriptomes from cell lines(GBM6,GBM8), 5 population controls (1 for each tumor), and 6 population libraries from cell lines derived from the tumors (GSC and DGC for MGH26, MGH28 and MGH31). The final matrix (GBM_data_matrix.txt) therefore contains 5948 rows (genes) quantified in 543 samples (columns). Please note that the samples which are not included in the data processing are indicated in the sample description field.",
+    "Test 2018/10/23 production DCP release",
+    "Single cell genomics are revolutionizing our ability to characterize complex tissues. By contrast, the techniques used to analyze the renal biopsy are little changed over the past several decades. In this study we have tested the hypothesis that single cell RNA sequencing (sc-RNA-seq) can comprehensively describe cell types and states in a human kidney biopsy. We generated 8,746 single cell cell transcriptomes from a healthy adult kidney and a single kidney transplant biopsy core by sc-RNA-seq. Unsupervised clustering analysis of the biopsy identified 16 distinct cell types, including all of the major immune cell types and most native kidney cell types in this biopsy whose histologic read was mixed rejection. Endothelial cells formed three distinct sub-clusters: resting cells and two activated endothelial cell clusters, including expression of Fc-receptor pathway activation and immunoglobulin internalization genes, consistent with the pathologic diagnosis of antibody-mediated rejection. Monocytes formed two sub-clusters representing a non-classical CD16+ group and a classical CD16- group expressing dendritic cell maturation markers. The presence of both monocyte cell subtypes was validated by staining of of independent transplant biopsies. Comparison of healthy kidney epithelial transcriptomes to their biopsy counterparts identified novel segment specific pro-inflammatory responses. We mapped previously defined genes that associate with rejection outcomes to single cell types and generated a searchable online gene expression database. These findings represent a first step towards incorporation of single cell transcriptomics into kidney biopsy interpretation, describe a heterogeneous immune response in mixed rejection and provide a searchable resource for the scientific community.",
+    "Despite rapid developments in single cell sequencing technology, sample-specific batch effects, detection of cell doublets, and the cost of generating massive datasets remain outstanding challenges. Here, we introduce cell hashing, where oligo-tagged antibodies against ubiquitously expressed surface proteins are used to uniquely label cells from distinct samples, which can be subsequently pooled. By sequencing these tags alongside the cellular transcriptome, we can assign each cell to its sample of origin, and robustly identify doublets originating from multiple samples. We demonstrate our approach by pooling eight human PBMC samples on a single run of the 10x Chromium system, substantially reducing our per-cell costs for library generation. Cell hashing is inspired by, and complementary to, elegant multiplexing strategies based on genetic variation, which we also leverage to validate our results. We therefore envision that our approach will help to generalize the benefits of single cell multiplexing to diverse samples and experimental designs.",
+    "The Human Cell Atlas project seeks to identify and functionally characterize all cell types in the human body. Single-cell RNA-sequencing (scRNA-seq) methods quantify gene expression in individual cells. In principle, highly parallelized scRNA-seq approaches enable marker-free decomposition of cells from complex tissues to identify known and unknown cell types and provide direct insights into regulatory and functional states of each cell. Different scRNA-seq technologies vary in cell capture efficiency, library preparation, and throughput. Importantly, these approaches also vary in sensitivity and accuracy of mRNA quantification. The Human Cell Atlas project will collate data generated across many labs, necessitating the evaluation of experimental replicability, and comparing different experimental procedures. It is important to develop robust sequencing protocols and benchmark their performance on select cells and tissues. This project will perform a systematic comparison of three single cell RNA sequencing technologies, viz., Drop-Seq, Fluidigm C1, and DroNC-Seq and resulting datasets. Droplet-based methods facilitate high-throughput processing of tens of thousands of cells in parallel and at low costs, making them ideal for the Human Cell Atlas project. This project proposes to compare the sensitivity, accuracy, and precision with which the three methods quantify transcript levels within individual cells. In addition, this project will directly compare these methods using a \u2018synthetic tissue\u2019 created from a mixture of multiple cell types at known ratios.",
+    "Our aims are to generate a full representation of human hematopoiesis in blood and bone marrow of humans using a multi-tier and iterative collection and analysis of 200,000 cells from ten healthy human bone "
+  ],
+  "files.project_json.supplementary_links": [
+    "https://www.ebi.ac.uk/gxa/sc/experiments/E-GEOD-81547/Results",
+    "https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-5061/Results",
+    "https://www.ebi.ac.uk/gxa/sc/experiments/E-GEOD-93593/Results",
+    "https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.3.0/1M_neurons",
+    "https://www.ebi.ac.uk/gxa/sc/experiments/E-GEOD-106540/Results"
+  ],
+  "files.project_json.insdc_project": [
+    "SRP075496",
+    "ERP017126",
+    "SRP096727",
+    "SRP096558",
+    "SRP124157",
+    "ERP107913"
+  ],
+  "files.project_json.geo_series": [
+    "GSE81547",
+    "GSE93593",
+    "GSE93421",
+    "GSE106540"
+  ],
+  "files.project_json.contributors.email": [
+    "martin.enge@gmail.com",
+    "lauhuema@ebi.ac.uk",
+    "hewgreen@ebi.ac.uk",
+    "st9@sanger.ac.uk",
+    "me5@sanger.ac.uk",
+    "bm11@sanger.ac.uk",
+    "JS970@MRCCU.cam.ac.uk",
+    "SED49@MRCCU.cam.ac.uk",
+    "a.riedel@dkfz-heidelberg.de",
+    "rv4@sanger.ac.uk",
+    "jp19@sanger.ac.uk",
+    "gkar@ebi.ac.uk",
+    "jani.huuhtanen@helsinki.fi",
+    "mfreeberg@ebi.ac.uk",
+    "dwelter@ebi.ac.uk",
+    "Athanasia.Palasantza@ki.se",
+    "Rickard.Sandberg@ki.se",
+    "Asa.Segerstolpe@ki.se",
+    "anjaf@ebi.ac.uk",
+    "jenniec@alleninstitute.org",
+    "jens.durruthy@10xgenomics.com",
+    "elliott.meer@10xgenomics.com",
+    "solongo@10xgenomics.com",
+    "charles.bruce@10xgenomics.com",
+    "qiang.gong@10xgenomics.com",
+    "wisulliv@ucsc.edu",
+    "aregev@broadinstitute.org",
+    "libo@broadinstitute.org",
+    "msk.kowalczyk@gmail.com",
+    "dionne@broadinstitute.org",
+    "ttickle@broadinstitute.org",
+    "janelee@broadinstitute.org",
+    "orit@broadinstitute.org",
+    "orr@broadinstitute.org",
+    "mtabaka@broadinstitute.org",
+    "karthik@broadinstitute.org",
+    "mslyper@broadinstitute.org",
+    "jwaldman@broadinstitute.org",
+    "vijay@lji.org",
+    "barbara_treutlein@eva.mpg.de",
+    "gray_camp@eva.mpg.de",
+    "zhisong_he@eva.mpg.de",
+    "sabina_kanton@eva.mpg.de",
+    "manu.talanki@gmail.com",
+    "vaidotaskiseliovas@yahoo.com",
+    "peerster@gmail.com",
+    "pnejad@ucsc.edu",
+    "ms31@sanger.ac.uk",
+    "ph11@sanger.ac.uk",
+    "aw24@sanger.ac.uk",
+    "kp9@sanger.ac.uk",
+    "kevinloudon@doctors.org.uk",
+    "jrf58@cam.ac.uk",
+    "ktam2@cam.ac.uk",
+    "ng395@cam.ac.uk",
+    "km16@sanger.ac.uk",
+    "ks10014@cam.ac.uk",
+    "kpn25@mrc-cu.cam.ac.uk",
+    "rcf29@mrc-cu.cam.ac.uk",
+    "rm13@sanger.ac.uk",
+    "dummy@email.com",
+    "humphreysbd@wustl.edu",
+    "haojiawu@wustl.edu",
+    "amalone@wustl.edu",
+    "e.donnelly@wustl.edu",
+    "ykirita@wustl.edu",
+    "kohei.uchimura@wustl.edu",
+    "saimukund@wustl.edu",
+    "jpgaut@wustl.edu",
+    "rsatija@nygenome.org",
+    "psmibert@nygenome.org",
+    "mstoeckius@nygenome.org",
+    "szheng@nygenome.org",
+    "onibasu@uchicago.edu",
+    "spott@uchicago.edu",
+    "heckart@uchicago.edu",
+    "dohnr@uchicago.edu",
+    "reemelorbany@uchicago.edu",
+    "klrhodes@uchicago.edu",
+    "egauchat@uchicago.edu",
+    "eyald.david@weizmann.ac.il",
+    "guy.ledergor@weizmann.ac.il",
+    "assaf.weiner@weizmann.ac.il",
+    "ido.amit@weizmann.ac.il"
+  ],
+  "files.project_json.contributors.institution": [
+    "Stanford University",
+    "EMBL-EBI",
+    "EMBL-EBI European Bioinformatics Institute",
+    "Wellcome Trust Sanger Institute",
+    "University of Cambridge",
+    "DKFZ German Cancer Research Center",
+    "University of Helsinki",
+    "Karolinska Institutet",
+    "The Allen Institute for Brain Science",
+    "10x Genomics, Inc.",
+    "University of California Santa Cruz",
+    "Broad Institute",
+    "La Jolla Institute for Allergy and Immunology",
+    "Max Planck Institute for Evolutionary Anthropology",
+    "Sloan Kettering Institute",
+    "University of California, Santa Cruz",
+    "MRC Cancer Unit",
+    "Fake Institution",
+    "Washington University in St. Louis",
+    "New York Genome Center",
+    "University of Chicago",
+    "The Weizmann Institute of Science"
+  ],
+  "files.project_json.contributors.address": [
+    "Bioengineering, Stanford University, James H. Clark Center, 318 Campus Drive,, Stanford, CA, USA",
+    "Wellcome Trust Genome Campus, Cambridge UK",
+    "Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD",
+    "Box 197, Cambridge Biomedical Campus, Cambridge, CB2 0XZ",
+    "Wellcome Trust Genome Campus, Cambridge",
+    "Nobels vag 3, 171 77, Stockholm",
+    "615 Westlake Ave N, Seattle, WA",
+    "7068 Koll Center Parkway, Suite 401, Pleasanton, CA 94566",
+    "1156 High St, Santa Cruz, CA 95064",
+    "415 Main Street, Cambridge, MA",
+    "La Jolla, CA 92037",
+    "Deutscher Pl. 6, 04103 Leipzig",
+    "Memorial Sloan Kettering Cancer Center, 1275 York Avenue, New York, NY 10065",
+    "Wellcome Trust Sanger Institute, Wellcome Genome Campus, Hinxton, Cambridge. CB10 1SA.",
+    "Cambridge CB2 0QQ",
+    "MRC Cancer Unit, Hutchison-MRC Research Centre, University of Cambridge, Cambridge CB2 0XZ.",
+    "Wohl Clinic 09946, 4950 Childrens Pl, St. Louis, MO 63110",
+    "101 6th Avenue, NY, NY 10013",
+    "5835 S. Cottage Grove Ave., N516, Chicago, IL 60637",
+    "Department of Immunology, Wolfson bldg., Rooms 252, 257, 258\nWeizmann Institute of Science\nRehovot, 76100\n\n"
+  ],
+  "files.project_json.contributors.country": [
+    "USA",
+    "UK",
+    "Germany",
+    "Finland",
+    "Sweden",
+    "USA ",
+    "Israel"
+  ],
+  "files.project_json.contributors.laboratory": [
+    "Molecular Atlas",
+    "Human Cell Atlas Data Coordination Platform",
+    "Sarah Teichmann",
+    "MRC Cancer Unit",
+    "Department of Cell and Molecular Biology (CMB)",
+    "Regev Lab",
+    "Division of Vaccine Discovery",
+    "Pe'er",
+    "Human Cell Atlas (Mike Stubbington)",
+    "Molecular Immunity Unit, Department of Medicine",
+    "Cambridge Biorepository for Translational Medicine",
+    "Rebecca Fitzgerald",
+    "Human Cell Atlas (Sarah Teichmann)",
+    "Teichmann Lab",
+    "The Humphreys' Lab",
+    "Satija Lab",
+    "Technology Development and Innovation",
+    "Basu",
+    "Pott",
+    "Prof. Ido Amit"
+  ],
+  "files.project_json.contributors.project_role": [
+    "external curator",
+    "Human Cell Atlas wrangler",
+    "other",
+    "experimental scientist",
+    "computational scientist",
+    "principal investigator",
+    "co investigator",
+    "clinician"
+  ],
+  "files.project_json.contributors.orcid_id": [
+    "0000-0002-8748-599X",
+    "0000-0003-2771-9894",
+    "0000-0003-2949-3921",
+    "0000-0003-1058-2668",
+    "0000-0001-6473-1740",
+    "0000-0002-8674-0039",
+    "0000-0002-3299-5597",
+    "0000-0001-5924-3566",
+    "0000-0003-0936-0128",
+    "0000-0002-7924-079X"
+  ],
+  "files.project_json.contributors.corresponding_contributor": [
+    "false",
+    "true"
+  ],
+  "files.project_json.contributors.phone": [
+    "(+44) 122-349-4444",
+    "925-401-7300",
+    "(617) 714-7020",
+    "(617) 714-8681",
+    "(617) 714-8147",
+    "(617) 714-7084",
+    "(617) 714-7448",
+    "(617) 714-7789",
+    "(617) 714-7470",
+    "(617) 714-8067",
+    "(617) 714-7199",
+    "9175451407",
+    "6463480473",
+    "646-888-2619",
+    "44 (0)1223 834244",
+    "3143621575",
+    "972-8-934-6975",
+    "972-8-934-6976"
+  ],
+  "files.project_json.publications.authors": [
+    "Enge M",
+    "Arda HE",
+    "Mignardi M",
+    "Beausang J",
+    "Bottino R",
+    "Kim SK",
+    "Quake SR",
+    "Segerstolpe A",
+    "Palasantza A",
+    "Eliasson P",
+    "Andersson EM",
+    "Andreasson AC",
+    "Sun X",
+    "Picelli S",
+    "Sabirsh A",
+    "Clausen M",
+    "Bjursell MK",
+    "Smith DM",
+    "Kasper M",
+    "Ammala C",
+    "Sandberg R",
+    "Close JL",
+    "Yao Z",
+    "Levi BP",
+    "Miller JA",
+    "Bakken TE",
+    "Menon V",
+    "Ting JT",
+    "Wall A",
+    "Krostag AR",
+    "Thomsen ER",
+    "Nelson AM",
+    "Mich JK",
+    "Hodge RD",
+    "Shehata SI",
+    "Glass IA",
+    "Bort S",
+    "Shapovalova NV",
+    "Ngo NK",
+    "Grimley JS",
+    "Phillips JW",
+    "Thompson CL",
+    "Ramanathan S",
+    "Lein E",
+    "Patil VS",
+    "Madrigal A",
+    "Schmiedel BJ",
+    "Clarke J",
+    "ORourke P",
+    "Harris E",
+    "de Silva AD",
+    "Peters B",
+    "Seumois G",
+    "Weiskopf D",
+    "Sette A",
+    "Vijayanand P",
+    "Setty M",
+    "Kiseliovas V",
+    "Levine J",
+    "Gayoso A",
+    "Mazutis L",
+    "Pe'er D",
+    "Wu H",
+    "Malone AF",
+    "Donnelly EL",
+    "Kirita Y",
+    "Uchimura K",
+    "Ramakrishnan SM",
+    "Gaut JP",
+    "Humphreys BD",
+    "Setty Manu",
+    "Kieseliovas Vaidotas",
+    "Levine Jacob",
+    "Gayoso Adam",
+    "Mazutis Linas",
+    "Pe'er Dana"
+  ],
+  "files.project_json.publications.publication_title": [
+    "Single-Cell Analysis of Human Pancreas Reveals Transcriptional Signatures of Aging and Somatic Mutation Patterns.",
+    "Single-Cell Transcriptome Profiling of Human Pancreatic Islets in Health and Type 2 Diabetes",
+    "Single-Cell Profiling of an In\u00a0Vitro Model of Human Interneuron Development Reveals Temporal Dynamics of Cell Type Production and Maturation.",
+    "Precursors of human CD4+ cytotoxic T lymphocytes identified by single-cell transcriptome analysis.",
+    "Palantir characterizes cell fate continuities in human hematopoiesis",
+    "Single-Cell Transcriptomics of a Human Kidney Allograft Biopsy Specimen Defines a Diverse Inflammatory Response",
+    "Palantir characterizes cell fate continuities human hematopoiesis"
+  ],
+  "files.project_json.publications.doi": [
+    "10.1016/j.cell.2017.09.004",
+    "10.1016/j.cmet.2016.08.020",
+    "10.1016/j.neuron.2017.02.014",
+    "10.1126/sciimmunol.aan8664",
+    "10.1101/385328",
+    "10.1681/ASN.2018020125"
+  ],
+  "files.project_json.publications.pmid": [
+    "28965763",
+    "27667667",
+    "28279351",
+    "29352091",
+    "29980650"
+  ],
+  "files.project_json.publications.publication_url": [
+    "https://www.ncbi.nlm.nih.gov/pubmed/28965763",
+    "https://europepmc.org/abstract/MED/27667667",
+    "https://europepmc.org/abstract/MED/28279351",
+    "http://immunology.sciencemag.org/content/3/19/eaan8664.long",
+    "https://www.biorxiv.org/content/early/2018/08/05/385328",
+    "https://jasn.asnjournals.org/content/29/8/2069",
+    "https://www.biorxiv.org/content/biorxiv/early/2018/08/05/385328.full.pdf"
+  ],
+  "files.project_json.provenance.document_id": [
+    "e8642221-4c2c-4fd7-b926-a68bce363c88",
+    "f396fa53-2a2d-4b8a-ad18-03bf4bd46833",
+    "1a0f98b8-746a-489d-8af9-d5c657482aab",
+    "f8880be0-210c-4aa3-9348-f5a423e07421",
+    "ff481f29-3d0b-4533-9de2-a760c61c162d",
+    "179bf9e6-5b33-4c5b-ae26-96c7270976b8",
+    "0ec2b05f-ddbe-4e5a-b30f-e81f4b1e330c",
+    "2a0faf83-e342-4b1c-bb9b-cf1d1147f3bb",
+    "fd1d163d-d6a7-41cd-b3bc-9d77ba9a36fe",
+    "cf8439db-fcc9-44a8-b66f-8ffbf729bffa",
+    "6b9f514d-d738-403f-a9c2-62580bbe5c83",
+    "d237ed6a-3a7f-4a91-b300-b070888a8542",
+    "311d013c-01e4-42c0-9c2d-25472afa9cbc",
+    "209e6402-d854-49ea-815f-421dae5e3f4d",
+    "34ec62a2-9643-430d-b41a-1e342bd615fc",
+    "29f53b7e-071b-44b5-998a-0ae70d0229a4",
+    "5f256182-5dfc-4070-8404-f6fa71d37c73",
+    "c765e3f9-7cfc-4501-8832-79e5f7abd321",
+    "0c7bbbce-3c70-4d6b-a443-1b92c1f205c8",
+    "1630e3dc-5501-4faf-9726-2e2c0b4da6d7"
+  ],
+  "files.project_json.provenance.submission_date": [
+    "2018-11-02T10:02:12.133Z",
+    "2018-11-06T16:18:53.284Z",
+    "2018-12-03T15:23:08.237Z",
+    "2018-11-21T10:58:59.291Z",
+    "2018-12-04T18:52:20.164Z",
+    "2018-11-29T09:15:49.598Z",
+    "2018-12-03T16:33:20.718Z",
+    "2018-10-30T15:29:07.039Z",
+    "2018-11-20T11:36:21.178Z",
+    "2018-11-12T20:36:37.965Z",
+    "2018-09-18T18:03:48.809Z",
+    "2018-10-23T17:24:34.571Z",
+    "2018-10-29T16:16:43.458Z",
+    "2018-12-05T14:34:46.448Z",
+    "2018-12-04T18:25:52.395Z",
+    "2018-12-04T19:02:13.603Z",
+    "2018-12-04T18:11:31.185Z",
+    "2018-12-04T16:22:45.367Z",
+    "2018-11-28T08:09:40.613Z",
+    "2018-11-28T21:23:55.826Z"
+  ],
+  "files.project_json.provenance.update_date": [
+    "2018-11-02T10:07:39.499Z",
+    "2018-11-06T16:34:47.951Z",
+    "2018-12-03T15:28:38.330Z",
+    "2018-11-21T11:02:02.549Z",
+    "2018-12-04T19:01:15.532Z",
+    "2018-11-29T09:16:20.747Z",
+    "2018-12-03T16:37:07.791Z",
+    "2018-10-30T15:29:12.589Z",
+    "2018-11-20T11:36:28.706Z",
+    "2018-11-12T20:36:47.277Z",
+    "2018-09-18T18:03:53.030Z",
+    "2018-10-23T17:24:39.254Z",
+    "2018-10-29T16:16:53.642Z",
+    "2018-12-05T14:34:54.470Z",
+    "2018-12-04T18:26:02.275Z",
+    "2018-12-04T19:02:19.905Z",
+    "2018-12-04T18:11:35.452Z",
+    "2018-12-04T16:22:50.543Z",
+    "2018-11-28T08:16:33.149Z",
+    "2018-11-28T21:24:01.697Z"
+  ],
+  "files.analysis_process_json.analysis_run_type": [
+    "run"
+  ],
+  "files.analysis_process_json.describedBy": [
+    "https://schema.humancellatlas.org/type/process/analysis/8.0.3/analysis_process"
+  ],
+  "files.analysis_process_json.inputs.parameter_name": [
+    "fastq1",
+    "fastq2",
+    "sample_name",
+    "output_name",
+    "gtf_file",
+    "genome_ref_fasta",
+    "rrna_intervals",
+    "gene_ref_flat",
+    "hisat2_ref_index",
+    "hisat2_ref_trans_name",
+    "rsem_ref_index",
+    "hisat2_ref_name",
+    "stranded",
+    "fastqs",
+    "sample_id",
+    "reference_name",
+    "transcriptome_tar_gz",
+    "expect_cells"
+  ],
+  "files.analysis_process_json.outputs.describedBy": [
+    "https://schema.humancellatlas.org/type/file/5.3.4/analysis_file"
+  ],
+  "files.analysis_process_json.outputs.file_core.file_format": [
+    "txt",
+    "csv",
+    "bam",
+    "bai",
+    "results",
+    "matrix",
+    "unknown",
+    "tsv",
+    "mtx",
+    "h5"
+  ],
+  "files.analysis_process_json.outputs.schema_type": [
+    "file"
+  ],
+  "files.analysis_process_json.process_type.text": [
+    "analysis"
+  ],
+  "files.analysis_process_json.reference_bundle": [
+    "bf51d668-3e14-4843-9bc7-5d676fdf0e01"
+  ],
+  "files.analysis_process_json.schema_type": [
+    "process"
+  ],
+  "files.analysis_process_json.tasks.cpus": [
+    "2",
+    "1",
+    "4",
+    "64"
+  ],
+  "files.analysis_process_json.tasks.docker_image": [
+    "quay.io/humancellatlas/secondary-analysis-picard:v0.2.2-2.10.10",
+    "quay.io/humancellatlas/secondary-analysis-sctools:v0.3.0",
+    "quay.io/humancellatlas/secondary-analysis-hisat2:v0.2.2-2-2.1.0",
+    "quay.io/humancellatlas/secondary-analysis-rsem:v0.2.2-1.3.0",
+    "quay.io/humancellatlas/secondary-analysis-python3-scientific:0.1.7",
+    "quay.io/humancellatlas/secondary-analysis-cellranger:v1.0.0"
+  ],
+  "files.analysis_process_json.tasks.memory": [
+    "7.5 GB",
+    "3.5 GB",
+    "2 GB",
+    "15 GB",
+    "16 GB",
+    "416 GB"
+  ],
+  "files.analysis_process_json.tasks.task_name": [
+    "CollectDuplicationMetrics",
+    "CollectMultipleMetrics",
+    "CollectRnaMetrics",
+    "GroupQCOutputs",
+    "HISAT2PairedEnd",
+    "HISAT2Transcriptome",
+    "RSEMExpression",
+    "SmartSeq2ZarrConversion",
+    "cellranger_count"
+  ],
+  "files.analysis_process_json.tasks.zone": [
+    "us-central1-b"
+  ],
+  "files.specimen_from_organism_json.describedBy": [
+    "https://schema.humancellatlas.org/type/biomaterial/6.3.3/specimen_from_organism",
+    "https://schema.humancellatlas.org/type/biomaterial/6.3.1/specimen_from_organism"
+  ],
+  "files.specimen_from_organism_json.schema_type": [
+    "biomaterial"
+  ],
+  "files.specimen_from_organism_json.biomaterial_core.ncbi_taxon_id": [
+    "9606",
+    "10090"
+  ],
+  "files.specimen_from_organism_json.genus_species.text": [
+    "Homo sapiens",
+    "Mus musculus"
+  ],
+  "files.specimen_from_organism_json.genus_species.ontology": [
+    "NCBITaxon:9606",
+    "NCBITaxon:10090"
+  ],
+  "files.specimen_from_organism_json.genus_species.ontology_label": [
+    "Homo sapiens",
+    "Mus musculus"
+  ],
+  "files.specimen_from_organism_json.organ.text": [
+    "pancreas",
+    "tumor",
+    "embryo",
+    "lymph node",
+    "Brain",
+    "immune system",
+    "blood",
+    "skin",
+    "skin of body",
+    "spleen",
+    "oesophagus",
+    "brain",
+    "kidney",
+    "bone ",
+    "bone"
+  ],
+  "files.specimen_from_organism_json.organ.ontology": [
+    "UBERON:0001264",
+    "UBERON:0000922",
+    "UBERON:0000029",
+    "UBERON:0000955",
+    "UBERON:0002405",
+    "UBERON:0000178",
+    "UBERON:0002097",
+    "UBERON:0002106",
+    "UBERON:0001043",
+    "UBERON:0002113",
+    "UBERON:0001474",
+    "UBERON:0004177"
+  ],
+  "files.specimen_from_organism_json.organ.ontology_label": [
+    "pancreas",
+    "embryo",
+    "lymph node",
+    "brain",
+    "immune system",
+    "blood",
+    "skin of body",
+    "spleen",
+    "esophagus",
+    "kidney",
+    "hemopoietic organ"
+  ],
+  "files.specimen_from_organism_json.organ_part.text": [
+    "islet of Langerhans",
+    "blastocyst",
+    "cortex",
+    "bone marrow",
+    "peripheral blood mononuclear cell",
+    "skin epidermis",
+    "epithelium only",
+    "epithelium only; end of oesophagus closest to stomach",
+    "umbilical cord blood",
+    "temporal lobe",
+    "cortex of kidney ",
+    "venous blood"
+  ],
+  "files.specimen_from_organism_json.organ_part.ontology": [
+    "UBERON:0000006",
+    "UBERON:0000358",
+    "UBERON:0001851",
+    "UBERON:0002371",
+    "CL:2000001",
+    "UBERON:0001003",
+    "UBERON:0001976",
+    "UBERON:0012168",
+    "UBERON:0001871",
+    "UBERON:0001225",
+    "UBERON:0013756"
+  ],
+  "files.specimen_from_organism_json.organ_part.ontology_label": [
+    "islet of Langerhans",
+    "blastocyst",
+    "cortex",
+    "bone marrow",
+    "peripheral blood mononuclear cell",
+    "skin epidermis",
+    "epithelium of esophagus",
+    "umbilical cord blood",
+    "cortex of kidney ",
+    "venous blood"
+  ],
+  "files.specimen_from_organism_json.diseases.text": [
+    "normal",
+    "glioblastoma",
+    "ESRD",
+    "hemolytic uremic syndrome"
+  ],
+  "files.specimen_from_organism_json.diseases.ontology": [
+    "PATO:0000461",
+    "MONDO:0004375",
+    "MONDO:0001549"
+  ],
+  "files.specimen_from_organism_json.diseases.ontology_label": [
+    "normal",
+    "end stage renal failure",
+    "hemolytic-uremic syndrome"
+  ],
+  "files.library_preparation_protocol_json.protocol_core.protocol_name": [
+    "Make/amplify cDNA for each cell",
+    "Library preparation for sequencing",
+    "single cell library construction protocol",
+    "Chromium\u2122 Single Cell 3\u2019 Reagent Kits v2 User Guide",
+    "Preparing RNA for sequencing by 10x",
+    "Preparation of mRNAs for single cell SmartSeq2 sequencing",
+    "10x 3' single cell library preparation",
+    "10X Chromium Single Cell 3' Solution v2 Chemistry",
+    "Library preparation for 10x_v2 sequencing",
+    "Indrop Library Preparation",
+    "Amplification of cell hashtags from cDNA for sequencing",
+    "High-throughput, single cell RNA-seq",
+    "High-throughput, single nuclei RNA-seq",
+    "Amplification of antibody derived tags from cDNA for sequencing",
+    "MARS-Seq profiles the transcriptional dynamics of single cells in an automated and massively parallel workflow with high resolution"
+  ],
+  "files.library_preparation_protocol_json.protocol_core.document": [
+    "SmartSeq2_RTPCR_protocol.pdf",
+    "CG00052_SingleCell3_ReagentKitv2UserGuide_RevE.pdf",
+    "CG00052_SingleCell3_ReagentKitv2UserGuide_RevD.pdf",
+    "10x_sequencing_protocol.pdf",
+    "1CellBio_InDrop_Library_Preparation.pdf"
+  ],
+  "files.library_preparation_protocol_json.input_nucleic_acid_molecule.ontology_label": [
+    "polyA RNA",
+    "messenger RNA"
+  ],
+  "files.library_preparation_protocol_json.umi_barcode.barcode_read": [
+    "Read 1",
+    "Read 2"
+  ],
+  "files.library_preparation_protocol_json.umi_barcode.barcode_offset": [
+    "0",
+    "16",
+    "15"
+  ],
+  "files.library_preparation_protocol_json.umi_barcode.barcode_length": [
+    "16",
+    "10",
+    "50"
+  ],
+  "files.supplementary_file_json.describedBy": [
+    "https://schema.humancellatlas.org/type/file/1.1.5/supplementary_file"
+  ],
+  "files.supplementary_file_json.schema_type": [
+    "file"
+  ],
+  "files.supplementary_file_json.file_core.file_name": [
+    "SmartSeq2_sequencing_protocol.pdf",
+    "SmartSeq2_RTPCR_protocol.pdf",
+    "TissueDissociationProtocol.pdf",
+    "hipsci-ipsc-pipeline.pdf",
+    "CG00052_SingleCell3_ReagentKitv2UserGuide_RevE.pdf",
+    "Dissociation_protocol_130-092-628.pdf",
+    "Human_spleen_dissociation_protocol.pdf",
+    "10x_sequencing_protocol.pdf",
+    "284C_IMAGE_spleen_annotated.jpeg",
+    "SOP-Human_Oesophagus_Dissociation_19.02.18.pdf",
+    "SOP-Mechanical_Human_Spleen_Dissociation_19.02.17.pdf",
+    "SOP_MACS_Live_Dead_Separation_V3.pdf",
+    "BM_Hip_Rep_Protocol.pdf",
+    "BM_Ficoll.pdf"
+  ],
+  "files.supplementary_file_json.file_core.file_format": [
+    "pdf",
+    "jpeg"
+  ],
+  "files.supplementary_file_json.file_description": [
+    "Sequencing SmartSeq2 cells",
+    "Make/amplify cDNA for each cell",
+    "Extracting cells from lymph nodes",
+    "iPSC induction by Sendai virus protocol.",
+    "10x Chromium single cell 3' v2 library preparation.",
+    "Cerebral organoid dissociation protocol.",
+    "Dissociation of spleen tissue sample into cell suspension.",
+    "Sequencing and library preparation protocol.",
+    "Gross image of specimen location in spleen.",
+    "Dissociation of human oesophagus epithelium into single cell suspension.",
+    "Enrichment for live cells.",
+    "collection protocol",
+    "enrichment protocol"
+  ],
+  "files.supplementary_file_json.provenance.document_id": [
+    "dd5638fe-9028-46d3-8d28-d77b21018041",
+    "d25ca3d2-2492-4d3e-86bf-350d73829d26",
+    "36f7da51-91a7-498e-a4d8-8d1c62a0d5e8",
+    "fafd80ce-fcff-4e41-b81b-3b5415566540",
+    "2a3064f3-7294-4ce8-b7b6-20ddafb38722",
+    "92a30afd-21eb-4682-bb08-212ce48244b4",
+    "e18eee14-9f10-47e2-85cb-0fcbcef168b2",
+    "594e91ee-16c9-4cad-8624-a490334fdf5d",
+    "292b2a1b-1a83-4c01-8053-d63dc0b19e15",
+    "db353a2b-a724-49ad-b5c1-b10d2c0a59b8",
+    "3633845c-aee7-4752-ad48-a83ebb5d13ca",
+    "a9dcbefc-fe6d-4ffc-88f2-54116bd3c0c3",
+    "a7cd3cd9-42a3-4090-8588-bf10a7818b28",
+    "a7aaa2a7-a307-485d-bb2a-8dc812e03d94",
+    "e749ba48-271f-41d9-ac89-2b52bd71d9f2",
+    "5897780e-1032-412f-a8d1-e1652c227558",
+    "ef39e40a-2d30-4ca2-bf7c-1d3945e1991b",
+    "860c5308-a760-473f-90b2-bc141190b443",
+    "7f2745ca-caa7-4d2c-b2ae-51127b7b33a9"
+  ],
+  "files.supplementary_file_json.provenance.submission_date": [
+    "2018-11-06T16:18:53.329Z",
+    "2018-11-06T16:18:53.308Z",
+    "2018-11-06T16:18:53.299Z",
+    "2018-10-30T15:29:07.055Z",
+    "2018-10-30T15:29:07.095Z",
+    "2018-10-30T15:29:07.071Z",
+    "2018-11-12T20:36:37.988Z",
+    "2018-11-12T20:36:37.973Z",
+    "2018-11-12T20:36:38.010Z",
+    "2018-11-12T20:36:38.054Z",
+    "2018-11-12T20:36:38.039Z",
+    "2018-11-12T20:36:38.025Z",
+    "2018-12-05T14:34:46.524Z",
+    "2018-12-05T14:34:46.516Z",
+    "2018-12-05T14:34:46.496Z",
+    "2018-12-05T14:34:46.507Z",
+    "2018-12-05T14:34:46.474Z",
+    "2018-11-28T08:09:40.647Z",
+    "2018-11-28T08:09:40.632Z"
+  ],
+  "files.supplementary_file_json.provenance.update_date": [
+    "2018-11-06T16:29:04.403Z",
+    "2018-11-06T16:29:04.396Z",
+    "2018-11-06T16:29:04.471Z",
+    "2018-10-30T15:38:50.582Z",
+    "2018-10-30T15:38:50.451Z",
+    "2018-10-30T15:38:50.461Z",
+    "2018-11-12T20:38:40.166Z",
+    "2018-11-12T20:38:13.168Z",
+    "2018-11-12T20:38:55.168Z",
+    "2018-11-12T20:38:31.180Z",
+    "2018-11-12T20:38:31.179Z",
+    "2018-12-05T14:35:28.354Z",
+    "2018-12-05T14:35:43.330Z",
+    "2018-12-05T14:35:28.343Z",
+    "2018-12-05T14:36:55.334Z",
+    "2018-11-28T08:26:05.294Z",
+    "2018-11-28T08:26:05.224Z"
+  ],
+  "files.dissociation_protocol_json.protocol_core.protocol_name": [
+    "Extracting cells from lymph nodes",
+    "Single cell dissociation",
+    "single cell isolation protocol",
+    "Dissociation of Mouse Embryonic Neural Tissue for Single Cell RNA Sequencing",
+    "mononuclear cell isolation",
+    "Dissociation by FACS into single cells",
+    "cerebral organoid dissociation",
+    "Dissociation of spleen tissue sample into cell suspension",
+    "Dissociation of human oesophagus epithelium into single cell suspension",
+    "a FACS method to separate cells",
+    "Adult Kidney Dissociation Protocol ",
+    "Nuclei Isolation Protocol "
+  ],
+  "files.dissociation_protocol_json.protocol_core.document": [
+    "TissueDissociationProtocol.pdf",
+    "CG00055_SamplePrepDemonstratedProtocol_-_MouseNeuralTissue_RevB.pdf",
+    "Dissociation_protocol_130-092-628.pdf",
+    "SOP-Mechanical_Human_Spleen_Dissociation_19.02.17.pdf",
+    "SOP-Human_Oesophagus_Dissociation_19.02.18.pdf",
+    "Human_spleen_dissociation_protocol.pdf",
+    "Adult_Kidney_Dissociation_Protocol.pdf"
+  ],
+  "files.enrichment_protocol_json.protocol_core.protocol_name": [
+    "FACS sorting cells by surface markers",
+    "FACS enrichment for single, live cells.",
+    "PBMC Enrichment",
+    "TEMRA Enrichment",
+    "DENV antigen specific TEM Enrichment",
+    "DENV antigen specific TEMRA Enrichment",
+    "TMC Enrichment",
+    "TEM Enrichment",
+    "IL7R low TEMRA Enrichment",
+    "IL7R high TEMRA Enrichment",
+    "Enrichment for CD34+ cells",
+    "Enrichment for live cells",
+    "BM_Ficoll"
+  ],
+  "files.cell_suspension_json.selected_cell_type.text": [
+    "CD4+ T cell",
+    "CD31+ endothelial",
+    "inhibitory interneurons",
+    "CD8+ T cell",
+    "ILCs",
+    "CD11c+ DC",
+    "CAFs",
+    "CD11b+ Macrophages/monocytes",
+    "CD11b+CD11c+DC",
+    "neuron",
+    "bone marrow hematopoietic cell",
+    "TEMRA",
+    "DENV antigen specific TEM",
+    "B Cell",
+    "DENV antigen specific TEMRA",
+    "TCM",
+    "TEM",
+    "IL7R low TEMRA",
+    "IL7R high TEMRA",
+    "neural cell",
+    "CD34-positive, CD38-negative hematopoietic stem cell",
+    "umbilical cord blood cell",
+    "endothelial cells",
+    "epithelial cells",
+    "monocytes",
+    "fibroblasts",
+    "myofibroblasts",
+    "peripheral blood mononuclear cells",
+    "Plasma cells"
+  ],
+  "files.cell_suspension_json.selected_cell_type.ontology": [
+    "CL:0000624",
+    "CL:0000498",
+    "CL:0000625",
+    "CL:0001065",
+    "CL:0000540",
+    "CL:1001610",
+    "CL:0001062",
+    "CL:0000236",
+    "CL:0002319",
+    "CL:0001024",
+    "CL:2000095",
+    "CL:0000115",
+    "CL:0000066",
+    "CL:0000576",
+    "CL:0000057",
+    "CL:0000186",
+    "CL:2000001",
+    "CL:0000786"
+  ],
+  "files.cell_suspension_json.selected_cell_type.ontology_label": [
+    "CD4+ T cell",
+    "inhibitory interneuron",
+    "CD8-positive, alpha-beta T cell",
+    "innate lymphoid cell",
+    "neuron",
+    "bone marrow hematopoietic cell",
+    "effector memory CD8-positive, alpha-beta T cell, terminally differentiated",
+    "B cell",
+    "neural cell",
+    "CD34-positive, CD38-negative hematopoietic stem cell",
+    "cord blood hematopoietic stem cell",
+    "endothelial cell",
+    "epithelial cell",
+    "monocyte",
+    "fibroblast",
+    "myofibroblast cell",
+    "peripheral blood mononuclear cell"
+  ],
+  "files.sequencing_protocol_json.protocol_core.protocol_name": [
+    "Sequencing SmartSeq2 cells",
+    "SmartSeq2 single cell sequencing",
+    "single cell sequencing protocol",
+    "Sequencing the single cell RNA v2 libraries",
+    "Sequencing bone marrow donor 1-4",
+    "SmartSeq 2 single cell sequencing",
+    "Sequencing bone marrow donor 5-8",
+    "10x single cell RNA Sequencing",
+    "10X Chromium Single Cell 3' Solution v2 Chemistry",
+    "10x_v2 sequencing",
+    "Sequencing cord blood donor 1-4",
+    "Sequencing cord blood donor 5-8",
+    "Nextseq_indrop",
+    "Hiseq_indrop",
+    "Sequencing RNA, ADT, HTO from PBMC1-8",
+    "Drop-seq Protocol",
+    "DroNc-seq Protocol",
+    "MARS_sequencing_instructions"
+  ],
+  "files.sequencing_protocol_json.protocol_core.document": [
+    "SmartSeq2_sequencing_protocol.pdf",
+    "CG00052_SingleCell3_ReagentKitv2UserGuide_RevE.pdf",
+    "CG00052_SingleCell3_ReagentKitv2UserGuide_RevD.pdf",
+    "10x_sequencing_protocol.pdf",
+    "1CellBio_Guidelines_for_sequencing_SCC_libraries.pdf"
+  ],
+  "files.sequence_file_json.lane_index": [
+    "6",
+    "4",
+    "1",
+    "7",
+    "2",
+    "8",
+    "3",
+    "5"
+  ],
+  "files.donor_organism_json.biomaterial_core.biomaterial_name": [
+    "Mouse_day8_rep1",
+    "Mouse_day11_rep6",
+    "Normal Donor 4",
+    "Type II Diabetes Donor 4",
+    "human embryo",
+    "Mouse_day11_rep1",
+    "Mouse_day5_rep3",
+    "Mouse_day8_rep12",
+    "Mouse_day8_rep9",
+    "Mouse_day5_rep2",
+    "Mouse_day11_rep5",
+    "Mouse_day5_rep1",
+    "Mouse_day5_rep8",
+    "Mouse_day5_rep7",
+    "Mouse_day11_rep4",
+    "Mouse_day8_rep8",
+    "Type II Diabetes Donor 2",
+    "E18 Mouse",
+    "Bone Marrow donor 3",
+    "Bone Marrow donor 2",
+    "Normal Donor 2",
+    "Normal Donor 5",
+    "Subject11",
+    "Mouse_day5_rep10",
+    "Subject12",
+    "Mouse_day8_rep3",
+    "Subject6",
+    "Mouse_day11_rep7",
+    "Type II Diabetes Donor 1",
+    "Mouse_day8_rep11",
+    "Mouse_day8_rep6",
+    "Mouse_day11_rep8",
+    "Mouse_day5_rep4",
+    "Mouse_day8_rep2",
+    "Type II Diabetes Donor 3",
+    "Mouse_lymphnode_control",
+    "Subject8",
+    "Mouse_day5_rep9",
+    "Normal Donor 3",
+    "Mouse_day11_rep3",
+    "Mouse_day5_rep5",
+    "Mouse_day8_rep10",
+    "Bone Marrow donor 6",
+    "Bone Marrow donor 4",
+    "Mouse_day8_rep4",
+    "Normal Donor 6",
+    "Mouse_day8_rep7",
+    "Mouse_day5_rep6",
+    "Subject10",
+    "Subject14",
+    "Subject13",
+    "Normal Donor 1",
+    "Subject7",
+    "Mouse_skin_control",
+    "Subject15",
+    "Subject3",
+    "Subject2",
+    "Subject16",
+    "Subject5",
+    "Bone Marrow donor 7",
+    "donor HPSI0214i-wibj",
+    "donor HPSI0314i-sojd",
+    "donor HPSI0314i-hoik",
+    "donor HPSI0214i-kucg",
+    "Subject1",
+    "BM_donor_1",
+    "Spleen and oesophagus donor",
+    "Spleen donor",
+    "BM_donor_2",
+    "Oesophagus donor",
+    "Subject4",
+    "Cord blood donor 3",
+    "Cord blood donor 4",
+    "Cord blood donor 8",
+    "Subject9",
+    "Mouse_day8_rep5",
+    "Mouse_day11_rep2",
+    "Cord blood donor 7",
+    "Q4 DEMO donor MGH30",
+    "Cord blood donor 6",
+    "Bone Marrow donor 1",
+    "Cord blood donor 1",
+    "Bone Marrow donor 5",
+    "Cord blood donor 2",
+    "Cord blood donor 5",
+    "Bone Marrow donor 8",
+    " BM_donor_3",
+    "Kidney Donor BxA14",
+    "PBMC donor 3",
+    "PBMC donor 1",
+    "PBMC donor 4",
+    "PBMC donor 2",
+    "PBMC donor 7",
+    "PBMC donor 6",
+    "PBMC donor 5",
+    "PBMC donor 8",
+    "YORUBA Female"
+  ],
+  "files.donor_organism_json.mouse_specific.strain.text": [
+    "C57BL/6"
+  ],
+  "files.donor_organism_json.mouse_specific.strain.ontology": [
+    "EFO:0004472"
+  ],
+  "files.donor_organism_json.mouse_specific.strain.ontology_label": [
+    "C57BL/6"
+  ],
+  "files.dissociation_protocol_json.protocol_core.protocol_description": [
+    "Islets were dissociated into single-cell suspension and viable individual cells were distributed by FACS into 384-well plates containing lysis buffer.",
+    "To generate single cell suspensions, hESC-derived cultures were dissociated from plates using Accutase (ThermoFisher) at 37C. Light trituration using a P1000 pipette was done every 5 min until nearly all clumps had been dissociated (up to 1 h). Cell suspension was washed and filtered through a 40 um cell strainer. Cells were washed in PBS with 1% FBS and stained with 0.5-1 ug/mL DAPI. Single-cell suspensions were loaded onto a FACSAria II SORP (Becton Dickinson) and sorted directly into PCR strip tubes or plates held in chilled aluminium blocks. Doublets and dead cells were excluded based on forward scatter, side scatter and DAPI fluorescence. Sorting was done using the 130 um nozzle with the sort mode set to single cell. Accuracy of single-cell sorts was confirmed by sorting DAPI-stained fixed cells onto a dry well of a 96-well plate and analyzing by fluorescence microscopy.",
+    "The Demonstrated Protocol showing how to obtain a single cell suspension from embryonic mouse brain tissue in preparation for use in 10x Genomics\u00ae Single Cell Protocols which can be downloaded from https://assets.ctfassets.net/an68im79xiti/3clmEF115Ku420KaAuYUOe/ba22dcdfd8150f5f77ded1f500af01b4/CG00055_SamplePrepDemonstratedProtocol_-_MouseNeuralTissue_RevB.pdf",
+    "We isolated mononuclear cells for all samples in preparation for 10x sequencing.",
+    "Dissociation by FACS into single cells",
+    "cerebral organoid dissociation",
+    "Dissociation of spleen tissue sample into cell suspension",
+    "Dissociation of human oesophagus epithelium into single cell suspension",
+    "30 minute, 37C enzymatic dissociation using DNAse1 and Liberase. The renal biopsy was minced into small pieces with a razor blade and incubated at 37 \u02daC in freshly prepared dissociation buffer containing 0.25% trypsin and 40 U/ml DNase I. Dissociated cells were harvested every 10 min by filtering the cell suspension through a 70 \u00b5m cell strainer (pluriSelect) into 10% FBS buffer on ice. The residual biopsy tissue trapped on the cell strainer was dissociated once again with 1 mL dissociation buffer for 10 min, passed through cell strainer into the same FBS buffer from the first collection. We repeated this dissociation procedure three times until most of the tissue had been dissociated into single cells (total dissociation time was 30 min). Finally, cells were collected by centrifugation at 400 g for 5 min, resuspended in inDrops cell suspension buffer (9% Optiprep) and strained through a 40 \u00b5m cell mesh (pluriSelect) to further remove cell clumps and large fragments.",
+    "Mechanical sheering using the EZ lysis kit"
+  ],
+  "files.library_preparation_protocol_json.protocol_core.protocol_description": [
+    "Single-cell RNA-seq libraries were generated as described in Picelli et al., 2014, Full-length RNA-seq from single cells using Smart-seq2, Nature Protocols.",
+    "Cells were prepared for single-cell transcriptomics using SmartSeq2 (Picelli et al., 2014). After reverse transcription and template switching, we amplified cDNA with KAPA HotStart HIFI 2\u00d7 ReadyMix (Kapa Biosystems) for 22 cycles for RNA from single primary cortical cells. We purified PCR products using Ampure XP beads (Beckman Coulter). We quantified cDNA using a High Sensitivity DNA Chip (Agilent) on a Bioanalyzer 2100 or with the Quant-iT PicoGreen dsDNA Assay Kit (Thermo Fisher) on an Enspire plate reader (PerkinElmer).",
+    "Single cell RNAseq was performed as described in Picelli et al.Nat Protoc. 2014, PMID:24385147. We performed 23 cycles of amplification. Barcoded Illumina sequencing libraries (Nextera XT library preparation kit, Illumina) were prepared as following manufacturers protocol.",
+    "10x Chromium single cell 3' v2 library preparation",
+    "ChromiumTM Single Cell 3' Library & Gel Bead Kit v2",
+    "preparation of single cell rnaseq libraries according to 1CellBio's published protocol",
+    "droplet based RNA-seq",
+    "Single cells are first isolated into individual wells using FACS. Each cell is lysed, and the 3' ends of mRNAs are annealed to unique molecular identifiers containing a T7 promoter. The mRNA is reverse-transcribed to generate the first cDNA strand and treated with exonuclease I to remove leftover RT primers. Next, the cellular lysates are pooled together and converted to double-stranded cDNA. The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture. The RNA strands are fragmented and annealed to sequencing adapters, followed by RT to generate barcoded cDNA libraries that are ready for sequencing."
+  ],
+  "files.library_preparation_protocol_json.protocol_core.publication_doi": [
+    "10.1038/nprot.2014.006",
+    "10.1016/j.cell.2015.05.002",
+    "10.1038/nmeth.4407",
+    "10.1126/science.1247651"
+  ],
+  "files.library_preparation_protocol_json.spike_in_dilution": [
+    "40000"
+  ],
+  "files.library_preparation_protocol_json.spike_in_kit.retail_name": [
+    "External RNA Controls Consortium (ERCC)"
+  ],
+  "files.library_preparation_protocol_json.spike_in_kit.manufacturer": [
+    "Ambion, Life Technologies"
+  ],
+  "files.specimen_from_organism_json.biomaterial_core.biomaterial_description": [
+    "Pancreas from normal donor H4",
+    "Pancreas from type II diabetes mellitus donor T2D4",
+    "human embryo",
+    "Pancreas from type II diabetes mellitus donor T2D2",
+    "Sample prepared 2 days after dissection, from the first E18 mouse",
+    "Sample prepared 6 days after dissection, from the second E18 mouse",
+    "Pancreas from normal donor H2",
+    "Pancreas from normal donor H5",
+    "Subject11_DENV positive_PBMC_TEMRA",
+    "Subject12_DENV positive_PBMC_TEMRA",
+    "Subject6_DENV positive_PBMC_DENV antigen specific TEM",
+    "Pancreas from type II diabetes mellitus donor T2D1",
+    "Subject6_DENV positive_PBMC_TEMRA",
+    "Pancreas from type II diabetes mellitus donor T2D3",
+    "Subject8_DENV positive_PBMC_TEMRA",
+    "Pancreas from normal donor H3",
+    "Subject6_DENV positive_PBMC_DENV antigen specific TEMRA",
+    "Pancreas from normal donor H6",
+    "Subject10_DENV negative_PBMC_TEMRA",
+    "Subject14_DENV positive_PBMC_DENV antigen specific TEMRA",
+    "Subject13_DENV positive_PBMC_TEMRA",
+    "Subject12_DENV positive_PBMC_TCM",
+    "Subject13_DENV positive_PBMC_DENV antigen specific TEMRA",
+    "Subject12_DENV positive_PBMC_TEM",
+    "Pancreas from normal donor H1",
+    "Subject7_DENV negative_PBMC_TEMRA",
+    "Subject15_DENV positive_PBMC_DENV antigen specific TEMRA",
+    "Subject3_DENV positive_PBMC_TEM",
+    "Subject2_DENV negative_PBMC_TEMRA",
+    "Subject16_DENV negative_PBMC_IL7Rlow_TEMRA",
+    "Subject15_DENV positive_PBMC_TEMRA",
+    "Subject14_DENV positive_PBMC_TEMRA",
+    "Subject3_DENV positive_PBMC_TCM",
+    "Subject16_DENV negative_PBMC_IL7Rhigh_TEMRA",
+    "Subject5_DENV positive_PBMC_TEMRA",
+    "Skin cells from HPSI0214i-kucg_skin",
+    "Skin cells from HPSI0214i-wibj_skin",
+    "Skin cells from HPSI0314i-hoik_skin",
+    "Skin cells from HPSI0314i-sojd_skin",
+    "Subject1_DENV negative_PBMC_TEMRA",
+    "Male 35 YO bone marrow specimen",
+    "fresh spleen",
+    "fresh oesophagus",
+    "Female 28 YO bone marrow specimen",
+    "Subject3_DENV positive_PBMC_TEMRA",
+    "Subject4_DENV negative_PBMC_TEMRA",
+    "Subject6_DENV positive_PBMC_TEM",
+    "Subject6_DENV positive_PBMC_TCM",
+    "Subject9_DENV negative_PBMC_TEMRA",
+    "Female 19 YO bone marrow specimen",
+    "Human kidney allograft biopsy taken 9-21-17",
+    "PBMC",
+    "B-Lymphocyte transformed with Epstein-Barr Virus",
+    "bone marrow from proximal femur bone"
+  ],
+  "files.specimen_from_organism_json.purchased_specimen.manufacturer": [
+    "Prodo Laboratories Inc (Irvine, CA, USA) ",
+    "Stem Cell Technologies"
+  ],
+  "files.sequencing_protocol_json.protocol_core.protocol_description": [
+    "Libraries were sequenced on an Illumina HiSeq 2000, generating 43 bp single-end reads.",
+    "We used 1 ng of cDNA to generate RNA-Seq libraries using the Nextera XT library prep system (Illumina). We carried out sequencing of human cortical cells the on Illumina HiSeq using 50 base paired-end reads",
+    "Single cell sequencing of cDNAs by 10x",
+    "Libraries were sequenced on the Illumina HiSeq 2500 platform to obtain 50-bp single end reads (barcoded Illumina sequencing libraries (Nextera XT library preparation kit, Illumina)).",
+    "10x RNA sequencing",
+    "ChromiumTM Single Cell 3' Library & Gel Bead Kit v2",
+    "Library from tube 4 was sequenced in four lanes of NextSeq 500",
+    "Libraries from tube 1-3 were sequenced in each individual lane. ",
+    "droplet based, high throughput,  single-cell RNA-seq",
+    "Sequencing MARS-seq libraries on Illumina's Nextseq500 (Illumina's document # 15046563 v04)"
+  ],
+  "files.sequencing_protocol_json.protocol_core.publication_doi": [
+    "10.1038/nprot.2014.006",
+    "10.1126/science.1247651"
+  ],
+  "files.project_json.array_express_investigation": [
+    "E-MTAB-5061",
+    "E-GEOD-93593"
+  ],
+  "files.project_json.insdc_study": [
+    "PRJEB15401",
+    "PRJNA361254",
+    "PRJNA360949",
+    "PRJNA417191",
+    "PRJEB25946"
+  ],
+  "files.project_json.funders.grant_id": [
+    "648842",
+    "U19AI118626",
+    "U19AI118610",
+    "R01HL114093",
+    "R24AI108564"
+  ],
+  "files.project_json.funders.funder_name": [
+    "European Research Council",
+    "Swedish Research Council",
+    "Swedish Foundation for Strategic Research",
+    "Swedish Cancer Society",
+    "Center for Innovative Medicine",
+    "National Institutes of Health (NIH)",
+    "William K. Bowes Jr. Foundation",
+    "Chan Zuckerberg Initiative"
+  ],
+  "files.donor_organism_json.biomaterial_core.biomaterial_description": [
+    "Normal Donor 4",
+    "Type II Diabetes Donor 4",
+    "human embryo",
+    "Type II Diabetes Donor 2",
+    "A healthy E18 mouse",
+    "Bone Marrow donor 3",
+    "Bone Marrow donor 2",
+    "Normal Donor 2",
+    "Normal Donor 5",
+    "Subject11",
+    "Subject12",
+    "Subject6",
+    "Type II Diabetes Donor 1",
+    "Type II Diabetes Donor 3",
+    "Subject8",
+    "Normal Donor 3",
+    "Bone Marrow donor 6",
+    "Bone Marrow donor 4",
+    "Normal Donor 6",
+    "Subject10",
+    "Subject14",
+    "Subject13",
+    "Normal Donor 1",
+    "Subject7",
+    "Subject15",
+    "Subject3",
+    "Subject2",
+    "Subject16",
+    "Subject5",
+    "Bone Marrow donor 7",
+    "donor HPSI0214i-wibj_2, iPSC, cell line, skin",
+    "donor HPSI0314i-sojd_3, iPSC, cell line, skin",
+    "donor HPSI0314i-hoik_1, iPSC, cell line, skin",
+    "donor HPSI0214i-kucg_2, iPSC, cell line, skin",
+    "Subject1",
+    "AllCells Male 35 YO Bone Marrow Donor ",
+    "Spleen and oesophagus donor",
+    "Spleen donor",
+    "AllCells Female 28 YO Bone Marrow Donor ",
+    "Oesophagus donor",
+    "Subject4",
+    "Cord blood donor 3",
+    "Cord blood donor 4",
+    "Cord blood donor 8",
+    "Subject9",
+    "Cord blood donor 7",
+    "Cord blood donor 6",
+    "Bone Marrow donor 1",
+    "Cord blood donor 1",
+    "Bone Marrow donor 5",
+    "Cord blood donor 2",
+    "Cord blood donor 5",
+    "Bone Marrow donor 8",
+    "AllCells Female 19 YO Bone Marrow Donor ",
+    "21 YO Male Donor",
+    "PBMC donor 3",
+    "PBMC donor 1",
+    "PBMC donor 4",
+    "PBMC donor 2",
+    "PBMC donor 7",
+    "PBMC donor 6",
+    "PBMC donor 5",
+    "PBMC donor 8",
+    "Nigerian Female Blood Donor, Age Unknown",
+    "Bone marrow aspirate during surgery for hip replacement"
+  ],
+  "files.donor_organism_json.medical_history.test_results": [
+    "HbA1c 5.4%",
+    "HbA1c 7.4%",
+    "HbA1c 7.3%",
+    "HbA1c 5.3%",
+    "not available",
+    "dengue virus positive",
+    "HbA1c 7.0%",
+    "HbA1c 7.7%",
+    "HbA1c 5.7%",
+    "HbA1c 5.5%",
+    "dengue virus negative",
+    "HbA1c 5.0%",
+    "HIV, HBV, HCV: Negative"
+  ],
+  "files.donor_organism_json.development_stage.text": [
+    "adult",
+    "embryo",
+    "Embryo stage",
+    "postpartum",
+    "Adult"
+  ],
+  "files.donor_organism_json.development_stage.ontology": [
+    "EFO:0001272",
+    "UBERON:0000068",
+    "EFO:0007725",
+    "EFO:0008562"
+  ],
+  "files.donor_organism_json.development_stage.ontology_label": [
+    "adult",
+    "embryo stage",
+    "postpartum"
+  ],
+  "files.cell_suspension_json.plate_based_sequencing.cell_quality": [
+    "OK",
+    "control, 2-cell well",
+    "low quality cell",
+    "control, empty well"
+  ],
+  "files.cell_suspension_json.biomaterial_core.genotype": [
+    "DCX-Citrine"
+  ],
+  "files.cell_line_json.describedBy": [
+    "https://schema.humancellatlas.org/type/biomaterial/9.0.0/cell_line"
+  ],
+  "files.cell_line_json.schema_type": [
+    "biomaterial"
+  ],
+  "files.cell_line_json.biomaterial_core.biomaterial_id": [
+    "cell_line_WAe001-A",
+    "HPSI0214i-kucg_2",
+    "HPSI0214i-wibj_2",
+    "HPSI0314i-sojd_3",
+    "HPSI0314i-hoik_1",
+    "HS_BM_1_cell_line",
+    "HS_BM_2_cell_line",
+    "HS_BM_3_cell_line",
+    "cell_line_Day3_hiPSC-CM_BioRep1",
+    "cell_line_GM18505",
+    "cell_line_Day0_hiPSC-CM_BioRep1",
+    "cell_line_Day1_hiPSC-CM_BioRep1",
+    "cell_line_GM18517",
+    "cell_line_Day3_hiPSC-CM_BioRep2",
+    "cell_line_Day7_hiPSC-CM_BioRep1",
+    "cell_line_Day15_hiPSC-CM_BioRep2",
+    "cell_line_Day7_hiPSC-CM_BioRep2",
+    "cell_line_Day0_hiPSC-CM_BioRep2",
+    "cell_line_Day1_hiPSC-CM_BioRep2"
+  ],
+  "files.cell_line_json.biomaterial_core.biomaterial_name": [
+    "embryo_WAe001-A",
+    "iPS cell line kucg_2",
+    "iPS cell line wibj_2",
+    "iPS cell line sojd_3",
+    "iPS cell line hoik_1",
+    "Bone Marrow CD34+ stem/progenitor cells",
+    "hiPSC-CM,Day3",
+    "LCL",
+    "hiPSC-CM,Day0",
+    "hiPSC-CM,Day1",
+    "hiPSC-CM,Day7",
+    "hiPSC-CM,Day15"
+  ],
+  "files.cell_line_json.biomaterial_core.biomaterial_description": [
+    "Human Embryonic Stem Cell",
+    "iPS cell line kucg_2",
+    "iPS cell line wibj_2",
+    "iPS cell line sojd_3",
+    "iPS cell line hoik_1",
+    "human induced Pluripotent Stem Cells differentiating into Cardiomyocytes, day 3",
+    "LCL from B-Lymphocyte",
+    "human induced Pluripotent Stem Cells differentiating into Cardiomyocytes, day 0",
+    "human induced Pluripotent Stem Cells differentiating into Cardiomyocytes, day 1",
+    "human induced Pluripotent Stem Cells differentiating into Cardiomyocytes, day 7",
+    "human induced Pluripotent Stem Cells differentiating into Cardiomyocytes, day 15"
+  ],
+  "files.cell_line_json.biomaterial_core.ncbi_taxon_id": [
+    "9606"
+  ],
+  "files.cell_line_json.biomaterial_core.genotype": [
+    "DCX-Citrine"
+  ],
+  "files.cell_line_json.cell_line_type": [
+    "stem cell",
+    "induced pluripotent",
+    "stem cell-derived",
+    "primary"
+  ],
+  "files.cell_line_json.cell_type.text": [
+    "embryonic stem cell",
+    "pluripotent stem cell",
+    "CD34-positive, CD38-negative hematopoietic stem cell",
+    "cardiomyocyte",
+    "lymphocyte of B lineage",
+    "induced pluripotent stem cell"
+  ],
+  "files.cell_line_json.cell_type.ontology": [
+    "CL:0002322",
+    "CL:0002248",
+    "CL:0001024",
+    "CL:0000746",
+    "CL:0000945"
+  ],
+  "files.cell_line_json.cell_type.ontology_label": [
+    "embryonic stem cell",
+    "pluripotent stem cell",
+    "CD34-positive, CD38-negative hematopoietic stem cell",
+    "cardiac muscle cell",
+    "lymphocyte of B lineage"
+  ],
+  "files.cell_line_json.disease.text": [
+    "normal"
+  ],
+  "files.cell_line_json.disease.ontology": [
+    "PATO:0000461"
+  ],
+  "files.cell_line_json.disease.ontology_label": [
+    "normal"
+  ],
+  "files.cell_line_json.genus_species.text": [
+    "Homo sapiens"
+  ],
+  "files.cell_line_json.genus_species.ontology": [
+    "NCBITaxon:9606"
+  ],
+  "files.cell_line_json.genus_species.ontology_label": [
+    "Homo sapiens"
+  ],
+  "files.cell_line_json.publication.authors": [
+    "Thomson JA",
+    "Itskovitz-Eldor J",
+    "Shapiro SS",
+    "Waknitz MA",
+    "Swiergiel JJ",
+    "Marshall VS",
+    "Jones JM"
+  ],
+  "files.cell_line_json.publication.publication_title": [
+    "Embryonic stem cell lines derived from human blastocysts."
+  ],
+  "files.cell_line_json.publication.pmid": [
+    "9804556"
+  ],
+  "files.cell_line_json.publication.publication_url": [
+    "https://www.ncbi.nlm.nih.gov/pubmed/9804556"
+  ],
+  "files.cell_line_json.provenance.document_id": [
+    "a8366e82-7b6f-49b4-b268-db097427c320",
+    "8992203c-4802-4ed9-98f3-155e028072a6",
+    "dd77f3c6-132a-418f-9a59-8483b7dc10df",
+    "44937172-b946-4c78-8530-b42818ce0190",
+    "6bee831a-ae75-4415-abcb-d46eb30e1c81",
+    "0c916d46-4cdb-4689-99c0-228baf0ae33c",
+    "df5978dd-d9aa-4329-928b-91979bf83dd0",
+    "55cfa980-6684-4d89-8ec7-51017795c15c",
+    "b95bd00c-1c00-4f57-820f-f3f431e63377",
+    "af743a24-397f-4540-874e-f3ed7565eaa3",
+    "95fa5906-15bb-41aa-9abc-ac758c76a8a1",
+    "eed8fdd9-63d1-4480-a693-bab5c3c05e0d",
+    "ef7088ed-054b-4088-90f1-53dceb299072",
+    "708cc1a0-13d5-4319-b967-cf65bc022d0c",
+    "9a5d8b76-94ca-4d07-a2dd-5ef6c187ae2c",
+    "c737000c-60d3-43c6-9017-16de92294529",
+    "1659308f-5ab4-43de-b4dd-2e562e05db8b",
+    "69bb58e9-fe27-4e4a-bd3b-4a0b569c8ff5",
+    "af1595a3-fac8-4f83-a995-096f219dd210",
+    "195b2621-ec05-4618-9063-c56048de97d1",
+    "f7301e90-f6aa-453e-8555-1785472c8885",
+    "64baca4b-4b68-41a6-b307-eef8711811da"
+  ],
+  "files.cell_line_json.provenance.submission_date": [
+    "2018-11-21T10:58:59.331Z",
+    "2018-10-30T15:29:07.411Z",
+    "2018-10-30T15:29:07.400Z",
+    "2018-10-30T15:29:07.434Z",
+    "2018-10-30T15:29:07.425Z",
+    "2018-11-20T11:36:21.264Z",
+    "2018-11-20T11:36:21.273Z",
+    "2018-11-20T11:36:21.284Z",
+    "2018-12-04T19:02:13.661Z",
+    "2018-12-04T16:22:45.516Z",
+    "2018-12-04T16:22:45.442Z",
+    "2018-12-04T19:02:13.676Z",
+    "2018-12-04T16:22:45.478Z",
+    "2018-12-04T16:22:45.506Z",
+    "2018-12-04T19:02:13.668Z",
+    "2018-12-04T16:22:45.467Z",
+    "2018-12-04T16:22:45.600Z",
+    "2018-12-04T16:22:45.524Z",
+    "2018-12-04T16:22:45.648Z",
+    "2018-12-04T16:22:45.625Z",
+    "2018-12-04T16:22:45.539Z",
+    "2018-12-04T16:22:45.577Z"
+  ],
+  "files.cell_line_json.provenance.update_date": [
+    "2018-11-21T11:07:40.692Z",
+    "2018-10-30T15:29:21.480Z",
+    "2018-10-30T15:29:21.622Z",
+    "2018-10-30T15:29:21.542Z",
+    "2018-10-30T15:29:21.507Z",
+    "2018-11-20T11:36:30.016Z",
+    "2018-11-20T11:36:30.017Z",
+    "2018-11-20T11:36:29.954Z",
+    "2018-12-04T19:02:25.327Z",
+    "2018-12-04T16:22:50.841Z",
+    "2018-12-04T16:22:50.564Z",
+    "2018-12-04T19:02:25.142Z",
+    "2018-12-04T16:22:50.704Z",
+    "2018-12-04T16:22:50.568Z",
+    "2018-12-04T19:02:25.421Z",
+    "2018-12-04T16:22:50.823Z",
+    "2018-12-04T16:22:50.777Z",
+    "2018-12-04T16:22:50.680Z",
+    "2018-12-04T16:22:50.641Z",
+    "2018-12-04T16:22:50.631Z",
+    "2018-12-04T16:22:50.811Z",
+    "2018-12-04T16:22:50.697Z"
+  ],
+  "files.specimen_from_organism_json.biomaterial_core.genotype": [
+    "DCX-Citrine"
+  ],
+  "files.differentiation_protocol_json.describedBy": [
+    "https://schema.humancellatlas.org/type/protocol/biomaterial_collection/1.3.0/differentiation_protocol"
+  ],
+  "files.differentiation_protocol_json.schema_type": [
+    "protocol"
+  ],
+  "files.differentiation_protocol_json.protocol_core.protocol_id": [
+    "P-GSE93593-1",
+    "Org_Lanc_2014",
+    "differentiation_protocol_3",
+    "differentiation_protocol_1",
+    "differentiation_protocol_2"
+  ],
+  "files.differentiation_protocol_json.protocol_core.protocol_name": [
+    "growth protocol",
+    "Differentiation of cerebral organoids",
+    "Cardiomyocyte Differentiation Protocol "
+  ],
+  "files.differentiation_protocol_json.protocol_core.protocol_description": [
+    "We constructed an hESC line with Citrine (Cit) fused to the endogenous copy of the DCX gene in the H1 parent line (WAe001-A RRID:CVCL_9771) to allow us to profile neurons (Cit+) and progenitors (Cit\u2212) (Yao et al., 2017). hESCs were seeded for a 10-day cortical induction phase in NIMX media with SMAD inhibitors; reseeded for the ventralization phase at D10 in culture media containing Shh and purmorphamine, and finally at D24 for neural differentiation with neurogenic/neurotrophic factors BDNF, GDNF, NT3, and cAMP. The protocol was ended at D125.",
+    "Generation of cerebral organoids from human pluripotent stem cells",
+    "Directed differentiation of iPSC to cardiomyocytes using B27 insulin, Glutamax, Pennicillin/Streptomycin and WNT-C59",
+    "Directed differentiation of iPSC to cardiomyocytes using B27 insulin, Glutamax, Pennicillin/Streptomycin and CHIR",
+    "Directed differentiation of iPSC to cardiomyocytes using B27 insulin, Glutamax and Pennicillin/Streptomycin"
+  ],
+  "files.differentiation_protocol_json.differentiation_method": [
+    "cell suspension",
+    "embryoid bodies",
+    "monolayer"
+  ],
+  "files.differentiation_protocol_json.provenance.document_id": [
+    "51bb8e67-8ad8-4feb-b1a8-f4dd9d18b670",
+    "4108eec2-1f2e-42e2-b6ce-96f18a575820",
+    "c6f9ddf1-c953-4b55-a1d7-75ca942db69e",
+    "7b971f86-2904-4159-b0d1-14eaf5375f5d",
+    "944f1bef-a1af-4a88-a6af-e8eec48172a3"
+  ],
+  "files.differentiation_protocol_json.provenance.submission_date": [
+    "2018-11-21T10:59:30.284Z",
+    "2018-10-30T15:29:07.647Z",
+    "2018-12-04T16:22:45.850Z",
+    "2018-12-04T16:22:45.833Z",
+    "2018-12-04T16:22:45.843Z"
+  ],
+  "files.differentiation_protocol_json.provenance.update_date": [
+    "2018-11-21T10:59:37.014Z",
+    "2018-10-30T15:29:18.506Z",
+    "2018-12-04T16:22:50.692Z",
+    "2018-12-04T16:22:50.565Z",
+    "2018-12-04T16:22:50.482Z"
+  ],
+  "files.enrichment_protocol_json.protocol_core.protocol_description": [
+    "Single-cell suspensions were loaded onto  a  FACSAria  II  SORP  (Becton  Dickinson)  and  sorted  directly  into  PCR  strip  tubes  or  plates  held  in  chilled aluminum  blocks.    Doublets  and  dead  cells  were  excluded  based  on  forward  scatter,  side  scatter  and  DAPI fluorescence. Sorting was done using the 130  \u03bcm nozzle with the sort mode set to single cell. Accuracy of single-cell  sorts  was  confirmed  by  sorting  DAPI-stained  fixed  cells  onto  a  dry  well  of  a  96-well  plate  and  analyzing  by fluorescence microscopy.",
+    "Enrichment for peripheral blood mononuclear cells",
+    "For single-cell RNA-seq experiments, live and singlet gated cells were further gated to sort 1) TCM; CD3+CD4+CD8\u03b1/CD14/CD19-CD45RA-CCR7+, 2) TEM; CD3+CD4+CD8\u03b1/CD14/CD19-CD45RA-CCR7-, 3) TEMRA; CD3+CD4+CD8\u03b1/CD14/CD19-CD45RA+CCR7-, 4) IL-7Rhigh TEMRA (CD4-CTL precursors); CD3+CD4+CD8\u03b1/CD14/CD19-CD45RA+CCR7-CD127high, 5) IL-7R- TEMRA (CD4-CTL effectors); CD3+CD4+CD8\u03b1/CD14/CD19-CD45RA+CCR7- CD127-. Single cells were directly sorted into 96 well plate with lysis buffer for downstream processing using Smart-seq2 method",
+    "FACS sorting for CD34+ cells",
+    "Enrichment for live cells",
+    "Bone Marrow (BM) is harvested in EDTA tubes, washed, strained, ficolled (Ficoll gradient centrifugation) and stained for flow cytometry sorting"
+  ],
+  "files.library_preparation_protocol_json.cell_barcode.barcode_read": [
+    "Read 1",
+    "Read 2"
+  ],
+  "files.library_preparation_protocol_json.cell_barcode.barcode_offset": [
+    "0",
+    "8"
+  ],
+  "files.library_preparation_protocol_json.cell_barcode.barcode_length": [
+    "16",
+    "50",
+    "8",
+    "7"
+  ],
+  "files.library_preparation_protocol_json.cell_barcode.white_list_file": [
+    "737k-bc.txt",
+    "737K-august-2016.txt"
+  ],
+  "files.specimen_from_organism_json.biomaterial_core.biosd_biomaterial": [
+    "SAMN06216805",
+    "SAMN06216887"
+  ],
+  "files.specimen_from_organism_json.biomaterial_core.insdc_biomaterial": [
+    "SRS1915124",
+    "SRS1915193"
+  ],
+  "files.specimen_from_organism_json.preservation_storage.storage_time": [
+    "2",
+    "6"
+  ],
+  "files.specimen_from_organism_json.preservation_storage.storage_time_unit.text": [
+    "day"
+  ],
+  "files.specimen_from_organism_json.preservation_storage.storage_time_unit.ontology": [
+    "UO:0000033"
+  ],
+  "files.specimen_from_organism_json.preservation_storage.storage_time_unit.ontology_label": [
+    "day"
+  ],
+  "files.specimen_from_organism_json.preservation_storage.preservation_method": [
+    "fresh",
+    "cryopreservation, other",
+    "cryopreservation of live cells in liquid nitrogen"
+  ],
+  "files.specimen_from_organism_json.collection_time": [
+    "2016-09-30T12:00:00Z",
+    "2016-10-04T12:00:00Z",
+    "2016-10-12T00:00:00Z",
+    "2018-02-01T00:00:00Z",
+    "2018-04-01T00:00:00Z",
+    "2017-11-01T00:00:00Z",
+    "2016-08-17T00:00:00Z",
+    "2017-08-01T00:00:00Z",
+    "2017-06-22T00:00:00Z",
+    "2017-09-21T12:00:00Z",
+    "2019-03-01T00:00:00Z"
+  ],
+  "files.specimen_from_organism_json.state_of_specimen.autolysis_score": [
+    "none"
+  ],
+  "files.sequencing_protocol_json.local_machine_name": [
+    "K00126",
+    "HXE",
+    "HXJ",
+    "HXH",
+    "NextSeq500",
+    "NB501277"
+  ],
+  "files.cell_suspension_json.cell_morphology.percent_cell_viability": [
+    "85",
+    "97",
+    "87",
+    "96",
+    "92",
+    "83",
+    "91",
+    "94"
+  ],
+  "files.cell_suspension_json.cell_morphology.cell_viability_method": [
+    " Thermo Fisher Live/Dead\u00ae Viability/Cytotoxicity Kit",
+    "Countess II trypan blue assay",
+    "Trypan blue / manual haemacytometer (C-chip)",
+    "not provided",
+    "trypan blue stain"
+  ],
+  "files.cell_suspension_json.growth_conditions.growth_medium": [
+    "NbActiv1",
+    "IMDM+10%FBS"
+  ],
+  "files.donor_organism_json.medical_history.smoking_history": [
+    "no",
+    "No",
+    "not provided",
+    "Smoker, 20/day for 25 years, stopped 2000",
+    "yes",
+    "non-smoker"
+  ],
+  "files.donor_organism_json.weight": [
+    "83",
+    "97",
+    "71",
+    "102",
+    "59",
+    "84.4",
+    "73",
+    "80-85",
+    "69",
+    "86",
+    "77",
+    "61.7"
+  ],
+  "files.donor_organism_json.weight_unit.text": [
+    "kilogram"
+  ],
+  "files.donor_organism_json.weight_unit.ontology": [
+    "UO:0000009"
+  ],
+  "files.donor_organism_json.weight_unit.ontology_label": [
+    "kilogram"
+  ],
+  "files.donor_organism_json.height": [
+    "184",
+    "169",
+    "160",
+    "178",
+    "163",
+    "1.85",
+    "1.72",
+    "1.75-1.8",
+    "165",
+    "177",
+    "157",
+    "1.62"
+  ],
+  "files.donor_organism_json.height_unit.text": [
+    "centimeter",
+    "meter"
+  ],
+  "files.donor_organism_json.height_unit.ontology": [
+    "UO:0000015",
+    "UO:0000008"
+  ],
+  "files.donor_organism_json.height_unit.ontology_label": [
+    "centimeter",
+    "meter"
+  ],
+  "files.process_json.process_core.process_location": [
+    "Broad Institute",
+    "Sri Lanka",
+    "Nicaragua",
+    "San Diego",
+    "Wellcome Sanger Institute",
+    "Laboratory of Molecular Biology, Clatworthy lab CL2",
+    "Rebecca Fitzgerald's Lab, Hutchinson MRC, Addenbrooke's, Cambridge"
+  ],
+  "files.library_preparation_protocol_json.library_preamplification_method.text": [
+    "PCR",
+    "In vitro transcription"
+  ],
+  "files.library_preparation_protocol_json.library_preamplification_method.ontology": [
+    "OBI:0000415",
+    "EFO:0009013"
+  ],
+  "files.library_preparation_protocol_json.library_preamplification_method.ontology_label": [
+    "PCR"
+  ],
+  "files.collection_protocol_json.describedBy": [
+    "https://schema.humancellatlas.org/type/protocol/biomaterial_collection/8.2.6/collection_protocol"
+  ],
+  "files.collection_protocol_json.schema_type": [
+    "protocol"
+  ],
+  "files.collection_protocol_json.protocol_core.protocol_id": [
+    "collection_protocol_2",
+    "collection_protocol_1",
+    "collection_protocol_3",
+    "renal_biopsy_1",
+    "BM_hip_rep"
+  ],
+  "files.collection_protocol_json.protocol_core.protocol_name": [
+    "Blood sample collection",
+    "Bone marrow aspiration",
+    "percutaneous kidney biopsy",
+    "BM_hip_rep"
+  ],
+  "files.collection_protocol_json.protocol_core.protocol_description": [
+    "Blood sample collection by blood draw",
+    "Blood sample collection by leukapheresis",
+    "AllCells, LLC Bone Marrow Aspiration Protocol 2016-10-12",
+    "AllCells, LLC Bone Marrow Aspiration Protocol 2016-08-17",
+    "AllCells, LLC Bone Marrow Aspiration Protocol 2017-06-22",
+    "small piece of kidney removed from patient via 16 gauge biopsy needle",
+    "harvesting cells from bone marrow aspirate during hip replacement surgery"
+  ],
+  "files.collection_protocol_json.protocol_core.publication_doi": [
+    "10.1126/sciimmunol.aan8664",
+    "10.1155/2016/3152065"
+  ],
+  "files.collection_protocol_json.collection_method.text": [
+    "blood draw",
+    "leukapheresis",
+    "Bone marrow aspiration",
+    "percutaneous kidney biopsy",
+    "Ficoll-Hypaque method"
+  ],
+  "files.collection_protocol_json.collection_method.ontology": [
+    "EFO:0009121",
+    "EFO:0009126",
+    "EFO:0009292",
+    "EFO:0009293",
+    "EFO:0009110",
+    "EFO:0009120"
+  ],
+  "files.collection_protocol_json.collection_method.ontology_label": [
+    "blood draw",
+    "leukapheresis",
+    "bone marrow aspiration",
+    "percutaneous kidney biopsy"
+  ],
+  "files.collection_protocol_json.provenance.document_id": [
+    "abed2b97-ef60-4dd7-a3f0-415bdd0a1321",
+    "370e41d6-8ef1-400a-9e46-caf3486c08e6",
+    "ae233aea-0f5b-4644-ae41-bd0e28117e08",
+    "bd879cea-6a28-4ed2-a36d-de3511978ee1",
+    "1141416e-b81a-4767-b82a-c90f8a0552b3",
+    "775fbb0e-c88e-469e-975d-c0a708473049",
+    "9495ef05-da3b-4e42-9293-60a6cf8c1a61",
+    "82c16786-bf1c-4e9c-85b8-94b34fa5c4f6",
+    "cc074b80-982b-463e-a4b4-204ab6604681",
+    "1af732f2-9783-4342-9fde-bc2afe7159da",
+    "a627144e-1c11-4dac-9e7f-74dc5ed5a07e"
+  ],
+  "files.collection_protocol_json.provenance.submission_date": [
+    "2018-12-03T16:34:56.931Z",
+    "2018-12-03T16:34:56.924Z",
+    "2018-11-20T11:36:21.408Z",
+    "2018-11-20T11:36:21.415Z",
+    "2018-11-20T11:36:21.422Z",
+    "2018-12-04T18:25:52.649Z",
+    "2018-12-04T19:02:13.762Z",
+    "2018-12-04T19:02:13.780Z",
+    "2018-11-28T08:12:51.898Z",
+    "2018-11-28T21:23:56.215Z",
+    "2018-12-04T19:02:13.772Z"
+  ],
+  "files.collection_protocol_json.provenance.update_date": [
+    "2018-12-03T16:35:03.004Z",
+    "2018-12-03T16:35:02.898Z",
+    "2018-11-20T11:36:28.111Z",
+    "2018-11-20T11:36:28.104Z",
+    "2018-11-20T11:36:28.106Z",
+    "2018-12-04T18:26:02.298Z",
+    "2018-12-04T19:02:24.949Z",
+    "2018-12-04T19:02:19.433Z",
+    "2018-11-28T08:12:59.381Z",
+    "2018-11-28T21:24:01.236Z",
+    "2018-12-04T19:02:19.414Z"
+  ],
+  "files.specimen_from_organism_json.preservation_storage.storage_method": [
+    "frozen, liquid nitrogen"
+  ],
+  "files.donor_organism_json.biomaterial_core.genotype": [
+    "DRB1*0802 susceptible allele",
+    "DRB1*0401 protective allele",
+    "not provided"
+  ],
+  "files.donor_organism_json.biomaterial_core.biosd_biomaterial": [
+    "SAMEA2398911",
+    "SAMEA2418245",
+    "SAMEA2399961",
+    "SAMEA2397923"
+  ],
+  "files.organoid_json.describedBy": [
+    "https://schema.humancellatlas.org/type/biomaterial/8.3.8/organoid"
+  ],
+  "files.organoid_json.schema_type": [
+    "biomaterial"
+  ],
+  "files.organoid_json.biomaterial_core.biomaterial_id": [
+    "Org_HPSI0214i-kucg_2_3",
+    "Org_HPSI0214i-wibj_2_3",
+    "Org_HPSI0314i-hoik_1_3",
+    "Org_HPSI0314i-sojd_3_3",
+    "Org_HPSI0314i-hoik_1_1",
+    "Org_HPSI0214i-wibj_2_1",
+    "Org_HPSI0314i-sojd_3_1",
+    "Org_HPSI0214i-kucg_2_1",
+    "Org_HPSI0314i-hoik_1_2",
+    "Org_HPSI0314i-sojd_3_2",
+    "Org_HPSI0214i-kucg_2_2",
+    "Org_HPSI0214i-wibj_2_2"
+  ],
+  "files.organoid_json.biomaterial_core.biomaterial_name": [
+    "human cerebral organoid kucg_2",
+    "human cerebral organoid wibj_2",
+    "human cerebral organoid hoik_1",
+    "human cerebral organoid sojd_3"
+  ],
+  "files.organoid_json.biomaterial_core.biomaterial_description": [
+    "human cerebral organoid kucg_2, 62d",
+    "human cerebral organoid wibj_2, 62d",
+    "human cerebral organoid hoik_1, 62d",
+    "human cerebral organoid sojd_3, 62d"
+  ],
+  "files.organoid_json.biomaterial_core.ncbi_taxon_id": [
+    "9606"
+  ],
+  "files.organoid_json.genus_species.text": [
+    "Homo sapiens"
+  ],
+  "files.organoid_json.genus_species.ontology": [
+    "NCBITaxon:9606"
+  ],
+  "files.organoid_json.genus_species.ontology_label": [
+    "Homo sapiens"
+  ],
+  "files.organoid_json.model_for_organ.text": [
+    "Brain"
+  ],
+  "files.organoid_json.model_for_organ.ontology": [
+    "UBERON:0000955"
+  ],
+  "files.organoid_json.model_for_organ.ontology_label": [
+    "brain"
+  ],
+  "files.organoid_json.organoid_age": [
+    "62"
+  ],
+  "files.organoid_json.organoid_age_unit.text": [
+    "day"
+  ],
+  "files.organoid_json.organoid_age_unit.ontology": [
+    "UO:0000033"
+  ],
+  "files.organoid_json.organoid_age_unit.ontology_label": [
+    "day"
+  ],
+  "files.organoid_json.organoid_type": [
+    "stem cell-derived"
+  ],
+  "files.organoid_json.embedded_in_matrigel": [
+    "true"
+  ],
+  "files.organoid_json.organoid_growth_environment": [
+    "suspension"
+  ],
+  "files.organoid_json.provenance.document_id": [
+    "f7acd04c-e247-4c1c-ac56-c62a7e6a97c9",
+    "72bc1a46-82a9-4ab5-985a-868b681a9c03",
+    "45005db9-0baf-440f-b513-d32e7349d2bc",
+    "40763591-66bd-4d28-8ad9-2dd7ff7135f1",
+    "63b719e8-7305-423d-8de9-29eee0a304f1",
+    "4ad723d1-e9ad-4434-9733-ae4528c0507d",
+    "5ab59464-d525-4e75-b4da-21c4dad60b00",
+    "054c083a-85d0-432f-bffe-272ac948b01b",
+    "feec2877-49d9-4b8a-8afb-6ac52503bddb",
+    "078054f6-8f25-482e-8ce5-97be4eee030b",
+    "a3824bbe-5f6d-4a54-b365-805f95814c6f",
+    "86b883c3-0674-4604-a5aa-ae19f0f747b5"
+  ],
+  "files.organoid_json.provenance.submission_date": [
+    "2018-10-30T15:29:07.497Z",
+    "2018-10-30T15:29:07.466Z",
+    "2018-10-30T15:29:07.560Z",
+    "2018-10-30T15:29:07.603Z",
+    "2018-10-30T15:29:07.506Z",
+    "2018-10-30T15:29:07.445Z",
+    "2018-10-30T15:29:07.583Z",
+    "2018-10-30T15:29:07.474Z",
+    "2018-10-30T15:29:07.528Z",
+    "2018-10-30T15:29:07.593Z",
+    "2018-10-30T15:29:07.482Z",
+    "2018-10-30T15:29:07.455Z"
+  ],
+  "files.organoid_json.provenance.update_date": [
+    "2018-10-30T15:29:20.636Z",
+    "2018-10-30T15:29:21.177Z",
+    "2018-10-30T15:29:20.807Z",
+    "2018-10-30T15:29:20.974Z",
+    "2018-10-30T15:29:21.084Z",
+    "2018-10-30T15:29:20.486Z",
+    "2018-10-30T15:29:20.797Z",
+    "2018-10-30T15:29:21.158Z",
+    "2018-10-30T15:29:20.584Z",
+    "2018-10-30T15:29:21.025Z",
+    "2018-10-30T15:29:20.424Z",
+    "2018-10-30T15:29:20.981Z"
+  ],
+  "files.cell_line_json.biomaterial_core.biosd_biomaterial": [
+    "SAMEA2645814",
+    "SAMEA2627567",
+    "SAMEA2627569",
+    "SAMEA2698315"
+  ],
+  "files.cell_line_json.catalog_number": [
+    "77650065",
+    "77650057",
+    "77650126",
+    "77650129",
+    "ABM022F",
+    "GM18505",
+    "GM18517"
+  ],
+  "files.cell_line_json.catalog_url": [
+    "http://www.hipsci.org/lines/#/lines/HPSI0214i-kucg_2",
+    "http://www.hipsci.org/lines/#/lines/HPSI0214i-wibj_2",
+    "http://www.hipsci.org/lines/#/lines/HPSI0314i-sojd_3",
+    "http://www.hipsci.org/lines/#/lines/HPSI0314i-hoik_1",
+    "https://www.allcells.com/products/bone-marrow-cd34-stem-progenitor-cells",
+    "https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=GM18505&product=CC",
+    "https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=GM18517&product=CC"
+  ],
+  "files.cell_line_json.cell_morphology.cell_viability_method": [
+    "Growth to confluence post-thaw",
+    "trypan blue staining"
+  ],
+  "files.cell_line_json.growth_conditions.passage_number": [
+    "36",
+    "32",
+    "29",
+    "28",
+    "23",
+    "14"
+  ],
+  "files.cell_line_json.growth_conditions.growth_medium": [
+    "mTeSR1",
+    "hESC-qualified Matrigel"
+  ],
+  "files.cell_line_json.growth_conditions.feeder_layer_type": [
+    "feeder-free"
+  ],
+  "files.cell_line_json.growth_conditions.drug_treatment": [
+    "Cells were cultured in presence of Penicillin and Streptomycin"
+  ],
+  "files.cell_line_json.growth_conditions.mycoplasma_testing_method": [
+    "PCR",
+    "Microbiological assay"
+  ],
+  "files.cell_line_json.growth_conditions.mycoplasma_testing_results": [
+    "pass"
+  ],
+  "files.cell_line_json.date_established": [
+    "2014-11-03T00:00:00Z",
+    "2014-10-24T00:00:00Z",
+    "2015-01-09T00:00:00Z",
+    "2015-02-02T00:00:00Z",
+    "2016-10-12T00:00:00Z",
+    "2016-08-17T00:00:00Z",
+    "2017-06-22T00:00:00Z"
+  ],
+  "files.ipsc_induction_protocol_json.describedBy": [
+    "https://schema.humancellatlas.org/type/protocol/biomaterial_collection/2.0.1/ipsc_induction_protocol"
+  ],
+  "files.ipsc_induction_protocol_json.schema_type": [
+    "protocol"
+  ],
+  "files.ipsc_induction_protocol_json.protocol_core.protocol_id": [
+    "ipsc_induction_protocol_1",
+    "iPSC_induction_protcol_1"
+  ],
+  "files.ipsc_induction_protocol_json.protocol_core.protocol_name": [
+    "iPSC induction by Sendai virus",
+    "iPSC Induction Protocol"
+  ],
+  "files.ipsc_induction_protocol_json.protocol_core.protocol_description": [
+    "Fibroblasts are thawed, transduced using Cytotune 2.0 Sendai virus (containing the Yamanaka genes encoding transcription factors Oct4, Sox2, cMyc and Klf4) and maintained until iPSC colony formation. Colonies are then picked and cultured to obtain a sizable yield of IPS cells, which are banked to a commercial grade standard. These banks then undergo quality checks to ensure the banks pass resuscitation tests and are free of mycoplasma.",
+    "Reprogramming by Episomal Transfection using  a plasmids contain genes POU5F1, SOX2, KLF4, MYCL, LIN28, and an shRNA against TP53"
+  ],
+  "files.ipsc_induction_protocol_json.protocol_core.document": [
+    "hipsci-ipsc-pipeline.pdf"
+  ],
+  "files.ipsc_induction_protocol_json.ipsc_induction_method": [
+    "sendai virus",
+    "plasmid"
+  ],
+  "files.ipsc_induction_protocol_json.pluripotency_vector_removed": [
+    "yes",
+    "no"
+  ],
+  "files.ipsc_induction_protocol_json.ipsc_induction_kit.retail_name": [
+    "Cytotune 1.0",
+    "AMAXA Cell Line Nucleofector Kit V"
+  ],
+  "files.ipsc_induction_protocol_json.ipsc_induction_kit.manufacturer": [
+    "Thermofisher",
+    "Lonza"
+  ],
+  "files.ipsc_induction_protocol_json.pluripotency_test": [
+    "HipSci Pluri test"
+  ],
+  "files.ipsc_induction_protocol_json.ipsc_induction_produced_in_house": [
+    "false",
+    "true"
+  ],
+  "files.ipsc_induction_protocol_json.provenance.document_id": [
+    "366c96f3-7513-4731-8cc7-17afde4f7aed",
+    "de1be240-5ac5-4b6d-8294-ae0c58e0e289"
+  ],
+  "files.ipsc_induction_protocol_json.provenance.submission_date": [
+    "2018-10-30T15:29:07.638Z",
+    "2018-12-04T16:22:45.824Z"
+  ],
+  "files.ipsc_induction_protocol_json.provenance.update_date": [
+    "2018-10-30T15:29:18.374Z",
+    "2018-12-04T16:22:50.382Z"
+  ],
+  "files.dissociation_protocol_json.protocol_reagents.retail_name": [
+    "Neural Tissue Dissociation Kit",
+    "DNase I",
+    "Liberase TL Research Grade",
+    "0.25% Trypsin-EDTA (1x)"
+  ],
+  "files.dissociation_protocol_json.protocol_reagents.catalog_number": [
+    "130-092-628",
+    "A3778",
+    "05401020001",
+    "25200-056"
+  ],
+  "files.dissociation_protocol_json.protocol_reagents.manufacturer": [
+    "Miltenyi Biotec",
+    "ITW Reagents",
+    "Roche",
+    "Gibco by Life Technologies"
+  ],
+  "files.differentiation_protocol_json.protocol_core.publication_doi": [
+    "10.1038/nprot.2014.158"
+  ],
+  "files.differentiation_protocol_json.target_pathway": [
+    "RHO, ROCK",
+    "Wnt Pathway"
+  ],
+  "files.differentiation_protocol_json.validation_method": [
+    "immunostaining"
+  ],
+  "files.differentiation_protocol_json.reagents.retail_name": [
+    "ROCK inhibitor Y27632"
+  ],
+  "files.differentiation_protocol_json.small_molecules": [
+    "Vitamin A (retinoic acid)"
+  ],
+  "files.cell_line_json.supplier": [
+    "AllCells, LLC",
+    "Coriell"
+  ],
+  "files.library_preparation_protocol_json.library_construction_kit.catalog_number": [
+    "120237",
+    "10196",
+    "FC-131-1096"
+  ],
+  "files.library_preparation_protocol_json.library_construction_kit.lot_number": [
+    "151634",
+    "0317SRK10004X",
+    "20208372"
+  ],
+  "files.library_preparation_protocol_json.library_construction_kit.expiry_date": [
+    "2018-07-13",
+    "2018-07-01",
+    "2018-08-02"
+  ],
+  "files.library_preparation_protocol_json.nucleic_acid_conversion_kit.retail_name": [
+    "10X Chromium Single Cell 3' Solution v2 Chemistry",
+    "SuperScript III Reverse Transcriptase"
+  ],
+  "files.library_preparation_protocol_json.nucleic_acid_conversion_kit.catalog_number": [
+    "151634",
+    "18080044"
+  ],
+  "files.library_preparation_protocol_json.nucleic_acid_conversion_kit.manufacturer": [
+    "10X Genomics",
+    "ThermoFisher"
+  ],
+  "files.library_preparation_protocol_json.nucleic_acid_conversion_kit.lot_number": [
+    "151634",
+    "1893563"
+  ],
+  "files.library_preparation_protocol_json.nucleic_acid_conversion_kit.expiry_date": [
+    "2018-07-13",
+    "2018-11-01"
+  ],
+  "files.donor_organism_json.medical_history.medication": [
+    "None",
+    "tacrolimus, mycophenolic acid, prednisone",
+    "No chronic meds"
+  ],
+  "files.cell_suspension_json.cell_morphology.cell_morphology": [
+    "Cells in suspension are generally spherical in shape",
+    "Normal",
+    "Normal; mixture of cell sizes"
+  ],
+  "files.cell_suspension_json.cell_morphology.cell_viability_result": [
+    "pass"
+  ],
+  "files.cell_suspension_json.growth_conditions.passage_number": [
+    "0"
+  ],
+  "files.donor_organism_json.death.cold_perfused": [
+    "true"
+  ],
+  "files.donor_organism_json.death.organ_donation_death_type": [
+    "Donation after circulatory death (DCD)"
+  ],
+  "files.donor_organism_json.medical_history.alcohol_history": [
+    "not provided",
+    "3-6 units/day",
+    "No alcoholism reported"
+  ],
+  "files.donor_organism_json.normothermic_regional_perfusion": [
+    "unknown",
+    "no",
+    "yes"
+  ],
+  "files.project_json.funders.grant_title": [
+    "CZI Tissue Stability Study"
+  ],
+  "files.process_json.process_core.operator": [
+    "AW",
+    "KNO"
+  ],
+  "files.enrichment_protocol_json.protocol_core.document": [
+    "SOP_MACS_Live_Dead_Separation_V3.pdf",
+    "Human_spleen_dissociation_protocol.pdf",
+    "BM_Ficoll.pdf"
+  ],
+  "files.enrichment_protocol_json.protocol_core.protocols_io_doi": [
+    "10.17504/protocols.io.qz5dx86",
+    "10.17504/protocols.io.qz3dx8n",
+    "10.17504/protocols.io.qxqdxmw"
+  ],
+  "files.dissociation_protocol_json.protocol_core.protocols_io_doi": [
+    "10.17504/protocols.io.qz3dx8n",
+    "10.17504/protocols.io.qz8dx9w"
+  ],
+  "files.specimen_from_organism_json.state_of_specimen.ischemic_temperature": [
+    "cold"
+  ],
+  "files.specimen_from_organism_json.state_of_specimen.microscopic_description": [
+    "not provided",
+    "Mixture of different cell sizes apparent",
+    "dead cells are quite faint on microscope at LMB",
+    "see figure 1B. PAS staining showed  diffuse inflammatory infiltrates"
+  ],
+  "files.specimen_from_organism_json.state_of_specimen.postmortem_interval": [
+    "26100",
+    "21600",
+    "25200",
+    "29700",
+    "48600",
+    "28800",
+    "32400"
+  ],
+  "files.specimen_from_organism_json.state_of_specimen.ischemic_time": [
+    "21600",
+    "25200",
+    "41400",
+    "19320",
+    "1200"
+  ],
+  "files.specimen_from_organism_json.state_of_specimen.gross_image": [
+    "284C_IMAGE_spleen_annotated.jpeg"
+  ],
+  "files.specimen_from_organism_json.biomaterial_core.supplementary_files": [
+    "Q4_DEMO-protocol"
+  ],
+  "files.cell_suspension_json.cell_morphology.cell_size": [
+    "0.01-0.06",
+    "15-20"
+  ],
+  "files.cell_suspension_json.cell_morphology.cell_size_unit.text": [
+    "millimeter",
+    "micrometer"
+  ],
+  "files.cell_suspension_json.cell_morphology.cell_size_unit.ontology": [
+    "UO:0000016",
+    "UO:0000017"
+  ],
+  "files.cell_suspension_json.cell_morphology.cell_size_unit.ontology_label": [
+    "millimeter"
+  ],
+  "files.dissociation_protocol_json.protocol_reagents.lot_number": [
+    "6U014165",
+    "24679400",
+    "1846496"
+  ],
+  "files.dissociation_protocol_json.protocol_reagents.expiry_date": [
+    "2020-06-01",
+    "2018-08-01",
+    "2018-11-30"
+  ],
+  "files.specimen_from_organism_json.state_of_specimen.gross_description": [
+    "1.5 cm long, 16 gauge core"
+  ],
+  "files.cell_line_json.cell_morphology.cell_morphology": [
+    "adherent cells , form single layer colonies"
+  ],
+  "files.cell_line_json.cell_morphology.cell_size": [
+    "40-45"
+  ],
+  "files.cell_line_json.cell_morphology.cell_size_unit.text": [
+    "micrometer"
+  ],
+  "files.cell_line_json.cell_morphology.cell_size_unit.ontology": [
+    "UO:0000017"
+  ],
+  "files.cell_line_json.cell_morphology.cell_size_unit.ontology_label": [
+    "micrometer"
+  ],
+  "files.cell_line_json.cell_morphology.percent_cell_viability": [
+    "80",
+    "50",
+    "70",
+    "60",
+    "55",
+    "90"
+  ],
+  "files.cell_line_json.cell_morphology.cell_viability_result": [
+    "pass"
+  ],
+  "files.ipsc_induction_protocol_json.ipsc_induction_kit.catalog_number": [
+    "VCA-1003"
+  ],
+  "files.sequencing_protocol_json.protocol_core.protocols_io_doi": [
+    "DOI: 10.1126/science.1247651"
+  ],
+  "files.library_preparation_protocol_json.cdna_library_amplification_method.text": [
+    "PCR"
+  ],
+  "files.library_preparation_protocol_json.cdna_library_amplification_method.ontology": [
+    "OBI:0000415"
+  ],
+  "files.collection_protocol_json.protocol_core.protocols_io_doi": [
+    "10.17504/protocols.io.qxydxpw"
+  ],
+  "files.collection_protocol_json.protocol_core.document": [
+    "BM_Hip_Rep.pdf"
+  ],
+  "files.collection_protocol_json.protocol_reagents.catalog_number": [
+    "GE17-1440-02"
+  ],
+  "files.collection_protocol_json.protocol_reagents.manufacturer": [
+    "GE healthcare"
+  ],
+  "files.donor_organism_json.medical_history.nutritional_state": [
+    "normal"
+  ]
+}

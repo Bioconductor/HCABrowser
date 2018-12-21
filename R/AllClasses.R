@@ -1,13 +1,15 @@
+## TODO columsn won't be displayed if value does not exist for those initial values
+.initial_source <- c(
+    "project_title", "project_short_name", "organ.text",
+    "library_construction_approach.text",
+    "specimen_from_organism_json.genus_species.text",
+    "disease.text"
+)
 
 .init_HumanCellAtlas <- function(hca)
 {
-#    select(hca,
-#           c("project_title", "project_shortname", "organ",
-#             "library_construction_approach.text",
-#             "specimen_from_organism_json.genus_species.text",
-#             "files.donor_organism_json.diseases.text")
-#    )
-    postSearch(hca, 'aws', 'raw', per_page=100)
+    select(hca, .initial_source)
+    #postSearch(hca, 'aws', 'raw', per_page=100)
 }
 
 #' @importFrom tibble tibble
@@ -29,6 +31,8 @@ setOldClass('quosures')
     slots = c(
         activated = "character",
         url = "character",
+        fields_path = "character",
+        supported_fields = "tbl_df",
         es_query = "quosures",
         es_source = "quosures",
         search_term = "list",
@@ -37,11 +41,46 @@ setOldClass('quosures')
     )
 )
 
+.get_supportedFields <- function(hca)
+{
+    if(is.null(hca))
+        field_names=names(jsonlite::fromJSON(system.file("extdata", "fields_and_values.json", package="HCABrowser")))
+    else
+        field_names <- names(jsonlite::fromJSON(hca@fields_path))
+    names_split <- strsplit(field_names, '[.]')
+    abbreviated_names <- vapply(names_split, function(x) {
+        short_name <- c()
+        for(i in rev(seq_along(x))){
+            if(i != length(x))
+                short_name <- paste0(x[i], '.', short_name)
+            else
+                short_name <- x[i]
+            uni <- field_names[grepl(paste0('[.]', short_name, '$'), field_names)]
+            if (length(uni) == 1) {
+#                if (i + 1 == length(x)) {
+#                    second_split <- strsplit(short_name, '[.]')[[1]]
+#                    uni <- field_names[grepl(paste0('[.]', second_split, '[.]'), field_names)]
+#                    if (length(uni) == 1)
+#                        short_name <- second_split[1]
+#                }
+                return(short_name)
+            }
+        }
+        short_name
+    }, character(1))
+    df <- cbind(abbreviated_names, field_names)
+    df <- df[order(df[,1]),]
+    as_tibble(df)
+}
+
 #' @export
 HumanCellAtlas <-
-    function(url='https://dss.data.humancellatlas.org/v1', per_page=10)
+    function(url='https://dss.data.humancellatlas.org/v1',
+             fields_path=system.file("extdata", "fields_and_values.json", package="HCABrowser"),
+             per_page=10)
 {
-    hca <- .HumanCellAtlas(url=url, per_page=per_page, activated="bundles", search_term=list(), es_query=quos(), es_source=quos())
+    hca <- .HumanCellAtlas(url=url, fields_path=fields_path, per_page=per_page, activated="bundles", search_term=list(), es_query=quos(), es_source=quos(), supported_fields = tibble())
+    hca@supported_fields <- .get_supportedFields(hca)
     .init_HumanCellAtlas(hca)
 }
 
@@ -71,21 +110,18 @@ setMethod('first_hit', 'SearchResult', .first_hit)
 setMethod('last_hit', 'SearchResult', .last_hit)
 setMethod('total_hits', 'SearchResult', .total_hits)
 setMethod('es_query', 'SearchResult', .es_query)
+#' @export
 setMethod('results', 'SearchResult', .results)
 setMethod('link', 'SearchResult', .link)
 
-.update_es_query <- function(object){message('hi')}
-.reset_es_query <- function(object) object@es_query_filter <- NULL
+setGeneric('undoEsQuery', function(hca, ...) standardGeneric('undoEsQuery'))
+setGeneric('resetEsQuery', function(hca, ...) standardGeneric('resetEsQuery'))
 
-setGeneric('.updateEsQuery', function(object, ...) standardGeneric('.updateEsQuery'))
-setGeneric('resetEsQuery', function(object, ...) standardGeneric('resetEsQuery'))
+setGeneric('per_page', function(hca, ...) standardGeneric('per_page'))
 
 setGeneric('pullBundles', function(hca, ...) standardGeneric('pullBundles'))
 setGeneric('showBundles', function(hca, bundle_fqids, ...) standardGeneric('showBundles'))
 setGeneric('downloadHCA', function(hca, ...) standardGeneric('downloadHCA'))
-
-setMethod('.updateEsQuery', 'HumanCellAtlas', .update_es_query)
-setMethod('resetEsQuery', 'HumanCellAtlas', .reset_es_query)
 
 #' @importFrom tidygraph activate
 #' @export
@@ -100,18 +136,71 @@ activate.HumanCellAtlas <-
     object
 }
 
+.set_per_page <-
+    function(hca, n)
+{
+    hca@per_page <- n
+    hca
+}
+
+#' @export
+setMethod('per_page', 'HumanCellAtlas', .set_per_page)
+
 .download.HumanCellAtlas <-
-    function(hca, ...)
+    function(hca, ..., n)
 {
     res <- results(hca)
-    while (!is.null(hca <- nextResults(hca))) {
-        res <- rbind.fill(res, results(hca))
+    if (!missing(n)) {
+        per_page <- hca@per_page
+        times <- floor(n/per_page)
+        mod <- n %% per_page
+        for(i in seq_len(times)) {
+            hca <- nextResults(hca)
+            res <- rbind.fill(res, results(hca))
+        }
+## TODO fix results length
+#        if (mod > 0) {
+#            hca <- hca %>% per_page(mod)
+#            hca <- 
+#        }
+    } else {
+        res <- results(hca)
+        while (!is.null(hca <- nextResults(hca))) {
+            res <- rbind.fill(res, results(hca))
+        }
     }
     res
 }
 
 #' @export
 setMethod("downloadHCA", "HumanCellAtlas", .download.HumanCellAtlas)
+
+.undo_esquery <-
+    function(hca, ...)
+{
+    hca@search_term <- list()
+    if (length(hca@es_query) < 2)
+        resetEsQuery(hca)
+    else{
+        hca@es_query[[length(hca@es_query)]] <- NULL
+        hca@es_source[[length(hca@es_source)]] <- NULL
+        hca
+    }
+}
+
+#' @export
+setMethod('undoEsQuery', 'HumanCellAtlas', .undo_esquery)
+
+.reset_esquery <-
+    function(hca, ...)
+{
+    hca@search_term <- list()
+    hca@es_query <- quos()
+    hca@es_source <- quos()
+    select(hca, .initial_source)  
+}
+
+setMethod('resetEsQuery', 'HumanCellAtlas', .reset_esquery)
 
 .pullBundles <-
     function(hca, ...)
@@ -125,7 +214,9 @@ setMethod('pullBundles', 'HumanCellAtlas', .pullBundles)
 .showBundles <- function(hca, bundle_fqids, ...)
 {
     hca <- hca %>% activate('files')
-    hca %>% downloadHCA() %>% filter(bundle_fqid %in% bundle_fqids)
+    bundle_fqids <- vapply(strsplit(bundle_fqids, '[.]'), function(x) { x[1] }, character(1))
+    hca %>% filter(uuid %in% bundle_fqids)
+    #hca %>% downloadHCA() %>% filter(bundle_fqid %in% bundle_fqids)
 }
 
 #' @export
@@ -142,6 +233,7 @@ setMethod('showBundles', 'HumanCellAtlas', .showBundles)
     print(results(object))
 }
 
+#' @export
 setMethod('show', 'SearchResult', .show_SearchResult)
 
 .show_HumanCellAtlas <- function(object)

@@ -19,4 +19,5 @@ setGeneric("getSubscription", function(hca, ...) standardGeneric("getSubscriptio
 
 setGeneric("nextResults", function(result, ...) standardGeneric("nextResults"))
 
-setGeneric("supportedFilters", function(missing, ...) standardGeneric("supportedFilters"))
+setGeneric("supportedFields", function(hca, ...) standardGeneric("supportedFields"))
+setGeneric("availableFields", function(hca, ...) standardGeneric("availableFields"))

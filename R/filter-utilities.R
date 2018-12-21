@@ -47,25 +47,39 @@ names(.filters) <- names(.filters_list)
     '>=' = 'gte'
 )
 
+.regexp_ops = c('contains', 'startsWith', 'endsWith')
+
 .range <- c('<', '<=', '>', '>=')
 
 .match_ops = list(
     '==' = '='
 )
 
-.supportedFilters <- function()
+.supportedFields <- function(hca)
 {
-    names(.filters)
+    hca@supported_fields
 }
+
+#' @export
+setMethod("supportedFields", "HumanCellAtlas", .supportedFields)
+
+.availableFields <- function(hca, fields=c())
+{
+    fields_json <- jsonlite::fromJSON(hca@fields_path)
+    fields <- .convert_names_to_filters(hca, fields)
+    if (length(fields) > 0)
+        fields_json <- fields_json[fields]
+    fields_json
+}
+
+#' @export
+setMethod("availableFields", "HumanCellAtlas", .availableFields)
 
 .is_bool_connector <- function(x)
 {
     names <- names(x)
     names %in% c("filter", "should", "must_not") 
 }
-
-#' @export
-setMethod("supportedFilters", "missing", .supportedFilters)
 
 .binary_op <- function(sep)
 {
@@ -91,9 +105,24 @@ setMethod("supportedFilters", "missing", .supportedFilters)
         if(sep %in% .range)
             fun <- "range"
 
-        field <- .convert_names_to_filters(field)
+        if(sep %in% .regexp_ops) {
+            fun <- 'regexp'
+            ## TODO parse regex string to catch protected characters
+            if(sep == 'contains')
+                value <- paste0('.*', value, '.*')
+            if(sep == 'startsWith')
+                value <- paste0(value, '.*')
+            if(sep == 'endsWith')
+                value <- paste0('.*', value)
+        }
+
+        field <- .convert_names_to_filters(NULL, field)
 
         leaf <- list(value)
+        if(fun == 'range') {
+            names(leaf) <- .range[sep]
+            leaf <- list(leaf)
+        }
         names(leaf) <- field
         leaf <- list(leaf)
         names(leaf) <- fun
@@ -147,7 +176,7 @@ setMethod("supportedFilters", "missing", .supportedFilters)
 {
     if (ret_next)
         return(names(x))
-    if(!is.null(names(x)) && names(x) %in% c("term", "terms", "range"))
+    if(!is.null(names(x)) && names(x) %in% c("term", "terms", "range", "regexp"))
         lapply(x, .get_selections, TRUE)
     else
         lapply(x, .get_selections, FALSE)
@@ -196,7 +225,7 @@ select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
         sources <- sources[-1]
     sources <- unique(sources)
 
-    sources <- .convert_names_to_filters(sources)
+    sources <- .convert_names_to_filters(hca, sources)
 
     search_term <- hca@search_term
     if(length(search_term) == 0)
@@ -210,42 +239,35 @@ select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
         hca
 }
 
-.convert_names_to_filters <- function(sources)
+.convert_names_to_filters <- function(hca, sources)
 {
-    sources <- vapply(sources, function(x) {
-        if (x %in% names(.filters)) {
-            .filters[x]
-        }
-        else if (length(matched_filters <- .filters_unlist[grep(x, .filters_unlist)]) > 0){
-            if (length(matched_filters) > 1) {
-                txt <- vapply(matched_filters, function(y) {
-                    paste0(y, '\n')
-                }, character(1))
-                mes <- paste0("Field ", x, " matched more than one field. Please select one:\n")  
-                txt <- c(mes, txt)
-                stop(txt)
-            }
-            matched_filters
-        }
-        else {
-            if (!x %in% .filters) 
-                message(paste0(".filter ", x, " not supported."))
-            x
-        }
-    }, character(1))
-    names(sources) <- NULL
-    sources
-}
+    if(is.null(hca))
+        fields <- .get_supportedFields(NULL)
+    else
+        fields <- hca@supported_fields
+    fields <- data.frame(fields)[,2]
 
-.convert_filter_to_names <- function(sources)
-{
     sources <- vapply(sources, function(x) {
-        if (length(aa <- .filters[.filters %in% x]) > 0) {
-            names(aa)
+        name <- fields[grepl(paste0('[.]', x, '$'), fields)]
+        if (length(name) > 1) {
+            txt <- vapply(name, function(y) {
+                paste0(y, '\n')
+            }, character(1))
+            mes <- paste0('Field "', x, '" matched more than one field. Please select one:\n')  
+            txt <- c(mes, txt)
+            stop(txt)
         }
-        else
-            x
-    }, character(1))
+        if (length(name) == 0) {
+            if (x %in% fields)
+                name <- x
+            else {
+                message(paste0('Field "', x, '" may not be supported.'))
+                name <- x
+            }
+        }
+        name
+            
+    }, character(1))    
     names(sources) <- NULL
     sources
 }

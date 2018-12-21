@@ -137,9 +137,9 @@
 {
     header <- .build_header(include_token=FALSE)
     if (is.character(body))
-        response <- httr::POST(url, header, body=body, encode="raw", httr::verbose())
+        response <- httr::POST(url, header, body=body, encode="raw")
     else
-        response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
+        response <- httr::POST(url, header, body=body, encode="json")
     res <-  .return_response(response)
     link <- httr::headers(response)[['link']]
     if (is.null(link))
