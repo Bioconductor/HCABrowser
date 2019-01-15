@@ -11,7 +11,9 @@
 )
 
 .ignore_fields <- c(
-    'links_json'
+    'links_json',
+    'analysis_process_json',
+    'process_json'
 )
 
 #' @importFrom plyr rbind.fill
@@ -95,7 +97,7 @@
         dfs <- lapply(field_names, function(x) {
             .obtain_content(results[[i]], x, n)
         })
-        names(dfs) <- field_names
+        #names(dfs) <- field_names
         dfs
     })
 
@@ -128,10 +130,23 @@
     x <- x[!duplicated(x),]
 }
 
+.obtain_process_files <- function(results, field_name, n)
+{
+    content_dir <- results[["metadata"]][["files"]][[field_name]]
+    if (!is.null(outputs <- content_dir[["outputs"]]))
+        data.frame()    
+    x <- do.call(plyr::rbind.fill, files)
+    x <- x[!duplicated(x),]
+}
+
 .obtain_content <- function(results, field_name, n)
 {
     x <- results[["metadata"]][["files"]][[field_name]]
     x <- unlist(x)
-    x <- as.data.frame(as.list(x), stringsAsFactors=FALSE)
+    x <- unique(as.data.frame(split(unname(x), names(x)), stringsAsFactors=FALSE))
+    names <- names(x)
+    names <- paste0(field_name, '.', names)
+    names(x) <- names
+    #x <- as.data.frame(as.list(x), stringsAsFactors=FALSE)
     x[rep(seq_len(nrow(x)), n), , drop=FALSE]
 }

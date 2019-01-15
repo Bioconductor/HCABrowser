@@ -36,6 +36,19 @@
     file_sizes = 'manifest.files.size'
 )
 
+.manifest_fields <- c(
+    'content_type',
+    'crc32c',
+    'indexed',
+    'name',
+    's3-etag',
+    'sha1',
+    'sha256',
+    'size',
+    'uuid',
+    'version'
+)
+
 .filters <- as.character(.filters_list)
 .filters_unlist <- unlist(.filters_list)
 names(.filters) <- names(.filters_list)
@@ -147,7 +160,7 @@ setMethod("availableFields", "HumanCellAtlas", .availableFields)
     force(sep)
     function(e1) {
         if(.is_bool_connector(e1))
-            list(bool = e1)
+            list(bool = list(filter = list(bool = e1)))
         else
             list(bool = list(filter = list(e1)))
     }

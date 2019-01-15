@@ -9,7 +9,7 @@
 .init_HumanCellAtlas <- function(hca)
 {
     select(hca, .initial_source)
-    #postSearch(hca, 'aws', 'raw', per_page=100)
+#    postSearch(hca, 'aws', 'raw', per_page=100)
 }
 
 #' @importFrom tibble tibble
@@ -69,7 +69,13 @@ setOldClass('quosures')
         short_name
     }, character(1))
     df <- cbind(abbreviated_names, field_names)
+
+    manifest_full <- paste0('manifest.', .manifest_fields)
+    manifest_full <- data.frame(abbreviated_names = manifest_full, field_names = manifest_full)
+    df <- cbind(df, manifest_full)
+
     df <- df[order(df[,1]),]
+
     as_tibble(df)
 }
 
@@ -101,7 +107,7 @@ setGeneric('link', function(object, ...) standardGeneric('link'))
 #' importFrom dplyr distinct
 setMethod('results', 'HumanCellAtlas', function(object) {
     res <- object@results@results
-    if (object@activated == 'bundles')
+    if (nrow(res) > 0 && object@activated == 'bundles')
         res <- res %>% distinct(bundle_fqid, .keep_all = TRUE)
     res
 })
@@ -152,24 +158,22 @@ setMethod('per_page', 'HumanCellAtlas', .set_per_page)
     res <- results(hca)
     if (!missing(n)) {
         per_page <- hca@per_page
-        times <- floor(n/per_page)
+        times <- floor((n-1)/per_page)
         mod <- n %% per_page
         for(i in seq_len(times)) {
             hca <- nextResults(hca)
-            res <- rbind.fill(res, results(hca))
+            reso <- results(hca)
+            if (i == times && mod != 0)
+                reso <- reso[seq_len(mod),]
+            res <- rbind.fill(res, reso)
         }
-## TODO fix results length
-#        if (mod > 0) {
-#            hca <- hca %>% per_page(mod)
-#            hca <- 
-#        }
     } else {
         res <- results(hca)
         while (!is.null(hca <- nextResults(hca))) {
             res <- rbind.fill(res, results(hca))
         }
     }
-    res
+    as_tibble(res)
 }
 
 #' @export
@@ -246,7 +250,7 @@ setMethod('show', 'SearchResult', .show_SearchResult)
     cat('\n')
     cat('Current Selection:\n')
     for(i in object@es_source)
-        cat(' ', deparse(unname(rlang::eval_tidy(i)), width.cutoff = 500), '\n')
+        cat(strwrap(paste0('"', unname(rlang::eval_tidy(i)), '"', ', ')), "\n")
     cat('\n')
     cat('class: ', class(object@results), "\n", 
         "  bundle ", first_hit(object@results), " - ", last_hit(object@results), " of ",

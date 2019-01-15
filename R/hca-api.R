@@ -83,7 +83,7 @@
 {
     expected_response <- match.arg(expected_response)
     stop_for_status(response)
-    response <- content(response, as = "text")
+    suppressMessages(response <- content(response, as = "text"))
     if (expected_response == 'json')
         fromJSON(response, simplifyDataFrame=FALSE, simplifyMatrix=FALSE,
             flatten=FALSE)
@@ -137,9 +137,9 @@
 {
     header <- .build_header(include_token=FALSE)
     if (is.character(body))
-        response <- httr::POST(url, header, body=body, encode="raw")
+        response <- httr::POST(url, header, body=body, encode="raw", httr::verbose())
     else
-        response <- httr::POST(url, header, body=body, encode="json")
+        response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
     res <-  .return_response(response)
     link <- httr::headers(response)[['link']]
     if (is.null(link))
@@ -147,9 +147,15 @@
     else
         link <- str_replace(link, '<(.*)>.*', '\\1')
     results <- .parse_postSearch_results(res[['results']])
+    if (length(res[['results']]) == 0) {
+        first_hit <- 0L
+        last_hit <- 0L
+    }
+    else
+        last_hit <- length(res[['results']]) + first_hit - 1L
     .SearchResult(results = as_tibble(results),
         total_hits = res[['total_hits']], link=link, first_hit = first_hit,
-        last_hit = length(res[['results']]) + first_hit - 1L)
+        last_hit = last_hit)
 }
 
 .nextResults_HumanCellAtlas <- function(result)
