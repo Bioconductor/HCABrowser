@@ -41,6 +41,7 @@ setOldClass('quosures')
     )
 )
 
+#' @importFrom dplyr mutate_if
 .get_supportedFields <- function(hca)
 {
     if(is.null(hca))
@@ -70,9 +71,12 @@ setOldClass('quosures')
     }, character(1))
     df <- cbind(abbreviated_names, field_names)
 
+    browser()
+
     manifest_full <- paste0('manifest.', .manifest_fields)
     manifest_full <- data.frame(abbreviated_names = manifest_full, field_names = manifest_full)
-    df <- cbind(df, manifest_full)
+    df <- rbind(df, manifest_full)
+    df <- mutate_if(df, is.factor, as.character)
 
     df <- df[order(df[,1]),]
 
