@@ -20,6 +20,8 @@
 #' @importFrom stringr str_sub
 .parse_postSearch_results <- function(results)
 {
+    browser()
+
     json_files <- lapply(seq_along(results), function(i) {
         field_names <- names(results[[i]][["metadata"]][["files"]])
         field_names <- field_names[!field_names %in% .ignore_fields]
@@ -40,12 +42,16 @@
     })
 
     bundle_files <- lapply(seq_along(results), function(i) {
-        if (is.null(results[[i]][['metadata']][['manifest']]))
+        if (is.null(results[[i]][['metadata']][['manifest']][['files']]))
             return(NULL)
         a <- do.call(rbind.data.frame, results[[i]][['metadata']][['manifest']][['files']])
         if (length(json_files[[i]]) > 0)
             a <- a[a$name %in% json_files[[i]]$file_core.file_name,]
-        a[order(a$name), , drop = FALSE]
+        a <- a[order(a$name), , drop = FALSE]
+        names <- names(a)
+        names <- paste0('manifest.files.', names)
+        names(a) <- names
+        a
     })
 
     ## Correct potential offset if more json_files exist than meta data files
@@ -62,10 +68,28 @@
         rbind(bundle_files[[i]], dd)
     })
 
+    bundle_else <- lapply(seq_along(results), function(i) {
+        values <- results[[i]][['metadata']][['manifest']]
+        values[['files']] <- NULL
+        names <- names(values)
+        names <- paste0('manifest.', names)
+        reps <- length(bundle_files[[i]][['name']])
+        if (reps == 0)
+            reps <- 1
+        if (is.null(values))
+            return(data.frame(matrix(nrow=1, ncol=0)))
+        else {
+            df <- as.data.frame(values)
+            df <- df[rep(seq_along(nrow(df)), reps),]
+            names(df) <- names
+            df
+        }
+    })
+
     ## aquire bundle ids
     bundle_fqids <- lapply(seq_along(results), function(i) {
         reps <- length(bundle_files[[i]][['name']])
-        if(reps == 0)
+        if (reps == 0)
             reps <- 1
         a <- rep(results[[i]][["bundle_fqid"]], reps)
         a <- as.data.frame(a)
@@ -76,7 +100,7 @@
     ## aquire bundles urls
     bundle_urls <- lapply(seq_along(results), function(i) {
         reps <- length(bundle_files[[i]][['name']])
-        if(reps == 0)
+        if (reps == 0)
             reps <- 1
         a <- rep(results[[i]][["bundle_url"]], reps)
         a <- as.data.frame(a)
@@ -109,7 +133,8 @@
 
     all_files <- lapply(seq_along(bundle_files), function(i) {
         do.call(cbind.data.frame, c(list(bundle_files[[i]], bundle_fqids[[i]],
-            bundle_urls[[i]]), json_files[[i]], json_bundles[[i]]))
+            bundle_urls[[i]], bundle_else[[i]]), json_files[[i]],
+            json_bundles[[i]]))
     })
     
     all_files <- do.call(plyr::rbind.fill, all_files)

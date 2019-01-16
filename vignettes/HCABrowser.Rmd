@@ -174,12 +174,23 @@ the result of input by other users, there may be errors or inconsistencies. To
 be safe, both fields can be queried with the following query:
 
 ```{r firstFilter}
-hca <- hca %>% filter(organ.text == c('Brain', 'brain'))
-hca
+hca2 <- hca %>% filter(organ.text == c('Brain', 'brain'))
+hca2 <- hca %>% filter(organ.text %in% c('Brain', 'brain'))
+hca2
 ```
 
-If we wish to see additional columns, 
+If we also wish to search for human results based on the NCBI Taxon ID for human
+```
 
+```
+
+Using `supportedFields()`, we can find that the fields `paired_end` and
+`manifest.files.name` are availiable. These fields can be shown in our resulting
+`HumanCellAtlas` object using the `select()` method.
+
+```{r select}
+hca <- hca %>% select('paired
+```
 
 
 ## Find data

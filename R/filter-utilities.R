@@ -257,7 +257,7 @@ select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
     if(is.null(hca))
         fields <- .get_supportedFields(NULL)
     else
-        fields <- hca@supported_fields
+        fields <- supportedFields(hca)
     fields <- data.frame(fields)[,2]
 
     sources <- vapply(sources, function(x) {
