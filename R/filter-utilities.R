@@ -82,7 +82,10 @@ setMethod("supportedFields", "HumanCellAtlas", .supportedFields)
     fields <- .convert_names_to_filters(hca, fields)
     if (length(fields) > 0)
         fields_json <- fields_json[fields]
-    fields_json
+    value <- unlist(fields_json, use.names=FALSE)
+    field <- rep(names(fields_json), lengths(fields_json))
+    fields <- data.frame(field, value)
+    as_tibble(fields)
 }
 
 #' @export

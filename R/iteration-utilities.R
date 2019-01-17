@@ -20,8 +20,6 @@
 #' @importFrom stringr str_sub
 .parse_postSearch_results <- function(results)
 {
-    browser()
-
     json_files <- lapply(seq_along(results), function(i) {
         field_names <- names(results[[i]][["metadata"]][["files"]])
         field_names <- field_names[!field_names %in% .ignore_fields]

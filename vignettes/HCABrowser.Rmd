@@ -176,12 +176,18 @@ be safe, both fields can be queried with the following query:
 ```{r firstFilter}
 hca2 <- hca %>% filter(organ.text == c('Brain', 'brain'))
 hca2 <- hca %>% filter(organ.text %in% c('Brain', 'brain'))
+hca2 <- hca %>% filter(organ.text == Brain | organ.text == brain)
 hca2
 ```
 
-If we also wish to search for human results based on the NCBI Taxon ID for human
-```
-
+If we also wish to search for results based on the NCBI Taxon ID for human,
+9606, as well as brain, we can perform this query in a variety of ways.
+```{r multiFilter}
+hca2 <- hca %>% filter(organ.text %in% c('Brain', 'brain')) %>%
+                filter('specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 9606)
+hca2 <- hca %>% filter(organ.text %in% c('Brain', 'brain'), 'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 9606)
+hca <- hca %>% filter(organ.text %in% c('Brain', 'brain') & 'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 9606)
+hca
 ```
 
 Using `supportedFields()`, we can find that the fields `paired_end` and
@@ -189,8 +195,11 @@ Using `supportedFields()`, we can find that the fields `paired_end` and
 `HumanCellAtlas` object using the `select()` method.
 
 ```{r select}
-hca <- hca %>% select('paired
+hca22 <- hca %>% select('paired_ends', 'manifest.files.name')
+
 ```
+
+
 
 
 ## Find data
