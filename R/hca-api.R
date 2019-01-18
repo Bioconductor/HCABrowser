@@ -129,17 +129,19 @@
     .return_response(response)
 }
 
-#' @importFrom dplyr as_tibble
-#' @importFrom httr POST headers
-#' @importFrom stringr str_replace
-.hca_post <-
-    function(url, body, first_hit = 1L)
+.hca_post_get_response <-
+    function(url, body)
 {
     header <- .build_header(include_token=FALSE)
     if (is.character(body))
-        response <- httr::POST(url, header, body=body, encode="raw", httr::verbose())
+        httr::POST(url, header, body=body, encode="raw", httr::verbose())
     else
-        response <- httr::POST(url, header, body=body, encode="json", httr::verbose())
+        httr::POST(url, header, body=body, encode="json", httr::verbose())
+}
+
+.hca_post_parse_response <-
+    function(response, first_hit)
+{
     res <-  .return_response(response)
     link <- httr::headers(response)[['link']]
     if (is.null(link))
@@ -156,6 +158,16 @@
     .SearchResult(results = as_tibble(results),
         total_hits = res[['total_hits']], link=link, first_hit = first_hit,
         last_hit = last_hit)
+}
+
+#' @importFrom dplyr as_tibble
+#' @importFrom httr POST headers
+#' @importFrom stringr str_replace
+.hca_post <-
+    function(url, body, first_hit = 1L)
+{
+    response <- (.hca_post_get_response(url, body))
+    .hca_post_parse_response(response, first_hit)
 }
 
 .nextResults_HumanCellAtlas <- function(result)

@@ -253,7 +253,9 @@ setMethod('show', 'SearchResult', .show_SearchResult)
     cat('\n')
     cat('Current Selection:\n')
     for(i in object@es_source)
-        cat(strwrap(paste0('"', unname(rlang::eval_tidy(i)), '"', ', ')), "\n")
+        cat(
+            paste(strwrap(paste0('"', unname(rlang::eval_tidy(i)), '"', collapse = ', '), indent = 2, exdent = 2), collapse = "\n"),
+        "\n")
     cat('\n')
     cat('class: ', class(object@results), "\n", 
         "  bundle ", first_hit(object@results), " - ", last_hit(object@results), " of ",

@@ -11,9 +11,9 @@
 )
 
 .ignore_fields <- c(
-    'links_json',
-    'analysis_process_json',
-    'process_json'
+    'links_json'#,
+#    'analysis_process_json',
+#    'process_json'
 )
 
 #' @importFrom plyr rbind.fill
@@ -66,6 +66,7 @@
         rbind(bundle_files[[i]], dd)
     })
 
+
     bundle_else <- lapply(seq_along(results), function(i) {
         values <- results[[i]][['metadata']][['manifest']]
         values[['files']] <- NULL
@@ -74,7 +75,7 @@
         reps <- length(bundle_files[[i]][['name']])
         if (reps == 0)
             reps <- 1
-        if (is.null(values))
+        if (length(values) == 0)
             return(data.frame(matrix(nrow=1, ncol=0)))
         else {
             df <- as.data.frame(values)

@@ -93,6 +93,8 @@ setMethod("availableFields", "HumanCellAtlas", .availableFields)
 
 .is_bool_connector <- function(x)
 {
+    if (length(x) == 0)
+        return(FALSE)
     names <- names(x)
     names %in% c("filter", "should", "must_not") 
 }
@@ -163,7 +165,7 @@ setMethod("availableFields", "HumanCellAtlas", .availableFields)
     force(sep)
     function(e1) {
         if(.is_bool_connector(e1))
-            list(bool = list(filter = list(bool = e1)))
+            list(bool = list(filter = list(list(bool = e1))))
         else
             list(bool = list(filter = list(e1)))
     }
@@ -202,10 +204,28 @@ setMethod("availableFields", "HumanCellAtlas", .availableFields)
 .hca_filter_loop <- function(li, expr)
 {
     res <- rlang::eval_tidy(expr, data= .LOG_OP_REG)
-    if(.is_bool_connector(res))
-        list(filter = list(c(li, list(bool = res))))
-    else
-        list(filter = list(c(li, res)))
+    if(length(li) == 0) {
+        if(.is_bool_connector(res))
+            list(filter=list(list(bool = res)))
+        else
+            list(filter=list(res))
+    }
+    else {
+        if (.is_bool_connector(li) & .is_bool_connector(res))
+            list(filter = list(c(list(bool = li)), list(bool = res)))
+        else if(.is_bool_connector(li))
+            list(filter = list(c(list(bool = li)), res))
+        else if(.is_bool_connector(res))
+            list(filter = list(c(li, list(bool = res))))
+        else
+            list(filter = list(c(li, res)))
+    }
+}
+
+.temp <- function(dots)
+{
+    res <- Reduce(.hca_filter_loop, dots, init =  list())
+    list(es_query = list(query = list(bool = res)))
 }
 
 #' @importFrom dplyr filter
@@ -215,15 +235,11 @@ filter.HumanCellAtlas <- function(hca, ...)
 {
     dots <- quos(...)
     es_query <- c(hca@es_query, dots)
-
-    res <- Reduce(.hca_filter_loop, dots, init =  list())
-
-    selected <- unlist(.get_selections(res))
-
-    bool <- list(es_query = list(query = list(bool = res)))
+    search_term <- .temp(es_query)
+    hca@search_term <- search_term
     hca@es_query <- es_query
-    hca@search_term <- bool
     
+    selected <- unlist(.get_selections(search_term))
     select(hca, selected)
 }
 
