@@ -8,8 +8,8 @@
 
 .init_HumanCellAtlas <- function(hca)
 {
-    select(hca, .initial_source)
-#    postSearch(hca, 'aws', 'raw', per_page=100)
+#    select(hca, .initial_source)
+    postSearch(hca, 'aws', 'raw', per_page=100)
 }
 
 #' @importFrom tibble tibble

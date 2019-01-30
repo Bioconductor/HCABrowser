@@ -174,8 +174,11 @@
 {
     sr <- result@results
     if (length(sr@link) > 0) {
+        es_query <- result@search_term
+        if (length(result@search_term) == 0)
+            es_query <- list(es_query = list(query = list(bool = NULL)))
         result@results <- .hca_post(link(sr),
-            body = result@search_term,
+            body = es_query,
             first_hit = last_hit(sr) + 1L)
         result
     }
