@@ -1,85 +1,105 @@
 ## helper functions for iterating through paged responses
 
-## Currently supports only one per field, may be more than one
-.field_sub_directory <- list(
-    biomaterial_json = 'biomaterials',
-    file_json = 'files',
-    links_json = 'links',
-    process_json = 'processes',
-    project_json = character(), ## no subdirectory
-    protocol_json = 'protocols'
+.ignore_fields <- c(
+#    'links_json'#, 'project_json'
 )
 
-.ignore_fields <- c(
-    'links_json', 'project_json'
-#    'analysis_process_json',
-#    'process_json'
-)
+#' @importFrom dplyr full_join
+.composite_join <- function(x, y)
+{
+    x_name <- colnames(x)
+    x_name <- x_name[grepl('file_name|manifest.files.name', x_name)]
+    x_name <- x_name[1]
+    y_name <- colnames(y)
+    y_name <- y_name[grepl('file_name|manifest.files.name', y_name)]
+    y_name <- y_name[1]
+
+    by <- c(y_name)
+    names(by) <- x_name
+    res <- suppressWarnings(full_join(x, y, by=by))
+
+    res[[y_name]] <- res[[x_name]]
+    res
+}
 
 #' @importFrom plyr rbind.fill
 #' @importFrom stringr str_sub
 #' @importFrom tidyr crossing
 .parse_postSearch_results <- function(results)
 {
-    browser()
-    json_files <- lapply(seq_along(results), function(i) {
+    all_files <- lapply(seq_along(results), function(i) {
+        ## files.files_json
         field_names <- names(results[[i]][["metadata"]][["files"]])
-        field_names <- field_names[!field_names %in% .ignore_fields]
         field_names <- field_names[grepl('file_json', field_names)]
-        dfs <- lapply(field_names, function(x) {
-            .obtain_files(results[[i]], x)
+        json_files <- lapply(field_names, function(x) {
+            oo <- .obtain_files(results[[i]], x)
+            names(oo) <- paste0(x, '.', names(oo))
+            oo
         })
-        names(dfs) <- field_names
-        dfs
-    })
-
-    json_files <- lapply(seq_along(json_files), function(i) {
-        x <- do.call(plyr::rbind.fill, json_files[[i]])
-        #x <- as.data.frame(json_files[[i]])
-        if (is.null(x))
-            return(data.frame(matrix(nrow=1, ncol=0)))
-        if (!nrow(x) == 0) {
-            x <- mutate_if(x, is.factor, as.character)
- #           x[order(x['file_core.file_name']), , drop=FALSE]
-            x
+        json_files <- Reduce(.composite_join, json_files)
+        #names(json_files) <- field_names
+        
+        ## manifest.files
+        manifest_files <- results[[i]][['metadata']][['manifest']][['files']]
+        if (!is.null(manifest_files)) {
+            manifest_files <- do.call(rbind.data.frame, c(manifest_files, list(stringsAsFactors=FALSE)))
+            names(manifest_files) <- paste0('manifest.files.', names(manifest_files))
         }
         else
-            data.frame(matrix(nrow=1, ncol=0))
+            manifest_files <- list()
+        
+        ## files.*_process_json
+        field_names <- names(results[[i]][["metadata"]][["files"]])
+        field_names <- field_names[grepl('process_json', field_names)]
+        json_processes <- lapply(field_names, function(x) {
+            oo <- .obtain_process_files(results[[i]], x)
+            names(oo) <- paste0(x, '.', names(oo))
+            oo
+        })
+        json_processes <- do.call(cbind, json_processes)
+        
+        concat_values <- list()
+        if (length(manifest_files) > 0)
+            concat_values <- c(concat_values, list(manifest_files))
+        if (length(json_files) > 0)
+            concat_values <- c(concat_values, list(json_files))
+        if (length(json_processes) > 0)
+            concat_values <- c(concat_values, list(json_processes))
+        res <- as.data.frame(matrix(ncol = 0, nrow = 1))
+        if (length(concat_values) > 0)
+            res <- Reduce(.composite_join, concat_values)
+        res
     })
 
-    bundle_files <- lapply(seq_along(results), function(i) {
-        if (is.null(results[[i]][['metadata']][['manifest']][['files']]))
-            return(NULL)
-        a <- do.call(rbind.data.frame, results[[i]][['metadata']][['manifest']][['files']])
-        if (length(json_files[[i]]) > 0)
-            a <- a[a$name %in% json_files[[i]]$file_core.file_name,]
-#        a <- a[order(a$name), , drop = FALSE]
-        names <- names(a)
-        names <- paste0('manifest.files.', names)
-        names(a) <- names
+    ## aquire bundle ids
+    bundle_fqids <- lapply(seq_along(results), function(i) {
+        reps <- nrow(all_files[[i]])
+        if (reps == 0)
+            reps <- 1
+        a <- rep(results[[i]][["bundle_fqid"]], reps)
+        a <- as.data.frame(a)
+        names(a) <- 'bundle_fqid'
         a
     })
 
-    ## Correct potential offset if more json_files exist than meta data files
-    bundle_files <- lapply(seq_along(json_files), function(i) {
-        if (is.null(bundle_files[[i]]))
-            return(data.frame(matrix(nrow=1, ncol=0)))
-        if (length(json_files[[i]]) == 0)
-            return(bundle_files[[i]])
-        offset <- nrow(json_files[[i]]) - nrow(bundle_files[[i]])
-        if (length(offset) == 0)
-            offset <- 0
-        dd <- as.data.frame(matrix(NA, offset, ncol(bundle_files[[i]])))
-        colnames(dd) <- colnames(bundle_files[[i]])
-        rbind(bundle_files[[i]], dd)
+    ## aquire bundles urls
+    bundle_urls <- lapply(seq_along(results), function(i) {
+        reps <- nrow(all_files[[i]])
+        if (reps == 0)
+            reps <- 1
+        a <- rep(results[[i]][["bundle_url"]], reps)
+        a <- as.data.frame(a)
+        names(a) <- 'bundle_url'
+        a
     })
 
+    ## acquire other manifest entries
     bundle_else <- lapply(seq_along(results), function(i) {
         values <- results[[i]][['metadata']][['manifest']]
         values[['files']] <- NULL
         names <- names(values)
         names <- paste0('manifest.', names)
-        reps <- length(bundle_files[[i]][['name']])
+        reps <- nrow(all_files[[i]])
         if (reps == 0)
             reps <- 1
         if (length(values) == 0)
@@ -92,66 +112,11 @@
         }
     })
 
-    bundle_processes <- lapply(seq_along(results), function(i) {
-        reps <- length(bundle_files[[i]][['name']])
-        if (reps == 0)
-            reps <- 1
-        field_names <- names(results[[i]][["metadata"]][["files"]])
-        field_names <- field_names[!field_names %in% .ignore_fields]
-        field_names <- field_names[grepl('process_json', field_names)]
-        dfs <- lapply(field_names, function(x) {
-            .obtain_process_files(results[[i]], x, reps)
-        })
-        names(dfs) <- field_names
-        if (length(dfs) == 0)
-            dfs <- data.frame(nrow=1, ncol=0)
-        dfs
-    })
-
-#    bundle_projects <- lapply(seq_along(results), function(i) {
-#        reps <- length(bundle_files[[i]][['name']])
-#        if (reps == 0)
-#            reps <- 1
-#        field_names <- names(results[[i]][["metadata"]][["files"]])
-#        field_names <- field_names[!field_names %in% .ignore_fields]
-#        field_names <- field_names[grepl('project_json', field_names)]
-#        dfs <- lapply(field_names, function(x) {
-#            .obtain_project_files(results[[i]], x, reps)
-#        })
-#        names(dfs) <- field_names
-#        if (length(dfs) == 0)
-#            dfs <- data.frame(nrow=1, ncol=0)
-#        dfs
-#    })
-
-    ## aquire bundle ids
-    bundle_fqids <- lapply(seq_along(results), function(i) {
-        reps <- length(bundle_files[[i]][['name']])
-        if (reps == 0)
-            reps <- 1
-        a <- rep(results[[i]][["bundle_fqid"]], reps)
-        a <- as.data.frame(a)
-        names(a) <- 'bundle_fqid'
-        a
-    })
-
-    ## aquire bundles urls
-    bundle_urls <- lapply(seq_along(results), function(i) {
-        reps <- length(bundle_files[[i]][['name']])
-        if (reps == 0)
-            reps <- 1
-        a <- rep(results[[i]][["bundle_url"]], reps)
-        a <- as.data.frame(a)
-        names(a) <- 'bundle_url'
-        a
-    })
-
     ## acquire rest of json schema information for bundles
     json_bundles <- lapply(seq_along(results), function(i) {
-        browser()
         n <- NULL
-        if(!is.null(bundle_files[[i]]))
-            n <- nrow(bundle_files[[i]])
+        if(!is.null(all_files[[i]]))
+            n <- nrow(all_files[[i]])
         if (is.null(n))
             n <- 1
         field_names <- names(results[[i]][["metadata"]][["files"]])
@@ -170,10 +135,9 @@
         do.call(cbind, json_bundles[[i]])
     })
 
-    all_files <- lapply(seq_along(bundle_files), function(i) {
-        do.call(tidyr::crossing, c(list(bundle_files[[i]], bundle_fqids[[i]],
-            bundle_urls[[i]], bundle_else[[i]], bundle_processes[[i]]), json_files[[i]],
-            json_bundles[[i]]))
+    all_files <- lapply(seq_along(results), function(i) {
+        do.call(cbind.data.frame, c(list(bundle_fqids[[i]], bundle_urls[[i]],
+            all_files[[i]], bundle_else[[i]], json_bundles[[i]])))
     })
     
     all_files <- do.call(plyr::rbind.fill, all_files)
@@ -212,33 +176,22 @@
     if(!missing(n)) {
         a <- a[rep(seq_len(nrow(a)), n), , drop=FALSE]
     }
-    cbind(x, a)
-}
-
-.obtain_project_files <- function(results, field_name, n)
-{
-    x <- results[["metadata"]][["files"]][[field_name]]
-    x <- unlist(x)
-    x <- as.data.frame(as.list(x), stringsAsFactors=FALSE)
-#    x <- unique(as.data.frame(split(unname(x), names(x)), stringsAsFactors=FALSE))
-#    names <- names(x)
-#    names <- paste0(field_name, '.', names)
-#    names(x) <- names
-    #x <- as.data.frame(as.list(x), stringsAsFactors=FALSE)
-    x[rep(seq_len(nrow(x)), n), , drop=FALSE]
+    x <- cbind(x, a, stringsAsFactors = FALSE)
+    x
 }
 
 .obtain_content <- function(results, field_name, n)
 {
     x <- results[["metadata"]][["files"]][[field_name]]
     x <- unlist(x)
-#    x <- as.data.frame(as.list(x), stringsAsFactors=FALSE)
-    spl <- split(unname(x), names(x))
-    x <- do.call(tidyr::crossing, spl)
+    x <- as.data.frame(as.list(x), stringsAsFactors=FALSE)
+#    spl <- split(unname(x), names(x))
+#    x <- do.call(tidyr::crossing, spl)
     #x <- unique(as.data.frame(split(unname(x), names(x)), stringsAsFactors=FALSE))
     names <- names(x)
     names <- paste0(field_name, '.', names)
     names(x) <- names
     #x <- as.data.frame(as.list(x), stringsAsFactors=FALSE)
     x[rep(seq_len(nrow(x)), n), , drop=FALSE]
+    x
 }

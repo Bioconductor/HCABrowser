@@ -142,7 +142,7 @@
 .hca_post_parse_response <-
     function(response, first_hit)
 {
-    res <-  .return_response(response)
+    res <- .return_response(response)
     link <- httr::headers(response)[['link']]
     if (is.null(link))
         link <- character(0)
@@ -166,7 +166,7 @@
 .hca_post <-
     function(url, body, first_hit = 1L)
 {
-    response <- (.hca_post_get_response(url, body))
+    response <- .hca_post_get_response(url, body)
     .hca_post_parse_response(response, first_hit)
 }
 
