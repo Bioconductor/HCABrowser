@@ -14,6 +14,7 @@
 
 #' @importFrom tibble tibble
 setOldClass('tbl_df')
+#' @export
 .SearchResult <- setClass("SearchResult",
     slots = c(
         first_hit = 'integer',
@@ -82,6 +83,10 @@ setOldClass('quosures')
     as_tibble(df)
 }
 
+#' The Human Cell Atlas Class
+#'
+#' @author Daniel Van Twisk
+#'
 #' @export
 HumanCellAtlas <-
     function(url='https://dss.data.humancellatlas.org/v1',
@@ -107,7 +112,18 @@ setGeneric('es_query', function(object, ...) standardGeneric('es_query'))
 setGeneric('results', function(object, ...) standardGeneric('results'))
 setGeneric('link', function(object, ...) standardGeneric('link'))
 
-#' importFrom dplyr distinct
+#' Obtain search results from a Human Cell Atlas Object
+#'
+#' @description
+#'  Returns a tibble either showing bundles or files based on whichever is
+#'  activated.
+#'
+#' @param object A Human Cell Atlas object
+#'
+#' @return a tibble
+#'
+#' @export
+#' @importFrom dplyr distinct
 setMethod('results', 'HumanCellAtlas', function(object) {
     res <- object@results@results
     if (nrow(res) > 0 && object@activated == 'bundles')
@@ -119,7 +135,6 @@ setMethod('first_hit', 'SearchResult', .first_hit)
 setMethod('last_hit', 'SearchResult', .last_hit)
 setMethod('total_hits', 'SearchResult', .total_hits)
 setMethod('es_query', 'SearchResult', .es_query)
-#' @export
 setMethod('results', 'SearchResult', .results)
 setMethod('link', 'SearchResult', .link)
 
@@ -132,8 +147,11 @@ setGeneric('pullBundles', function(hca, ...) standardGeneric('pullBundles'))
 setGeneric('showBundles', function(hca, bundle_fqids, ...) standardGeneric('showBundles'))
 setGeneric('downloadHCA', function(hca, ...) standardGeneric('downloadHCA'))
 
-#' @importFrom tidygraph activate
+#' Activate files or bundles of Human
+#'
+#' @name activate-HumanCellAtlas
 #' @export
+#' @importFrom tidygraph activate
 activate.HumanCellAtlas <-
     function(object, type=c('bundles', 'files'), ...)
 {
@@ -148,10 +166,28 @@ activate.HumanCellAtlas <-
 .set_per_page <-
     function(hca, n)
 {
+    if (per_page > 10)
+        message('The HumanCellAtlas is unable to show bundle results of more than 10 per_page')
     hca@per_page <- n
     hca
 }
 
+#' Set per_page argument of HumanCellAtlas object
+#'
+#' @description note that no more than 10 pages can be displayed at once
+#'
+#' @param hca a HumanCellAtlas object
+#'
+#' @param n the new per_page value
+#'
+#' @return a HumanCellAtlas with updated per_page value
+#'
+#' @examples
+#'
+#' hca <- HumanCellAtlas()
+#' hca <- per_page(hca, 5)
+#' hca
+#'
 #' @export
 setMethod('per_page', 'HumanCellAtlas', .set_per_page)
 
@@ -179,6 +215,19 @@ setMethod('per_page', 'HumanCellAtlas', .set_per_page)
     as_tibble(res)
 }
 
+#' Download results from a HumanCellAtlas query
+#'
+#' @param hca A HumanCellAtlas object
+#'
+#' @param n integer(1) number of bundles to download
+#'
+#' @return tibble all bundles obtained from download
+#'
+#' @examples
+#'
+#' hca <- HumanCellAtlas()
+#' res <- hca %>% downloadHCA(n = 24)
+#'
 #' @export
 setMethod("downloadHCA", "HumanCellAtlas", .download.HumanCellAtlas)
 

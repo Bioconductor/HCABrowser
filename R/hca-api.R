@@ -48,7 +48,7 @@
     do.call(add_headers, header)
 }
 
-#' importFrom BiocFileCache BiocFileCache bfcnew bfcrpath bfccache
+#' @importFrom BiocFileCache BiocFileCache bfcnew bfcrpath bfccache
 .retrieve_BiocFileCache_dbpath <- function(url)
 {
     if (is.null(dbpath))
@@ -69,7 +69,7 @@
     }
 }
 
-#' importFrom readr read_tsv
+#' @importFrom readr read_tsv
 .save_as_BiocFileCache <- function(dbpath, url)
 {
     fname <- BiocFileCache::bfcrpath(rnames = url)
@@ -380,7 +380,7 @@
     .hca_get(url, include_token=TRUE)
 }
 
-#' @name HCA API methods
+#' HCA API methods
 #'
 #' @aliases getBundlesCheckout deleteBundle getBundle putBundle
 #'      postBundlesCheckout putCollection deleteCollection getCollection
@@ -539,97 +539,163 @@
 #'
 #' @param version character(1). Timestamp of bundle creation in RFC3339.
 #'
-#' 
+#' @name hca-api-methods
+#' @author Daniel Van Twisk
+NULL
+ 
 #'
 #' Check the status of a checkout request 
 #'
 #' @description Check the status of a checkout request 
 #'
 #' @author Daniel Van Twisk
-#'
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("getBundlesCheckout", "HumanCellAtlas", .getBundlesCheckout)
 
 #' Delete a bundle or a specific bundle version
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("deleteBundle", "HumanCellAtlas", .deleteBundle)
 
 #' Retrieve a bundle given a UUID and optionally a version
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("getBundle", "HumanCellAtlas", .getBundle)
 
 #' Create a bundle
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("putBundle", "HumanCellAtlas", .putBundle)
 
 #' Check out a bundle to DSS-namaged or user-managed cloud object storage
 #' destination
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("postBundlesCheckout", "HumanCellAtlas", .postBundlesCheckout)
 
 #' Create a collection
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("putCollection", "HumanCellAtlas", .putCollection)
 
 #' Delete a collection
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("deleteCollection", "HumanCellAtlas", .deleteCollection)
 
 #' Retrieve a collection given a UUID
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("getCollection", "HumanCellAtlas", .getCollection)
 
 #' Update a collection
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("patchCollection", "HumanCellAtlas", .patchCollection)
 
 #' Retrieve a file given a UUID and optionally a version
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 #' @export
 setMethod("getFile", "HumanCellAtlas", .getFile)
 
 #' Retrieve a file's metadata given an UUID and optionally a version
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("headFile", "HumanCellAtlas", .headFile)
 
 #' Create a new version of a file
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("putFile", "HumanCellAtlas", .putFile)
 
 #' Find bundles by searching their metadata with an Elasticsearch query
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 #' @export
 setMethod("postSearch", "HumanCellAtlas", .postSearch)
 
 #' Retrieve a user's event Subscription
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("getSubscriptions", "HumanCellAtlas", .getSubscriptions)
 
 #' Creates an event subscription
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("putSubscription", "HumanCellAtlas", .putSubscription)
 
 #' Delete an event subscription
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("deleteSubscription", "HumanCellAtlas", .deleteSubscription)
 
 #' Retrieve an event subscription given a UUID
 #'
+#' @author Daniel Van Twisk
+#' 
+#' @rdname hca-api-methods
 ###' @export
 setMethod("getSubscription", "HumanCellAtlas", .getSubscription)
 
+#' Next Results
+#'
+#' Fetch the next set of bundles from a Human Cell Atlas Object
+#'
+#' @param hca A Human Cell Atlas object the has further bundles to display
+#'
+#' @return A Human Cell Atlas object that displays the next results
+#'
+#' @examples
+#'
+#' hca <- HumanCellAtlas()
+#' hca <- nextResults(hca)
+#' hca
+#'
 #' @export
 setMethod("nextResults", "HumanCellAtlas", .nextResults_HumanCellAtlas)

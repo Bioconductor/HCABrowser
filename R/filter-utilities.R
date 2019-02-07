@@ -200,7 +200,7 @@ setMethod("availableFields", "HumanCellAtlas", .availableFields)
         lapply(x, .get_selections, FALSE)
 }
 
-#' importFrom rlang eval_tidy f_rhs f_env
+#' @importFrom rlang eval_tidy f_rhs f_env
 .hca_filter_loop <- function(li, expr)
 {
     res <- rlang::eval_tidy(expr, data= .LOG_OP_REG)
