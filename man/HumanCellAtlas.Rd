@@ -2,14 +2,14 @@
 % Please edit documentation in R/AllClasses.R
 \name{HumanCellAtlas}
 \alias{HumanCellAtlas}
-\title{The Human Cell Atlas Class}
+\title{The HumanCellAtlas Class}
 \usage{
 HumanCellAtlas(url = "https://dss.data.humancellatlas.org/v1",
   fields_path = system.file("extdata", "fields_and_values.json", package
   = "HCABrowser"), per_page = 10)
 }
 \description{
-The Human Cell Atlas Class
+The HumanCellAtlas Class
 }
 \author{
 Daniel Van Twisk

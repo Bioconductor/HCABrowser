@@ -136,8 +136,10 @@
     })
 
     all_files <- lapply(seq_along(results), function(i) {
+#        do.call(cbind.data.frame, c(list(bundle_fqids[[i]], bundle_urls[[i]],
+#            all_files[[i]], bundle_else[[i]], json_bundles[[i]])))
         do.call(cbind.data.frame, c(list(bundle_fqids[[i]], bundle_urls[[i]],
-            all_files[[i]], bundle_else[[i]], json_bundles[[i]])))
+            json_bundles[[i]], all_files[[i]], bundle_else[[i]])))
     })
     
     all_files <- do.call(plyr::rbind.fill, all_files)

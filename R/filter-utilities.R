@@ -1,41 +1,3 @@
-.filters_list <- list(
-    organ = 'files.specimen_from_organism_json.organ.text',
-    organ_part = 'files.specimen_from_organism_json.organ_part.text',
-    genus_species = c('files.cell_line_json.genus_species.text',
-                      'files.cell_suspension_json.genus_species.text', 
-                      'files.donor_organism_json.genus_species.text', 
-                      'files.organoid_json.genus_species.text', 
-                      'files.specimen_from_organism_json.genus_species.text'),
-    organism_age = 'files.donor_organism_json.organism_age_unit.txt',
-    instrument_manufacturer_model = 'files.sequencing_protocol_json.instrument_manufacturer_model.text',
-    storage_method = 1,
-    paired_end = 'files.sequencing_protocol_json.paired_end',
-    ncbi_taxon_id = 'files.donor_organism_json.biomaterial_core.ncbi_taxon_id',
-    process_type = 'files.analysis_process_json.process_type.text',
-    library_construction_approach.ontology = 'files.library_preparation_protocol_json.library_construction_approach.ontology',
-    library_construction_approach.text = 'files.library_preparation_protocol_json.library_construction_approach.text',
-    organism_age_unit = 'files.donor_organism_json.organism_age_unit.text',
-    project_title = 'files.project_json.project_core.project_title',
-    project_shortname = 'files.project_json.project_core.project_shortname',
-    biological_sex = 'files.donor_organism_json.biological_sex',
-    disease = 'files.specimen_from_organism.disease.text',
-    diseases = c('files.specimen_from_organism.diseases.text',
-                'files.donor_organism_json.diseases.text'),
-    versions = 'manifest.version',
-    laboratory = 'files.project_json.contributors.laboratory',
-    protocol = 1, # not clear if right
-    file_format = c('files.analysis_file_json.file_core.file_format',
-                    'files.image_file_json.file_core.file_format',
-                    'files.reference_file_json.file_core.file_format',
-                    'files.sequence_file_json.file_core.file_format',
-                    'files.supplementary_file_json.file_core.file_format'),
-    input_aggregate_cell_count = 1,
-    file_names = 'manifest.files.name',
-    file_uuids = 'manifest.files.uuid',
-    file_content_type = 'manifest.files.content.type',
-    file_sizes = 'manifest.files.size'
-)
-
 .manifest_fields <- c(
     'content_type',
     'crc32c',
@@ -49,9 +11,14 @@
     'version'
 )
 
-.filters <- as.character(.filters_list)
-.filters_unlist <- unlist(.filters_list)
-names(.filters) <- names(.filters_list)
+.manifest_fields <- paste0('manifest.files.', .manifest_fields)
+
+.initial_source <- c(
+    "project_title", "project_short_name", "organ.text",
+    "library_construction_approach.text",
+    "specimen_from_organism_json.genus_species.text",
+    "disease.text", .manifest_fields
+)
 
 .range_ops = list(
     '<' = "lt",
@@ -73,6 +40,8 @@ names(.filters) <- names(.filters_list)
     hca@supported_fields
 }
 
+#' List supported fields of an HumanCellAtlas object
+#'
 #' @export
 setMethod("supportedFields", "HumanCellAtlas", .supportedFields)
 
@@ -88,6 +57,8 @@ setMethod("supportedFields", "HumanCellAtlas", .supportedFields)
     as_tibble(fields)
 }
 
+#' List all values for certain fields
+#'
 #' @export
 setMethod("availableFields", "HumanCellAtlas", .availableFields)
 
@@ -228,9 +199,28 @@ setMethod("availableFields", "HumanCellAtlas", .availableFields)
     list(es_query = list(query = list(bool = res)))
 }
 
+#' Filter HumanCellAtlas objects
+#'
+#' @param hca a HumanCellAtlas object to perform a query on.
+#' @param ... further argument to be tranlated into a query to select from.
+#'  These arguments can be passed in two ways, either as a single expression or
+#'  as a series of expressions that are to be seperated by commas.
+#'
+#' @return a HumanCellAtlas object containing the resulting query.
+#'
+#' @examples
+#'
+#' hca <- HumanCellAtlas()
+#' hca2 <- hca %>% filter()
+#' hca2
+#'
+#' hca3 <- hca %>% filter()
+#' hca3
+#'
+#'
+#' @export
 #' @importFrom dplyr filter
 #' @importFrom rlang quo_get_expr quos
-#' @export
 filter.HumanCellAtlas <- function(hca, ...)
 {
     dots <- quos(...)
@@ -243,8 +233,27 @@ filter.HumanCellAtlas <- function(hca, ...)
     select(hca, selected)
 }
 
-#' @importFrom dplyr select
+#' Select fields from a HumanCellAtlas object
+#'
+#' @param hca a HumanCellAtlas object to perform a selection on
+#' @param ... further argument to be tranlated into an expression to select from.
+#'  These arguments can be passed in two ways, either as a character vector or
+#'  as a series of expressions that are the fields that are to be selected
+#'  seperated by commas.
+#'
+#' @return a HumanCellAtlas object containing the results of the selection.
+#'
+#' @examples
+#'
+#' hca <- HumanCellAtlas()
+#' hca2 <- hca %>% select(paired_end)
+#' hca2
+#'
+#' hca3 <- hca %>% select(c('organ.text', 'paired_end'))
+#' hca3
+#'
 #' @export
+#' @importFrom dplyr select
 select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
 {
     sources <- quos(...)

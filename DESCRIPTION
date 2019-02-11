@@ -1,7 +1,7 @@
 Package: HCABrowser
 Type: Package
 Title: Browse the Human Cell Atlas data portal
-Version: 0.0.19
+Version: 0.0.20
 Authors@R: c(
     person(
         "Daniel", "Van Twisk",
@@ -32,7 +32,8 @@ Imports: BiocFileCache,
          readr,
          rlang,
          stringr,
-         tibble
+         tibble,
+         tidygraph
 Suggests: BiocStyle,
           knitr,
           rmarkdown,
@@ -43,7 +44,7 @@ Collate: AllClasses.R
          filter-utilities.R
          hca-api.R
          iteration-utilities.R
-         json-utilities.R
+         data.R
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true

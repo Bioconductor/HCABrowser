@@ -1,10 +1,3 @@
-## TODO columsn won't be displayed if value does not exist for those initial values
-.initial_source <- c(
-    "project_title", "project_short_name", "organ.text",
-    "library_construction_approach.text",
-    "specimen_from_organism_json.genus_species.text",
-    "disease.text"
-)
 
 .init_HumanCellAtlas <- function(hca)
 {
@@ -14,7 +7,6 @@
 
 #' @importFrom tibble tibble
 setOldClass('tbl_df')
-#' @export
 .SearchResult <- setClass("SearchResult",
     slots = c(
         first_hit = 'integer',
@@ -72,7 +64,7 @@ setOldClass('quosures')
     }, character(1))
     df <- cbind(abbreviated_names, field_names)
 
-    manifest_full <- paste0('manifest.files.', .manifest_fields)
+    manifest_full <- .manifest_fields
     manifest_full <- c(manifest_full, 'manifest.creator_uid', 'manifest.format', 'manifest.version')
     manifest_full <- data.frame(abbreviated_names = manifest_full, field_names = manifest_full)
     df <- rbind(df, manifest_full)
@@ -83,7 +75,7 @@ setOldClass('quosures')
     as_tibble(df)
 }
 
-#' The Human Cell Atlas Class
+#' The HumanCellAtlas Class
 #'
 #' @author Daniel Van Twisk
 #'
@@ -166,10 +158,10 @@ activate.HumanCellAtlas <-
 .set_per_page <-
     function(hca, n)
 {
-    if (per_page > 10)
+    if (n > 10)
         message('The HumanCellAtlas is unable to show bundle results of more than 10 per_page')
     hca@per_page <- n
-    hca
+    select(hca, c())
 }
 
 #' Set per_page argument of HumanCellAtlas object
@@ -177,7 +169,6 @@ activate.HumanCellAtlas <-
 #' @description note that no more than 10 pages can be displayed at once
 #'
 #' @param hca a HumanCellAtlas object
-#'
 #' @param n the new per_page value
 #'
 #' @return a HumanCellAtlas with updated per_page value
@@ -218,32 +209,48 @@ setMethod('per_page', 'HumanCellAtlas', .set_per_page)
 #' Download results from a HumanCellAtlas query
 #'
 #' @param hca A HumanCellAtlas object
-#'
 #' @param n integer(1) number of bundles to download
 #'
-#' @return tibble all bundles obtained from download
+#' @return a tibble all bundles obtained from download
 #'
 #' @examples
 #'
 #' hca <- HumanCellAtlas()
 #' res <- hca %>% downloadHCA(n = 24)
+#' res
 #'
 #' @export
 setMethod("downloadHCA", "HumanCellAtlas", .download.HumanCellAtlas)
 
 .undo_esquery <-
-    function(hca, ...)
+    function(hca, ..., n = 1L)
 {
+    check <- length(hca@es_query) - n
     hca@search_term <- list()
-    if (length(hca@es_query) < 2)
+    if (check < 1)
         resetEsQuery(hca)
     else{
-        hca@es_query[[length(hca@es_query)]] <- NULL
-        hca@es_source[[length(hca@es_source)]] <- NULL
-        hca
+        hca@es_query <- head(hca@es_query, -c(n))
+        filter(hca)
     }
 }
 
+#' Undo previous filter queries on a HumanCellAtlas object
+#'
+#' @param hca A HumanCellAtlas object
+#' @param n integer(1) the number of filter queries to undo
+#'
+#' @return A HumanCellAtlas object with n fewer queries
+#'
+#' @examples
+#'
+#' hca <- HumanCellAtlas()
+#' hca <- hca %>% filter(organ.text == brain)
+#' hca <- hca %>% filter(organ.text == heart)
+#' hca <- hca %>% filter(organ.text != brain)
+#' hca <- hca %>% undoEsquery(n = 2)
+#' hca
+#'
 #' @export
 setMethod('undoEsQuery', 'HumanCellAtlas', .undo_esquery)
 
@@ -256,6 +263,21 @@ setMethod('undoEsQuery', 'HumanCellAtlas', .undo_esquery)
     select(hca, .initial_source)  
 }
 
+#' Reset the query of a HumanCellAtlas object to the default query
+#'
+#' @param hca A HumanCellAtlas object
+#' 
+#' @return A HumanCellAtlas object with the search reset
+#'
+#' @examples
+#'
+#' hca <- HumanCellAtlas()
+#' hca <- hca %>% filter(organ.text == brain)
+#' hca <- hca %>% filter(organ.text != brain)
+#' hca <- hca %>% resetEsQuery
+#' hca
+#' 
+#' @export
 setMethod('resetEsQuery', 'HumanCellAtlas', .reset_esquery)
 
 .pullBundles <-
@@ -264,6 +286,17 @@ setMethod('resetEsQuery', 'HumanCellAtlas', .reset_esquery)
     hca %>% downloadHCA() %>% pull('bundle_fqid') %>% as.character()
 }
 
+#' Obtain bunlde fqids from a HumanCellAtlas object
+#'
+#' @param hca A HumanCellAtlas object
+#'
+#' @return character(1) of bundle fqids
+#'
+#' @examples
+#'
+#' hca <- HumanCellAtlas()
+#' hca <- hca %>% pullBundles
+#'
 #' @export
 setMethod('pullBundles', 'HumanCellAtlas', .pullBundles)
 
@@ -275,6 +308,19 @@ setMethod('pullBundles', 'HumanCellAtlas', .pullBundles)
     #hca %>% downloadHCA() %>% filter(bundle_fqid %in% bundle_fqids)
 }
 
+#' Obtain all bundles from an hca object using there bundle fqids
+#'
+#' @param hca a HumanCellAtlas object to search for bundles on.
+#' @param bundle_fqids a character()
+#'
+#' @return A HumanCellAtlas object displaying the selected bundles
+#'
+#' @examples
+#'
+#' hca <- HumanCellAtlas()
+#' hca_bundles <- hca %>% pullBundles('')
+#' hca_bundles
+#'
 #' @export
 setMethod('showBundles', 'HumanCellAtlas', .showBundles)
 

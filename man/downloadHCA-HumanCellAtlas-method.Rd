@@ -13,7 +13,7 @@
 \item{n}{integer(1) number of bundles to download}
 }
 \value{
-tibble all bundles obtained from download
+a tibble all bundles obtained from download
 }
 \description{
 Download results from a HumanCellAtlas query
@@ -22,5 +22,6 @@ Download results from a HumanCellAtlas query
 
 hca <- HumanCellAtlas()
 res <- hca \%>\% downloadHCA(n = 24)
+res
 
 }

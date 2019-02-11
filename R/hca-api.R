@@ -134,9 +134,9 @@
 {
     header <- .build_header(include_token=FALSE)
     if (is.character(body))
-        httr::POST(url, header, body=body, encode="raw", httr::verbose())
+        httr::POST(url, header, body=body, encode="raw")
     else
-        httr::POST(url, header, body=body, encode="json", httr::verbose())
+        httr::POST(url, header, body=body, encode="json")
 }
 
 .hca_post_parse_response <-
