@@ -289,6 +289,8 @@ select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
     fields <- data.frame(fields)[,2]
 
     sources <- vapply(sources, function(x) {
+        if (x == 'uuid')
+            return(x)
         name <- fields[grepl(paste0('[.]', x, '$'), fields)]
         if (length(name) > 1) {
             txt <- vapply(name, function(y) {

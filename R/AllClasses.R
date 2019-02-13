@@ -281,9 +281,9 @@ setMethod('undoEsQuery', 'HumanCellAtlas', .undo_esquery)
 setMethod('resetEsQuery', 'HumanCellAtlas', .reset_esquery)
 
 .pullBundles <-
-    function(hca, ...)
+    function(hca, ..., n = hca@per_page)
 {
-    hca %>% downloadHCA() %>% pull('bundle_fqid') %>% as.character()
+    hca %>% downloadHCA(n = n) %>% pull('bundle_fqid') %>% as.character()
 }
 
 #' Obtain bunlde fqids from a HumanCellAtlas object
@@ -302,7 +302,7 @@ setMethod('pullBundles', 'HumanCellAtlas', .pullBundles)
 
 .showBundles <- function(hca, bundle_fqids, ...)
 {
-    hca <- hca %>% activate('files')
+#    hca <- hca %>% activate('files')
     bundle_fqids <- vapply(strsplit(bundle_fqids, '[.]'), function(x) { x[1] }, character(1))
     hca %>% filter(uuid %in% bundle_fqids)
     #hca %>% downloadHCA() %>% filter(bundle_fqid %in% bundle_fqids)
