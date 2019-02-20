@@ -1,7 +1,7 @@
 Package: HCABrowser
 Type: Package
 Title: Browse the Human Cell Atlas data portal
-Version: 0.0.21
+Version: 0.0.22
 Authors@R: c(
     person(
         "Daniel", "Van Twisk",
@@ -25,6 +25,7 @@ Depends: R (>= 3.5.0),
          dplyr
 Imports: BiocFileCache,
          SummarizedExperiment,
+         S4Vectors,
          googleAuthR,
          httr,
          jsonlite,

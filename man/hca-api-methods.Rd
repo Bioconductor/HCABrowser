@@ -20,23 +20,23 @@
 \alias{putSubscription}
 \alias{deleteSubscription}
 \alias{getSubscription}
-\alias{getBundlesCheckout,HumanCellAtlas-method}
-\alias{deleteBundle,HumanCellAtlas-method}
-\alias{getBundle,HumanCellAtlas-method}
-\alias{putBundle,HumanCellAtlas-method}
-\alias{postBundlesCheckout,HumanCellAtlas-method}
-\alias{putCollection,HumanCellAtlas-method}
-\alias{deleteCollection,HumanCellAtlas-method}
-\alias{getCollection,HumanCellAtlas-method}
-\alias{patchCollection,HumanCellAtlas-method}
-\alias{getFile,HumanCellAtlas-method}
-\alias{headFile,HumanCellAtlas-method}
-\alias{putFile,HumanCellAtlas-method}
-\alias{postSearch,HumanCellAtlas-method}
-\alias{getSubscriptions,HumanCellAtlas-method}
-\alias{putSubscription,HumanCellAtlas-method}
-\alias{deleteSubscription,HumanCellAtlas-method}
-\alias{getSubscription,HumanCellAtlas-method}
+\alias{getBundlesCheckout,HCABrowser-method}
+\alias{deleteBundle,HCABrowser-method}
+\alias{getBundle,HCABrowser-method}
+\alias{putBundle,HCABrowser-method}
+\alias{postBundlesCheckout,HCABrowser-method}
+\alias{putCollection,HCABrowser-method}
+\alias{deleteCollection,HCABrowser-method}
+\alias{getCollection,HCABrowser-method}
+\alias{patchCollection,HCABrowser-method}
+\alias{getFile,HCABrowser-method}
+\alias{headFile,HCABrowser-method}
+\alias{putFile,HCABrowser-method}
+\alias{postSearch,HCABrowser-method}
+\alias{getSubscriptions,HCABrowser-method}
+\alias{putSubscription,HCABrowser-method}
+\alias{deleteSubscription,HCABrowser-method}
+\alias{getSubscription,HCABrowser-method}
 \title{HCA API methods}
 \usage{
 getBundlesCheckout(checkout_job_id, ...)
@@ -58,60 +58,59 @@ putSubscription(replica, ...)
 deleteSubscription(replica, ...)
 getSubscription(replica, ...)
 
-\S4method{getBundlesCheckout}{HumanCellAtlas}(hca, checkout_job_id,
+\S4method{getBundlesCheckout}{HCABrowser}(hca, checkout_job_id,
   replica = c("aws", "gcp", "azure"))
 
-\S4method{deleteBundle}{HumanCellAtlas}(hca, uuid, replica = c("aws",
-  "gcp", "azure"), version = NULL, reason = NULL)
+\S4method{deleteBundle}{HCABrowser}(hca, uuid, replica = c("aws", "gcp",
+  "azure"), version = NULL, reason = NULL)
 
-\S4method{getBundle}{HumanCellAtlas}(hca, uuid, replica = c("aws", "gcp",
+\S4method{getBundle}{HCABrowser}(hca, uuid, replica = c("aws", "gcp",
   "azure"), version = NULL, directurls = NULL, presignedurls = FALSE,
   token = NULL)
 
-\S4method{putBundle}{HumanCellAtlas}(hca, uuid, replica = c("aws", "gcp",
+\S4method{putBundle}{HCABrowser}(hca, uuid, replica = c("aws", "gcp",
   "azure"), version = NULL, creator_uid, files)
 
-\S4method{postBundlesCheckout}{HumanCellAtlas}(hca, uuid,
-  replica = c("aws", "gcp", "azure"), destination = NULL,
-  email = NULL)
+\S4method{postBundlesCheckout}{HCABrowser}(hca, uuid, replica = c("aws",
+  "gcp", "azure"), destination = NULL, email = NULL)
 
-\S4method{putCollection}{HumanCellAtlas}(hca, uuid, replica = c("aws",
-  "gcp", "azure"), version, contents, description, details, name)
+\S4method{putCollection}{HCABrowser}(hca, uuid, replica = c("aws", "gcp",
+  "azure"), version, contents, description, details, name)
 
-\S4method{deleteCollection}{HumanCellAtlas}(hca, uuid, replica = c("aws",
+\S4method{deleteCollection}{HCABrowser}(hca, uuid, replica = c("aws",
   "gcp", "azure"))
 
-\S4method{getCollection}{HumanCellAtlas}(hca, uuid, replica = c("aws",
-  "gcp", "azure"), version = NULL)
+\S4method{getCollection}{HCABrowser}(hca, uuid, replica = c("aws", "gcp",
+  "azure"), version = NULL)
 
-\S4method{patchCollection}{HumanCellAtlas}(hca, uuid, replica = c("aws",
+\S4method{patchCollection}{HCABrowser}(hca, uuid, replica = c("aws",
   "gcp", "azure"), version, add_contents, description, details, name,
   remove_contents)
 
-\S4method{getFile}{HumanCellAtlas}(hca, uuid, replica = c("aws", "gcp",
+\S4method{getFile}{HCABrowser}(hca, uuid, replica = c("aws", "gcp",
   "azure"), token = NULL, version = NULL)
 
-\S4method{headFile}{HumanCellAtlas}(hca, uuid, replica = c("aws", "gcp",
+\S4method{headFile}{HCABrowser}(hca, uuid, replica = c("aws", "gcp",
   "azure"), version = NULL)
 
-\S4method{putFile}{HumanCellAtlas}(hca, uuid, creator_uid, source_url,
+\S4method{putFile}{HCABrowser}(hca, uuid, creator_uid, source_url,
   version = NULL)
 
-\S4method{postSearch}{HumanCellAtlas}(hca, replica = c("aws", "gcp",
+\S4method{postSearch}{HCABrowser}(hca, replica = c("aws", "gcp",
   "azure"), output_format = c("summary", "raw"), es_query = NULL,
   per_page = 100, search_after = NULL, json = NULL)
 
-\S4method{getSubscriptions}{HumanCellAtlas}(hca, replica = c("aws",
-  "gcp", "azure"))
+\S4method{getSubscriptions}{HCABrowser}(hca, replica = c("aws", "gcp",
+  "azure"))
 
-\S4method{putSubscription}{HumanCellAtlas}(hca, replica = c("aws", "gcp",
+\S4method{putSubscription}{HCABrowser}(hca, replica = c("aws", "gcp",
   "azure"), attachments, callback_url, encoding, es_query, form_fields,
   hmac_key_id, hmac_secret_key, method, payload_form_field)
 
-\S4method{deleteSubscription}{HumanCellAtlas}(hca, uuid,
-  replica = c("aws", "gcp", "azure"))
+\S4method{deleteSubscription}{HCABrowser}(hca, uuid, replica = c("aws",
+  "gcp", "azure"))
 
-\S4method{getSubscription}{HumanCellAtlas}(hca, uuid, replica = c("aws",
+\S4method{getSubscription}{HCABrowser}(hca, uuid, replica = c("aws",
   "gcp", "azure"))
 }
 \arguments{

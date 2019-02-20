@@ -19,5 +19,4 @@ setGeneric("getSubscription", function(hca, ...) standardGeneric("getSubscriptio
 
 setGeneric("nextResults", function(result, ...) standardGeneric("nextResults"))
 
-setGeneric("supportedFields", function(hca, ...) standardGeneric("supportedFields"))
-setGeneric("availableFields", function(hca, ...) standardGeneric("availableFields"))
+setGeneric("fields", function(hca, ...) standardGeneric("fields"))

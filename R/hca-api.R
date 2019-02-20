@@ -102,13 +102,34 @@
 
 #' @importFrom httr GET
 .hca_get <-
-    function(url, include_token, expected_response=c("json", "file"))
+    function(url, include_token)
 {
     header <- .build_header(include_token)
-    expected_response <- match.arg(expected_response)
     if(include_token) response <- httr::GET(url, header)
     else response <- httr::GET(url)   
-    .return_response(response, expected_response)
+    .return_response(response)
+}
+
+#' @importFrom BiocFileCache BiocFileCache bfcrpath bfcquery bfcnew bfccount
+#' @importFrom httr write_disk
+.hca_get_file <-
+    function(url, include_token)
+{
+    url_split <- unlist(strsplit(url, '?', fixed = TRUE))
+    ## Include 2 parts one is the unique identifier without extra "relpica", etc.
+    ## rname <- url1
+    ## if(bfccount(bfcquery(bfc, rname)) == 0) bfcnew(bfc, rname) else bfcrpath(bfc, rname)
+    bfc <- BiocFileCache()
+    rname <- url_split[1]
+    if (bfccount(bfcquery(bfc, rname)) == 0) {
+        path = bfcnew(bfc, rname)
+        httr::GET(url, write_disk(path))
+    }
+    bfcrpath(bfc, rname)
+#    header <- .build_header(include_token)
+#    if(include_token) response <- httr::GET(url, header)
+#    else response <- httr::GET(url)   
+#    .return_response(response)
 }
 
 #' @importFrom httr HEAD
@@ -134,9 +155,9 @@
 {
     header <- .build_header(include_token=FALSE)
     if (is.character(body))
-        httr::POST(url, header, body=body, encode="raw", httr::verbose())
+        httr::POST(url, header, body=body, encode="raw")#, httr::verbose())
     else
-        httr::POST(url, header, body=body, encode="json", httr::verbose())
+        httr::POST(url, header, body=body, encode="json")#, httr::verbose())
 }
 
 .hca_post_parse_response <-
@@ -170,7 +191,7 @@
     .hca_post_parse_response(response, first_hit)
 }
 
-.nextResults_HumanCellAtlas <- function(result)
+.nextResults_HCABrowser <- function(result)
 {
     sr <- result@results
     if (length(sr@link) > 0) {
@@ -293,8 +314,11 @@
 {
     replica <- match.arg(replica)
     args <- list(replica=replica, version=version, token=token)
-    url <- .build_url(hca@url, .apis['getFile'], uuid, args)
-    .hca_get(url, include_token=FALSE, expected_response="file")
+    paths <- vapply(uuid, function(x) {
+        url <- .build_url(hca@url, .apis['getFile'], x, args)
+        .hca_get_file(url, include_token=FALSE)
+    }, character(1))
+    as_tibble(data.frame(uuid = uuid, path = paths))
 }
 
 .headFile <-
@@ -552,7 +576,7 @@ NULL
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("getBundlesCheckout", "HumanCellAtlas", .getBundlesCheckout)
+setMethod("getBundlesCheckout", "HCABrowser", .getBundlesCheckout)
 
 #' Delete a bundle or a specific bundle version
 #'
@@ -560,7 +584,7 @@ setMethod("getBundlesCheckout", "HumanCellAtlas", .getBundlesCheckout)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("deleteBundle", "HumanCellAtlas", .deleteBundle)
+setMethod("deleteBundle", "HCABrowser", .deleteBundle)
 
 #' Retrieve a bundle given a UUID and optionally a version
 #'
@@ -568,7 +592,7 @@ setMethod("deleteBundle", "HumanCellAtlas", .deleteBundle)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("getBundle", "HumanCellAtlas", .getBundle)
+setMethod("getBundle", "HCABrowser", .getBundle)
 
 #' Create a bundle
 #'
@@ -576,7 +600,7 @@ setMethod("getBundle", "HumanCellAtlas", .getBundle)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("putBundle", "HumanCellAtlas", .putBundle)
+setMethod("putBundle", "HCABrowser", .putBundle)
 
 #' Check out a bundle to DSS-namaged or user-managed cloud object storage
 #' destination
@@ -585,7 +609,7 @@ setMethod("putBundle", "HumanCellAtlas", .putBundle)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("postBundlesCheckout", "HumanCellAtlas", .postBundlesCheckout)
+setMethod("postBundlesCheckout", "HCABrowser", .postBundlesCheckout)
 
 #' Create a collection
 #'
@@ -593,7 +617,7 @@ setMethod("postBundlesCheckout", "HumanCellAtlas", .postBundlesCheckout)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("putCollection", "HumanCellAtlas", .putCollection)
+setMethod("putCollection", "HCABrowser", .putCollection)
 
 #' Delete a collection
 #'
@@ -601,7 +625,7 @@ setMethod("putCollection", "HumanCellAtlas", .putCollection)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("deleteCollection", "HumanCellAtlas", .deleteCollection)
+setMethod("deleteCollection", "HCABrowser", .deleteCollection)
 
 #' Retrieve a collection given a UUID
 #'
@@ -609,7 +633,7 @@ setMethod("deleteCollection", "HumanCellAtlas", .deleteCollection)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("getCollection", "HumanCellAtlas", .getCollection)
+setMethod("getCollection", "HCABrowser", .getCollection)
 
 #' Update a collection
 #'
@@ -617,7 +641,7 @@ setMethod("getCollection", "HumanCellAtlas", .getCollection)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("patchCollection", "HumanCellAtlas", .patchCollection)
+setMethod("patchCollection", "HCABrowser", .patchCollection)
 
 #' Retrieve a file given a UUID and optionally a version
 #'
@@ -625,7 +649,7 @@ setMethod("patchCollection", "HumanCellAtlas", .patchCollection)
 #' 
 #' @rdname hca-api-methods
 #' @export
-setMethod("getFile", "HumanCellAtlas", .getFile)
+setMethod("getFile", "HCABrowser", .getFile)
 
 #' Retrieve a file's metadata given an UUID and optionally a version
 #'
@@ -633,7 +657,7 @@ setMethod("getFile", "HumanCellAtlas", .getFile)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("headFile", "HumanCellAtlas", .headFile)
+setMethod("headFile", "HCABrowser", .headFile)
 
 #' Create a new version of a file
 #'
@@ -641,7 +665,7 @@ setMethod("headFile", "HumanCellAtlas", .headFile)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("putFile", "HumanCellAtlas", .putFile)
+setMethod("putFile", "HCABrowser", .putFile)
 
 #' Find bundles by searching their metadata with an Elasticsearch query
 #'
@@ -649,7 +673,7 @@ setMethod("putFile", "HumanCellAtlas", .putFile)
 #' 
 #' @rdname hca-api-methods
 #' @export
-setMethod("postSearch", "HumanCellAtlas", .postSearch)
+setMethod("postSearch", "HCABrowser", .postSearch)
 
 #' Retrieve a user's event Subscription
 #'
@@ -657,7 +681,7 @@ setMethod("postSearch", "HumanCellAtlas", .postSearch)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("getSubscriptions", "HumanCellAtlas", .getSubscriptions)
+setMethod("getSubscriptions", "HCABrowser", .getSubscriptions)
 
 #' Creates an event subscription
 #'
@@ -665,7 +689,7 @@ setMethod("getSubscriptions", "HumanCellAtlas", .getSubscriptions)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("putSubscription", "HumanCellAtlas", .putSubscription)
+setMethod("putSubscription", "HCABrowser", .putSubscription)
 
 #' Delete an event subscription
 #'
@@ -673,7 +697,7 @@ setMethod("putSubscription", "HumanCellAtlas", .putSubscription)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("deleteSubscription", "HumanCellAtlas", .deleteSubscription)
+setMethod("deleteSubscription", "HCABrowser", .deleteSubscription)
 
 #' Retrieve an event subscription given a UUID
 #'
@@ -681,7 +705,7 @@ setMethod("deleteSubscription", "HumanCellAtlas", .deleteSubscription)
 #' 
 #' @rdname hca-api-methods
 ###' @export
-setMethod("getSubscription", "HumanCellAtlas", .getSubscription)
+setMethod("getSubscription", "HCABrowser", .getSubscription)
 
 #' Next Results
 #'
@@ -693,9 +717,9 @@ setMethod("getSubscription", "HumanCellAtlas", .getSubscription)
 #'
 #' @examples
 #'
-#' hca <- HumanCellAtlas()
+#' hca <- HCABrowser()
 #' hca <- nextResults(hca)
 #' hca
 #'
 #' @export
-setMethod("nextResults", "HumanCellAtlas", .nextResults_HumanCellAtlas)
+setMethod("nextResults", "HCABrowser", .nextResults_HCABrowser)

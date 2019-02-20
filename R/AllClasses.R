@@ -1,5 +1,5 @@
 
-.init_HumanCellAtlas <- function(hca)
+.init_HCABrowser <- function(hca)
 {
     select(hca, .initial_source)
 #    postSearch(hca, 'aws', 'raw', per_page=100)
@@ -20,7 +20,7 @@ setOldClass('tbl_df')
 setOldClass('quosure')
 setOldClass('quosures')
 #' @export
-.HumanCellAtlas <- setClass("HumanCellAtlas",
+.HCABrowser <- setClass("HCABrowser",
     slots = c(
         activated = "character",
         url = "character",
@@ -75,19 +75,19 @@ setOldClass('quosures')
     as_tibble(df)
 }
 
-#' The HumanCellAtlas Class
+#' The HCABrowser Class
 #'
 #' @author Daniel Van Twisk
 #'
 #' @export
-HumanCellAtlas <-
+HCABrowser <-
     function(url='https://dss.data.humancellatlas.org/v1',
              fields_path=system.file("extdata", "fields_and_values.json", package="HCABrowser"),
              per_page=10)
 {
-    hca <- .HumanCellAtlas(url=url, fields_path=fields_path, per_page=per_page, activated="bundles", search_term=list(), es_query=quos(), es_source=quos(), supported_fields = tibble())
+    hca <- .HCABrowser(url=url, fields_path=fields_path, per_page=per_page, activated="bundles", search_term=list(), es_query=quos(), es_source=quos(), supported_fields = tibble())
     hca@supported_fields <- .get_supportedFields(hca)
-    .init_HumanCellAtlas(hca)
+    .init_HCABrowser(hca)
 }
 
 .first_hit <- function(object) object@first_hit
@@ -104,7 +104,16 @@ setGeneric('es_query', function(object, ...) standardGeneric('es_query'))
 setGeneric('results', function(object, ...) standardGeneric('results'))
 setGeneric('link', function(object, ...) standardGeneric('link'))
 
-#' Obtain search results from a Human Cell Atlas Object
+.retrieve_results <-
+    function(object)
+{
+    res <- object@results@results
+    if (nrow(res) > 0 && object@activated == 'bundles')
+        res <- res %>% distinct(bundle_fqid, .keep_all = TRUE)
+    res
+}
+
+#' Obtain search results from a HHACBrowser Object
 #'
 #' @description
 #'  Returns a tibble either showing bundles or files based on whichever is
@@ -116,11 +125,26 @@ setGeneric('link', function(object, ...) standardGeneric('link'))
 #'
 #' @export
 #' @importFrom dplyr distinct
-setMethod('results', 'HumanCellAtlas', function(object) {
-    res <- object@results@results
-    if (nrow(res) > 0 && object@activated == 'bundles')
-        res <- res %>% distinct(bundle_fqid, .keep_all = TRUE)
-    res
+setMethod('results', 'HCABrowser', function(object, n = object@per_page, all = FALSE) {
+    res <- .retrieve_results(hca)
+    if (all) {
+        res <- .retrieve_results(hca)
+        while (!is.null(hca <- nextResults(hca))) {
+            res <- rbind.fill(res, .retrieve_results(hca))
+        }
+    } else {
+        per_page <- hca@per_page
+        times <- floor((n-1)/per_page)
+        mod <- n %% per_page
+        for(i in seq_len(times)) {
+            hca <- nextResults(hca)
+            reso <- .retrieve_results(hca)
+            if (i == times && mod != 0)
+                reso <- reso[seq_len(mod),]
+            res <- rbind.fill(res, reso)
+        }
+    }
+    as_tibble(res)
 })
 
 setMethod('first_hit', 'SearchResult', .first_hit)
@@ -136,54 +160,59 @@ setGeneric('resetEsQuery', function(hca, ...) standardGeneric('resetEsQuery'))
 setGeneric('per_page', function(hca, ...) standardGeneric('per_page'))
 
 setGeneric('pullBundles', function(hca, ...) standardGeneric('pullBundles'))
+setGeneric('pullFiles', function(hca, ...) standardGeneric('pullFiles'))
 setGeneric('showBundles', function(hca, bundle_fqids, ...) standardGeneric('showBundles'))
 setGeneric('downloadHCA', function(hca, ...) standardGeneric('downloadHCA'))
 
+setGeneric('activate', function(hca, ...) standardGeneric('activate'))
+
+.activate.HCABrowser <-
+    function(hca, what=c('bundles', 'files'))
+{
+    type <- match.arg(what)
+    if(what == 'bundles')
+        hca@activated <- 'bundles'
+    else if(what == 'files')
+        hca@activated <- 'files'
+    hca
+}
+
 #' Activate files or bundles of Human
 #'
-#' @name activate-HumanCellAtlas
-#' @export
+#' @name activate-HCABrowser
 #' @importFrom tidygraph activate
-activate.HumanCellAtlas <-
-    function(object, type=c('bundles', 'files'), ...)
-{
-    type <- match.arg(type)
-    if(type == 'bundles')
-        object@activated <- 'bundles'
-    else if(type == 'files')
-        object@activated <- 'files'
-    object
-}
+#' @export
+setMethod('activate', 'HCABrowser', .activate.HCABrowser)
 
 .set_per_page <-
     function(hca, n)
 {
     if (n > 10)
-        message('The HumanCellAtlas is unable to show bundle results of more than 10 per_page')
+        message('The HCABrowser is unable to show bundle results of more than 10 per_page')
     hca@per_page <- n
     select(hca, c())
 }
 
-#' Set per_page argument of HumanCellAtlas object
+#' Set per_page argument of HCABrowser object
 #'
 #' @description note that no more than 10 pages can be displayed at once
 #'
-#' @param hca a HumanCellAtlas object
+#' @param hca a HCABrowser object
 #' @param n the new per_page value
 #'
-#' @return a HumanCellAtlas with updated per_page value
+#' @return a HCABrowser with updated per_page value
 #'
 #' @examples
 #'
-#' hca <- HumanCellAtlas()
+#' hca <- HCABrowser()
 #' hca <- per_page(hca, 5)
 #' hca
 #'
 #' @export
-setMethod('per_page', 'HumanCellAtlas', .set_per_page)
+setMethod('per_page', 'HCABrowser', .set_per_page)
 
-.download.HumanCellAtlas <-
-    function(hca, ..., n)
+.download.HCABrowser <-
+    function(hca, n)
 {
     res <- results(hca)
     if (!missing(n)) {
@@ -206,24 +235,24 @@ setMethod('per_page', 'HumanCellAtlas', .set_per_page)
     as_tibble(res)
 }
 
-#' Download results from a HumanCellAtlas query
+#' Download results from a HCABrowser query
 #'
-#' @param hca A HumanCellAtlas object
+#' @param hca A HCABrowser object
 #' @param n integer(1) number of bundles to download
 #'
 #' @return a tibble all bundles obtained from download
 #'
 #' @examples
 #'
-#' hca <- HumanCellAtlas()
+#' hca <- HCABrowser()
 #' res <- hca %>% downloadHCA(n = 24)
 #' res
 #'
 #' @export
-setMethod("downloadHCA", "HumanCellAtlas", .download.HumanCellAtlas)
+setMethod("downloadHCA", "HCABrowser", .download.HCABrowser)
 
 .undo_esquery <-
-    function(hca, ..., n = 1L)
+    function(hca, n = 1L)
 {
     check <- length(hca@es_query) - n
     hca@search_term <- list()
@@ -231,20 +260,21 @@ setMethod("downloadHCA", "HumanCellAtlas", .download.HumanCellAtlas)
         resetEsQuery(hca)
     else{
         hca@es_query <- head(hca@es_query, -c(n))
+        hca@es_source <- head(hca@es_source, -c(n))
         filter(hca)
     }
 }
 
-#' Undo previous filter queries on a HumanCellAtlas object
+#' Undo previous filter queries on a HCABrowser object
 #'
-#' @param hca A HumanCellAtlas object
+#' @param hca A HCABrowser object
 #' @param n integer(1) the number of filter queries to undo
 #'
-#' @return A HumanCellAtlas object with n fewer queries
+#' @return A HCABrowser object with n fewer queries
 #'
 #' @examples
 #'
-#' hca <- HumanCellAtlas()
+#' hca <- HCABrowser()
 #' hca <- hca %>% filter(organ.text == brain)
 #' hca <- hca %>% filter(organ.text == heart)
 #' hca <- hca %>% filter(organ.text != brain)
@@ -252,10 +282,10 @@ setMethod("downloadHCA", "HumanCellAtlas", .download.HumanCellAtlas)
 #' hca
 #'
 #' @export
-setMethod('undoEsQuery', 'HumanCellAtlas', .undo_esquery)
+setMethod('undoEsQuery', 'HCABrowser', .undo_esquery)
 
 .reset_esquery <-
-    function(hca, ...)
+    function(hca)
 {
     hca@search_term <- list()
     hca@es_query <- quos()
@@ -263,44 +293,68 @@ setMethod('undoEsQuery', 'HumanCellAtlas', .undo_esquery)
     select(hca, .initial_source)  
 }
 
-#' Reset the query of a HumanCellAtlas object to the default query
+#' Reset the query of a HCABrowser object to the default query
 #'
-#' @param hca A HumanCellAtlas object
+#' @param hca A HCABrowser object
 #' 
-#' @return A HumanCellAtlas object with the search reset
+#' @return A HCABrowser object with the search reset
 #'
 #' @examples
 #'
-#' hca <- HumanCellAtlas()
+#' hca <- HCABrowser()
 #' hca <- hca %>% filter(organ.text == brain)
 #' hca <- hca %>% filter(organ.text != brain)
 #' hca <- hca %>% resetEsQuery
 #' hca
 #' 
 #' @export
-setMethod('resetEsQuery', 'HumanCellAtlas', .reset_esquery)
+setMethod('resetEsQuery', 'HCABrowser', .reset_esquery)
 
 .pullBundles <-
-    function(hca, ..., n = hca@per_page)
+    function(hca, n = hca@per_page)
 {
-    hca %>% downloadHCA(n = n) %>% pull('bundle_fqid') %>% as.character()
+    hca %>% results(n = n) %>% pull('bundle_fqid') %>% as.character()
 }
 
-#' Obtain bunlde fqids from a HumanCellAtlas object
+#' Obtain bunlde fqids from a HCABrowser object
 #'
-#' @param hca A HumanCellAtlas object
+#' @param hca A HCABrowser object
+#' @param n integer(1) number of bundle fqids to pull
 #'
 #' @return character(1) of bundle fqids
 #'
 #' @examples
 #'
-#' hca <- HumanCellAtlas()
+#' hca <- HCABrowser()
 #' hca <- hca %>% pullBundles
 #'
 #' @export
-setMethod('pullBundles', 'HumanCellAtlas', .pullBundles)
+setMethod('pullBundles', 'HCABrowser', .pullBundles)
 
-.showBundles <- function(hca, bundle_fqids, ...)
+.pullFiles <-
+    function(hca, n = 10)
+{
+    hca <- hca %>% activate('files')
+    res <- hca %>% results(n = n)
+    res %>% pull('manifest.files.uuid') %>% as.character()
+}
+
+#' Obtain file uuids from a HCABrowser object
+#'
+#' @param hca A HCABrowser object
+#' @param n integer(1) number of files to pull
+#'
+#' @return character(1) of 
+#'
+#' @examples
+#'
+#' hca <- HCABrowser()
+#' hca <- hca %>% pullFiles
+#'
+#' @export
+setMethod('pullFiles', 'HCABrowser', .pullFiles)
+
+.showBundles <- function(hca, bundle_fqids)
 {
 #    hca <- hca %>% activate('files')
     bundle_fqids <- vapply(strsplit(bundle_fqids, '[.]'), function(x) { x[1] }, character(1))
@@ -310,19 +364,19 @@ setMethod('pullBundles', 'HumanCellAtlas', .pullBundles)
 
 #' Obtain all bundles from an hca object using there bundle fqids
 #'
-#' @param hca a HumanCellAtlas object to search for bundles on.
+#' @param hca a HCABrowser object to search for bundles on.
 #' @param bundle_fqids a character()
 #'
-#' @return A HumanCellAtlas object displaying the selected bundles
+#' @return A HCABrowser object displaying the selected bundles
 #'
 #' @examples
 #'
-#' hca <- HumanCellAtlas()
+#' hca <- HCABrowser()
 #' hca_bundles <- hca %>% pullBundles('')
 #' hca_bundles
 #'
 #' @export
-setMethod('showBundles', 'HumanCellAtlas', .showBundles)
+setMethod('showBundles', 'HCABrowser', .showBundles)
 
 .show_SearchResult <- function(object)
 {
@@ -338,7 +392,7 @@ setMethod('showBundles', 'HumanCellAtlas', .showBundles)
 #' @export
 setMethod('show', 'SearchResult', .show_SearchResult)
 
-.show_HumanCellAtlas <- function(object)
+.show_HCABrowser <- function(object)
 {
     cat('class:', class(object), '\n')
     cat('Using hca-dcp at:\n ', object@url, '\n\n')
@@ -363,5 +417,5 @@ setMethod('show', 'SearchResult', .show_SearchResult)
     print(results(object))
 }
 
-setMethod('show', 'HumanCellAtlas', .show_HumanCellAtlas)
+setMethod('show', 'HCABrowser', .show_HCABrowser)
 

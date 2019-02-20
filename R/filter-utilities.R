@@ -35,32 +35,34 @@
     '==' = '='
 )
 
-.supportedFields <- function(hca)
+.fields <- function(hca)
 {
     hca@supported_fields
 }
 
-#' List supported fields of an HumanCellAtlas object
+#' List supported fields of an HCABrowser object
 #'
 #' @export
-setMethod("supportedFields", "HumanCellAtlas", .supportedFields)
+setMethod("fields", "HCABrowser", .fields)
 
-.availableFields <- function(hca, fields=c())
+.values <- function(x, fields=c(), ...)
 {
+    hca <- x
     fields_json <- jsonlite::fromJSON(hca@fields_path)
     fields <- .convert_names_to_filters(hca, fields)
     if (length(fields) > 0)
         fields_json <- fields_json[fields]
     value <- unlist(fields_json, use.names=FALSE)
-    field <- rep(names(fields_json), lengths(fields_json))
-    fields <- data.frame(field, value)
+    field_names <- rep(names(fields_json), lengths(fields_json))
+    fields <- data.frame(field_names, value)
     as_tibble(fields)
 }
 
 #' List all values for certain fields
 #'
+#' @importFrom S4Vectors values
 #' @export
-setMethod("availableFields", "HumanCellAtlas", .availableFields)
+setMethod("values", "HCABrowser", .values)
 
 .is_bool_connector <- function(x)
 {
@@ -199,18 +201,18 @@ setMethod("availableFields", "HumanCellAtlas", .availableFields)
     list(es_query = list(query = list(bool = res)))
 }
 
-#' Filter HumanCellAtlas objects
+#' Filter HCABrowser objects
 #'
-#' @param hca a HumanCellAtlas object to perform a query on.
+#' @param hca a HCABrowser object to perform a query on.
 #' @param ... further argument to be tranlated into a query to select from.
 #'  These arguments can be passed in two ways, either as a single expression or
 #'  as a series of expressions that are to be seperated by commas.
 #'
-#' @return a HumanCellAtlas object containing the resulting query.
+#' @return a HCABrowser object containing the resulting query.
 #'
 #' @examples
 #'
-#' hca <- HumanCellAtlas()
+#' hca <- HCABrowser()
 #' hca2 <- hca %>% filter()
 #' hca2
 #'
@@ -221,7 +223,7 @@ setMethod("availableFields", "HumanCellAtlas", .availableFields)
 #' @export
 #' @importFrom dplyr filter
 #' @importFrom rlang quo_get_expr quos
-filter.HumanCellAtlas <- function(hca, ...)
+filter.HCABrowser <- function(hca, ...)
 {
     dots <- quos(...)
     es_query <- c(hca@es_query, dots)
@@ -233,19 +235,19 @@ filter.HumanCellAtlas <- function(hca, ...)
     select(hca, selected)
 }
 
-#' Select fields from a HumanCellAtlas object
+#' Select fields from a HCABrowser object
 #'
-#' @param hca a HumanCellAtlas object to perform a selection on
+#' @param hca a HCABrowser object to perform a selection on
 #' @param ... further argument to be tranlated into an expression to select from.
 #'  These arguments can be passed in two ways, either as a character vector or
 #'  as a series of expressions that are the fields that are to be selected
 #'  seperated by commas.
 #'
-#' @return a HumanCellAtlas object containing the results of the selection.
+#' @return a HCABrowser object containing the results of the selection.
 #'
 #' @examples
 #'
-#' hca <- HumanCellAtlas()
+#' hca <- HCABrowser()
 #' hca2 <- hca %>% select(paired_end)
 #' hca2
 #'
@@ -254,13 +256,22 @@ filter.HumanCellAtlas <- function(hca, ...)
 #'
 #' @export
 #' @importFrom dplyr select
-select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
+#' @importFrom rlang quo_get_expr
+select.HCABrowser <- function(hca, ..., .search = TRUE)
 {
     sources <- quos(...)
     sources <- c(hca@es_source, sources)
     hca@es_source <- sources
-    sources <- unlist(lapply(sources, rlang::eval_tidy))
-    sources <- lapply(sources, as.character)
+    sources <- lapply(sources, function(x) {
+        val <- try ({
+            rlang::eval_tidy(x)
+        }, silent = TRUE)
+        if (inherits(val, "try-error")) {
+            val <- as.character(rlang::quo_get_expr(x))
+        }
+        val
+    })
+    #sources <- lapply(sources, as.character)
     sources <- unlist(sources)
     if (length(sources) && sources[1] == 'c')
         sources <- sources[-1]
@@ -285,7 +296,7 @@ select.HumanCellAtlas <- function(hca, ..., .search = TRUE)
     if(is.null(hca))
         fields <- .get_supportedFields(NULL)
     else
-        fields <- supportedFields(hca)
+        fields <- fields(hca)
     fields <- data.frame(fields)[,2]
 
     sources <- vapply(sources, function(x) {
