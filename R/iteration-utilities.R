@@ -131,8 +131,11 @@
 
     json_bundles <- lapply(seq_along(json_bundles), function(i) {
         if (is.null(json_bundles[[i]]))
-            return(NULL)
-        do.call(cbind, json_bundles[[i]])
+            return(data.frame(matrix(nrow=1, ncol=)))
+        val <- do.call(cbind, json_bundles[[i]])
+        if(is.null(val))
+            val <- data.frame(matrix(nrow=1, ncol=0))
+        val
     })
 
     all_files <- lapply(seq_along(results), function(i) {
