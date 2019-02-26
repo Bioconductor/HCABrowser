@@ -275,9 +275,10 @@ select.HCABrowser <- function(hca, ..., .search = TRUE)
     sources <- unlist(sources)
     if (length(sources) && sources[1] == 'c')
         sources <- sources[-1]
-    sources <- unique(sources)
+#    sources <- unique(sources)
 
     sources <- .convert_names_to_filters(hca, sources)
+    sources <- unique(sources)
 
     search_term <- hca@search_term
     if(length(search_term) == 0)

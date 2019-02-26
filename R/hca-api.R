@@ -358,7 +358,8 @@
     if (!is.null(json))
         body <- json
     url <- .build_url(hca@url, .apis['postSearch'], NULL, args)
-    hca@results <- .hca_post(url, body)
+    post_res <- .hca_post(url, body)
+    hca@results <- post_res
     hca
 }
 

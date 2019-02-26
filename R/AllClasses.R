@@ -126,19 +126,19 @@ setGeneric('link', function(object, ...) standardGeneric('link'))
 #' @export
 #' @importFrom dplyr distinct
 setMethod('results', 'HCABrowser', function(object, n = object@per_page, all = FALSE) {
-    res <- .retrieve_results(hca)
+    res <- .retrieve_results(object)
     if (all) {
-        res <- .retrieve_results(hca)
-        while (!is.null(hca <- nextResults(hca))) {
-            res <- rbind.fill(res, .retrieve_results(hca))
+        res <- .retrieve_results(object)
+        while (!is.null(object <- nextResults(object))) {
+            res <- rbind.fill(res, .retrieve_results(object))
         }
     } else {
-        per_page <- hca@per_page
+        per_page <- object@per_page
         times <- floor((n-1)/per_page)
         mod <- n %% per_page
         for(i in seq_len(times)) {
-            hca <- nextResults(hca)
-            reso <- .retrieve_results(hca)
+            hca <- nextResults(object)
+            reso <- .retrieve_results(object)
             if (i == times && mod != 0)
                 reso <- reso[seq_len(mod),]
             res <- rbind.fill(res, reso)
