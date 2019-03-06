@@ -2,7 +2,7 @@
 .init_HCABrowser <- function(hca)
 {
     select(hca, .initial_source)
-#    postSearch(hca, 'aws', 'raw', per_page=100)
+#    postSearch(hca, 'aws', 'raw', per_page=10)
 }
 
 #' @importFrom tibble tibble
@@ -32,6 +32,14 @@ setOldClass('quosures')
         results = "SearchResult",
         per_page = "numeric"
     )
+)
+
+#' @export
+.ProjectBrowser <- setClass("ProjectBrowser",
+    slots = c(
+        url = "character",
+        project_results = "tbl_df"
+   )
 )
 
 #' @importFrom dplyr mutate_if
@@ -83,12 +91,21 @@ setOldClass('quosures')
 HCABrowser <-
     function(url='https://dss.data.humancellatlas.org/v1',
              fields_path=system.file("extdata", "fields_and_values.json", package="HCABrowser"),
-             per_page=10)
+             per_page=500)
 {
     hca <- .HCABrowser(url=url, fields_path=fields_path, per_page=per_page, activated="bundles", search_term=list(), es_query=quos(), es_source=quos(), supported_fields = tibble())
     hca@supported_fields <- .get_supportedFields(hca)
     .init_HCABrowser(hca)
 }
+
+#' @export
+ProjectBrowser <-
+    function(url='https://dss.data.humancellatlas.org/v1')
+{
+    pb <- .ProjectBrowser(url=url, fields_path=fields_path, project_results="tbl_df")
+    pb
+}
+             
 
 .first_hit <- function(object) object@first_hit
 .last_hit <- function(object) object@last_hit
@@ -163,8 +180,30 @@ setGeneric('pullBundles', function(hca, ...) standardGeneric('pullBundles'))
 setGeneric('pullFiles', function(hca, ...) standardGeneric('pullFiles'))
 setGeneric('showBundles', function(hca, bundle_fqids, ...) standardGeneric('showBundles'))
 setGeneric('downloadHCA', function(hca, ...) standardGeneric('downloadHCA'))
-
 setGeneric('activate', function(hca, ...) standardGeneric('activate'))
+setGeneric('getProjects', function(hca, ...) standardGeneric('getProjects'))
+
+.project_selections <-
+    c('project_title', 'project_short_name', 'organ.text',
+      'library_construction_approach.text',
+      'specimen_from_organism_json.species.text', 'disease.text'
+    )
+
+.getProjects <-
+    function(hca)
+{
+    projects <- values(hca, 'project_json.project_core.project_title')
+    projects <- as.character(projects$value)
+    res <- lapply(projects, function(x) {
+        hca_projects <- hca %>%
+            filter(project_title == x) %>%
+            select(.project_selections)
+        results(hca_projects)
+    })
+    res
+}
+
+setMethod('getProjects', 'HCABrowser', .getProjects)
 
 .activate.HCABrowser <-
     function(hca, what=c('bundles', 'files'))

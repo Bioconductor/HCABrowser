@@ -14,10 +14,10 @@
 .manifest_fields <- paste0('manifest.files.', .manifest_fields)
 
 .initial_source <- c(
-    "project_title", "project_short_name", "organ.text",
-    "library_construction_approach.text",
-    "specimen_from_organism_json.genus_species.text",
-    "disease.text", .manifest_fields
+    "project_title", "project_short_name", "organ.text"#,
+#    "library_construction_approach.text",
+#    "specimen_from_organism_json.genus_species.text",
+#    "disease.text"#, .manifest_fields
 )
 
 .range_ops = list(
