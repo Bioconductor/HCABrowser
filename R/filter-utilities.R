@@ -257,9 +257,10 @@ filter.HCABrowser <- function(hca, ...)
 #' @export
 #' @importFrom dplyr select
 #' @importFrom rlang quo_get_expr
-select.HCABrowser <- function(hca, ..., .search = TRUE)
+select.HCABrowser <- function(hca, ..., .output_format = c('raw', 'summary'))
 {
     sources <- quos(...)
+    output_format <- match.arg(.output_format)
     sources <- c(hca@es_source, sources)
     hca@es_source <- sources
     sources <- lapply(sources, function(x) {
@@ -271,11 +272,9 @@ select.HCABrowser <- function(hca, ..., .search = TRUE)
         }
         val
     })
-    #sources <- lapply(sources, as.character)
     sources <- unlist(sources)
     if (length(sources) && sources[1] == 'c')
         sources <- sources[-1]
-#    sources <- unique(sources)
 
     sources <- .convert_names_to_filters(hca, sources)
     sources <- unique(sources)
@@ -286,10 +285,7 @@ select.HCABrowser <- function(hca, ..., .search = TRUE)
     search_term$es_query$"_source" <- sources
     hca@search_term <- search_term
 
-    if (.search)
-        postSearch(hca, 'aws', 'raw', per_page = hca@per_page)
-    else
-        hca
+    postSearch(hca, 'aws', output_format = output_format, per_page = hca@per_page)
 }
 
 .convert_names_to_filters <- function(hca, sources)

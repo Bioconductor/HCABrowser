@@ -91,7 +91,7 @@ setOldClass('quosures')
 HCABrowser <-
     function(url='https://dss.data.humancellatlas.org/v1',
              fields_path=system.file("extdata", "fields_and_values.json", package="HCABrowser"),
-             per_page=500)
+             per_page=10)
 {
     hca <- .HCABrowser(url=url, fields_path=fields_path, per_page=per_page, activated="bundles", search_term=list(), es_query=quos(), es_source=quos(), supported_fields = tibble())
     hca@supported_fields <- .get_supportedFields(hca)
@@ -130,19 +130,12 @@ setGeneric('link', function(object, ...) standardGeneric('link'))
     res
 }
 
-#' Obtain search results from a HHACBrowser Object
-#'
-#' @description
-#'  Returns a tibble either showing bundles or files based on whichever is
-#'  activated.
-#'
-#' @param object A Human Cell Atlas object
-#'
-#' @return a tibble
-#'
-#' @export
-#' @importFrom dplyr distinct
-setMethod('results', 'HCABrowser', function(object, n = object@per_page, all = FALSE) {
+.results <- function(object, n = object@per_page, all = FALSE, .output_format=c('raw', 'summary')) {
+    browser()
+    output_format <- match.arg(.output_format)
+    if (output_format == 'summary')
+        object <- object %>% per_page(n=500)
+    object <- select(object, c(), .output_format=output_format)
     res <- .retrieve_results(object)
     if (all) {
         res <- .retrieve_results(object)
@@ -160,9 +153,25 @@ setMethod('results', 'HCABrowser', function(object, n = object@per_page, all = F
                 reso <- reso[seq_len(mod),]
             res <- rbind.fill(res, reso)
         }
+        if (times == 0)
+            res <- res[seq_len(mod),]
     }
     as_tibble(res)
-})
+}
+
+#' Obtain search results from a HHACBrowser Object
+#'
+#' @description
+#'  Returns a tibble either showing bundles or files based on whichever is
+#'  activated.
+#'
+#' @param object A Human Cell Atlas object
+#'
+#' @return a tibble
+#'
+#' @export
+#' @importFrom dplyr distinct
+setMethod('results', 'HCABrowser', .results)
 
 setMethod('first_hit', 'SearchResult', .first_hit)
 setMethod('last_hit', 'SearchResult', .last_hit)
@@ -250,46 +259,6 @@ setMethod('activate', 'HCABrowser', .activate.HCABrowser)
 #' @export
 setMethod('per_page', 'HCABrowser', .set_per_page)
 
-.download.HCABrowser <-
-    function(hca, n)
-{
-    res <- results(hca)
-    if (!missing(n)) {
-        per_page <- hca@per_page
-        times <- floor((n-1)/per_page)
-        mod <- n %% per_page
-        for(i in seq_len(times)) {
-            hca <- nextResults(hca)
-            reso <- results(hca)
-            if (i == times && mod != 0)
-                reso <- reso[seq_len(mod),]
-            res <- rbind.fill(res, reso)
-        }
-    } else {
-        res <- results(hca)
-        while (!is.null(hca <- nextResults(hca))) {
-            res <- rbind.fill(res, results(hca))
-        }
-    }
-    as_tibble(res)
-}
-
-#' Download results from a HCABrowser query
-#'
-#' @param hca A HCABrowser object
-#' @param n integer(1) number of bundles to download
-#'
-#' @return a tibble all bundles obtained from download
-#'
-#' @examples
-#'
-#' hca <- HCABrowser()
-#' res <- hca %>% downloadHCA(n = 24)
-#' res
-#'
-#' @export
-setMethod("downloadHCA", "HCABrowser", .download.HCABrowser)
-
 .undo_esquery <-
     function(hca, n = 1L)
 {
@@ -352,7 +321,7 @@ setMethod('resetEsQuery', 'HCABrowser', .reset_esquery)
 .pullBundles <-
     function(hca, n = hca@per_page)
 {
-    hca %>% results(n = n) %>% pull('bundle_fqid') %>% as.character()
+    hca %>% results(n = n, .output_format='summary') %>% pull('bundle_fqid') %>% as.character()
 }
 
 #' Obtain bunlde fqids from a HCABrowser object
@@ -373,6 +342,8 @@ setMethod('pullBundles', 'HCABrowser', .pullBundles)
 .pullFiles <-
     function(hca, n = 10)
 {
+    hca <- hca %>% per_page(500)
+    hca <- select(hca, c(), .output_format='summary')
     hca <- hca %>% activate('files')
     res <- hca %>% results(n = n)
     res %>% pull('manifest.files.uuid') %>% as.character()
@@ -395,7 +366,6 @@ setMethod('pullFiles', 'HCABrowser', .pullFiles)
 
 .showBundles <- function(hca, bundle_fqids)
 {
-#    hca <- hca %>% activate('files')
     bundle_fqids <- vapply(strsplit(bundle_fqids, '[.]'), function(x) { x[1] }, character(1))
     hca %>% filter(uuid %in% bundle_fqids)
     #hca %>% downloadHCA() %>% filter(bundle_fqid %in% bundle_fqids)
