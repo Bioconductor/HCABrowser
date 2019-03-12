@@ -131,11 +131,11 @@ setGeneric('link', function(object, ...) standardGeneric('link'))
 }
 
 .results <- function(object, n = object@per_page, all = FALSE, .output_format=c('raw', 'summary')) {
-    browser()
     output_format <- match.arg(.output_format)
-    if (output_format == 'summary')
+    if (output_format == 'summary') {
         object <- object %>% per_page(n=500)
-    object <- select(object, c(), .output_format=output_format)
+        object <- select(object, c(), .output_format=output_format)
+    }
     res <- .retrieve_results(object)
     if (all) {
         res <- .retrieve_results(object)
@@ -153,7 +153,7 @@ setGeneric('link', function(object, ...) standardGeneric('link'))
                 reso <- reso[seq_len(mod),]
             res <- rbind.fill(res, reso)
         }
-        if (times == 0)
+        if (times == 0 && mod != 0)
             res <- res[seq_len(mod),]
     }
     as_tibble(res)
@@ -193,9 +193,12 @@ setGeneric('activate', function(hca, ...) standardGeneric('activate'))
 setGeneric('getProjects', function(hca, ...) standardGeneric('getProjects'))
 
 .project_selections <-
-    c('project_title', 'project_short_name', 'organ.text',
-      'library_construction_approach.text',
-      'specimen_from_organism_json.species.text', 'disease.text'
+    c('project_json.project_core.project_title',
+      'project_json.project_core.project_short_name',
+      'specimen_from_organism_json.organ.text',
+      'library_preparation_protocol.library_construction_approach.text',
+      'specimen_from_organism_json.genus_species.text',
+      'disease.text'
     )
 
 .getProjects <-
@@ -207,9 +210,12 @@ setGeneric('getProjects', function(hca, ...) standardGeneric('getProjects'))
         hca_projects <- hca %>%
             filter(project_title == x) %>%
             select(.project_selections)
-        results(hca_projects)
+        hca_res <- results(hca_projects)[1,]
+        hca_res[,!grepl("[1-9]$", colnames(hca_res))]
     })
-    res
+    empties <- lengths(res) == 0
+    res[empties] <- NULL
+    do.call(rbind.fill, res)
 }
 
 setMethod('getProjects', 'HCABrowser', .getProjects)
