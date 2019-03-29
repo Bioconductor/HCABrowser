@@ -191,6 +191,8 @@ setGeneric('showBundles', function(hca, bundle_fqids, ...) standardGeneric('show
 setGeneric('downloadHCA', function(hca, ...) standardGeneric('downloadHCA'))
 setGeneric('activate', function(hca, ...) standardGeneric('activate'))
 setGeneric('getProjects', function(hca, ...) standardGeneric('getProjects'))
+setGeneric('showProject', function(hca, ...) standardGeneric('showProject'))
+setGeneric('pullProject', function(hca, ...) standardGeneric('pullProject'))
 
 .project_selections <-
     c('project_json.project_core.project_title',
@@ -219,6 +221,22 @@ setGeneric('getProjects', function(hca, ...) standardGeneric('getProjects'))
 }
 
 setMethod('getProjects', 'HCABrowser', .getProjects)
+
+.showProject <-
+    function(hca, project)
+{
+    
+}
+
+setMethod('showProject', 'HCABrowser', .showProject)
+
+.pullProject <-
+    function(hca, project, n)
+{
+    hca %>% filter(project_title == project) %>% pullBundles(n)
+}
+
+setMethod('pullProject', 'HCABrowser', .pullProject)
 
 .activate.HCABrowser <-
     function(hca, what=c('bundles', 'files'))
