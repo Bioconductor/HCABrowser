@@ -1,5 +1,5 @@
 
-The [Human Cell Atlas] (HCA) (https://www.humancellatlas.org/) was created in
+The Human Cell Atlas (https://www.humancellatlas.org/) was created in
 order to create comprehensive reference maps of all human cells as a basis for
 both understanding human health and diagnosing, monitoring, and treating
 disease. The *HCABrowser* Biocondctor pacakge provides infrastructure for

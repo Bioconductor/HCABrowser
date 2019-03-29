@@ -157,7 +157,7 @@
     if (is.character(body))
         httr::POST(url, header, body=body, encode="raw")#, httr::verbose())
     else
-        httr::POST(url, header, body=body, encode="json", httr::verbose())
+        httr::POST(url, header, body=body, encode="json")#, httr::verbose())
 }
 
 .hca_post_parse_response <-

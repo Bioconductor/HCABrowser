@@ -312,7 +312,7 @@ select.HCABrowser <- function(hca, ..., .output_format = c('raw', 'summary'))
             if (x %in% fields)
                 name <- x
             else {
-                message(paste0('Field "', x, '" may not be supported.'))
+                #message(paste0('Field "', x, '" may not be supported.'))
                 name <- x
             }
         }
