@@ -284,20 +284,20 @@ Note that unabbreviated names must be used for these kinds of queries.
 
 ## Obtaining results from the HCABrowser object
 
-Once the user is satisfied with their query, the `downloadHCA()` method can be
+Once the user is satisfied with their query, the `results()` method can be
 used to create a tibble of the first `n` bundles in the search.
 Note that since the maximum page size is `10`, the method will need to make
 multiple requests to the hca dcp. This may take some time for large requests.
 
 ```{r downloadHCA}
-#res <- hca %>% downloadHCA(n = 36)
-#res
+res <- hca %>% results(n = 36)
+res
 ```
 
 One can also simply pull bundles from the HCABrowser object's results.
 
 ```{r pullBundles}
-bundle_fqids <- hca %>% pullBundles
+bundle_fqids <- hca %>% pullBundles(n = 1)
 bundle_fqids
 ```
 
