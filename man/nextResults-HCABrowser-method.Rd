@@ -23,3 +23,6 @@ hca <- nextResults(hca)
 hca
 
 }
+\author{
+Daniel Van Twisk
+}

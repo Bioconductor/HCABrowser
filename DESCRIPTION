@@ -1,7 +1,7 @@
 Package: HCABrowser
 Type: Package
 Title: Browse the Human Cell Atlas data portal
-Version: 0.0.31
+Version: 0.99.0
 Authors@R: c(
     person(
         "Daniel", "Van Twisk",
@@ -21,10 +21,9 @@ Authors@R: c(
 Description: Search, browse, reference, and download resources from
     the Human Cell Atlas data portal. Development of this package is
     supported through funds from the Chan / Zuckerberg initiative.
-Depends: R (>= 3.5.0),
+Depends: R (>= 3.6.0),
          dplyr
 Imports: BiocFileCache,
-         SummarizedExperiment,
          S4Vectors,
          googleAuthR,
          httr,
@@ -34,7 +33,9 @@ Imports: BiocFileCache,
          rlang,
          stringr,
          tibble,
-         tidygraph
+         tidygraph,
+         tidyr,
+         utils
 Suggests: BiocStyle,
           knitr,
           rmarkdown,
@@ -51,7 +52,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/Bioconductor/HCABrowser
 RoxygenNote: 6.1.1
-BiocViews: DataImport
+biocViews: DataImport, Sequencing
 BugReports:
     https://github.com/Bioconductor/HCABrowser/issues
 VignetteBuilder: knitr

@@ -11,6 +11,11 @@ HCABrowser(url = "https://dss.data.humancellatlas.org/v1",
 \description{
 The HCABrowser Class
 }
+\examples{
+hca <- HCABrowser()
+hca
+
+}
 \author{
 Daniel Van Twisk
 }

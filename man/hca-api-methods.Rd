@@ -246,40 +246,12 @@ by means of the platform's REST API.
 
 Check the status of a checkout request
 }
+\examples{
+hca <- HCABrowser()
+#addmore
+
+
+}
 \author{
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
-Daniel Van Twisk
-
 Daniel Van Twisk
 }

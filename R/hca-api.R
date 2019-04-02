@@ -564,6 +564,11 @@
 #'
 #' @param version character(1). Timestamp of bundle creation in RFC3339.
 #'
+#' @examples
+#' hca <- HCABrowser()
+#' #addmore
+#' 
+#'
 #' @name hca-api-methods
 #' @author Daniel Van Twisk
 NULL
@@ -573,32 +578,24 @@ NULL
 #'
 #' @description Check the status of a checkout request 
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("getBundlesCheckout", "HCABrowser", .getBundlesCheckout)
 
 #' Delete a bundle or a specific bundle version
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("deleteBundle", "HCABrowser", .deleteBundle)
 
 #' Retrieve a bundle given a UUID and optionally a version
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("getBundle", "HCABrowser", .getBundle)
 
 #' Create a bundle
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("putBundle", "HCABrowser", .putBundle)
@@ -606,104 +603,79 @@ setMethod("putBundle", "HCABrowser", .putBundle)
 #' Check out a bundle to DSS-namaged or user-managed cloud object storage
 #' destination
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("postBundlesCheckout", "HCABrowser", .postBundlesCheckout)
 
 #' Create a collection
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("putCollection", "HCABrowser", .putCollection)
 
 #' Delete a collection
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("deleteCollection", "HCABrowser", .deleteCollection)
 
 #' Retrieve a collection given a UUID
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("getCollection", "HCABrowser", .getCollection)
 
 #' Update a collection
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("patchCollection", "HCABrowser", .patchCollection)
 
 #' Retrieve a file given a UUID and optionally a version
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 #' @export
 setMethod("getFile", "HCABrowser", .getFile)
 
 #' Retrieve a file's metadata given an UUID and optionally a version
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("headFile", "HCABrowser", .headFile)
 
 #' Create a new version of a file
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("putFile", "HCABrowser", .putFile)
 
 #' Find bundles by searching their metadata with an Elasticsearch query
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
+#'
 #' @export
 setMethod("postSearch", "HCABrowser", .postSearch)
 
 #' Retrieve a user's event Subscription
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("getSubscriptions", "HCABrowser", .getSubscriptions)
 
 #' Creates an event subscription
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("putSubscription", "HCABrowser", .putSubscription)
 
 #' Delete an event subscription
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("deleteSubscription", "HCABrowser", .deleteSubscription)
 
 #' Retrieve an event subscription given a UUID
 #'
-#' @author Daniel Van Twisk
-#' 
 #' @rdname hca-api-methods
 ###' @export
 setMethod("getSubscription", "HCABrowser", .getSubscription)
@@ -716,6 +688,8 @@ setMethod("getSubscription", "HCABrowser", .getSubscription)
 #'
 #' @return A Human Cell Atlas object that displays the next results
 #'
+#' @author Daniel Van Twisk
+#' 
 #' @examples
 #'
 #' hca <- HCABrowser()

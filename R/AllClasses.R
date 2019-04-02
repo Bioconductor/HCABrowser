@@ -6,6 +6,7 @@
 }
 
 #' @importFrom tibble tibble
+#' @importFrom dplyr %>%
 setOldClass('tbl_df')
 .SearchResult <- setClass("SearchResult",
     slots = c(
@@ -86,6 +87,10 @@ setOldClass('quosures')
 #' The HCABrowser Class
 #'
 #' @author Daniel Van Twisk
+#'
+#' @examples
+#' hca <- HCABrowser()
+#' hca
 #'
 #' @export
 HCABrowser <-
@@ -280,6 +285,7 @@ setMethod('activate', 'HCABrowser', .activate.HCABrowser)
 #' hca <- per_page(hca, 5)
 #' hca
 #'
+#' @importFrom utils head
 #' @export
 setMethod('per_page', 'HCABrowser', .set_per_page)
 
@@ -339,6 +345,7 @@ setMethod('undoEsQuery', 'HCABrowser', .undo_esquery)
 #' hca <- hca %>% resetEsQuery
 #' hca
 #' 
+#' @importFrom dplyr pull
 #' @export
 setMethod('resetEsQuery', 'HCABrowser', .reset_esquery)
 

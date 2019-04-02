@@ -6,7 +6,7 @@
 \title{Obtain search results from a HHACBrowser Object}
 \usage{
 \S4method{results}{HCABrowser}(object, n = object@per_page,
-  all = FALSE)
+  all = FALSE, .output_format = c("raw", "summary"))
 }
 \arguments{
 \item{object}{A Human Cell Atlas object}
