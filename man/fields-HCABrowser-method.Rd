@@ -7,6 +7,12 @@
 \usage{
 \S4method{fields}{HCABrowser}(hca)
 }
+\arguments{
+\item{hca}{An HCABrowser object.}
+}
+\value{
+A tibble indicating fields that can be queried upon.
+}
 \description{
 List supported fields of an HCABrowser object
 }

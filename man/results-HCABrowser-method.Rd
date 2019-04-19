@@ -9,7 +9,13 @@
   all = FALSE, .output_format = c("raw", "summary"))
 }
 \arguments{
-\item{object}{A Human Cell Atlas object}
+\item{object}{A Human Cell Atlas object.}
+
+\item{n}{numeric(1) number of elements to return.}
+
+\item{all}{logical(1) whether to return all elements.}
+
+\item{.output_format}{unused.}
 }
 \value{
 a tibble

@@ -39,24 +39,23 @@
 \alias{getSubscription,HCABrowser-method}
 \title{HCA API methods}
 \usage{
-getBundlesCheckout(checkout_job_id, ...)
-deleteBundle(uuid, ...)
-getBundle(uuid, ...)
-putBundle(uuid, ...)
-postBundle(uuid, ...)
-postBundlesCheckout(uuid, ...)
-putCollection(uuid, ...)
-deleteCollection(uuid, ...)
-getCollection(uuid, ...)
-patchCollection(uuid, ...)
-getFile(uuid, ...)
-headFile(uuid, ...)
-putFile(uuid, ...)
-postSearch(replica, ...)
-getSubscriptions(replica, ...)
-putSubscription(replica, ...)
-deleteSubscription(replica, ...)
-getSubscription(replica, ...)
+getBundlesCheckout(hca, ...)
+deleteBundle(hca, ...)
+getBundle(hca, ...)
+putBundle(hca, ...)
+postBundlesCheckout(hca, ...)
+putCollection(hca, ...)
+deleteCollection(hca, ...)
+getCollection(hca, ...)
+patchCollection(hca, ...)
+getFile(hca, ...)
+headFile(hca, ...)
+putFile(hca, ...)
+postSearch(hca, ...)
+getSubscriptions(hca, ...)
+putSubscription(hca, ...)
+deleteSubscription(hca, ...)
+getSubscription(hca, ...)
 
 \S4method{getBundlesCheckout}{HCABrowser}(hca, checkout_job_id,
   replica = c("aws", "gcp", "azure"))
@@ -114,6 +113,8 @@ getSubscription(replica, ...)
   "gcp", "azure"))
 }
 \arguments{
+\item{hca}{An HCABrowser object that is the subject of the request.}
+
 \item{checkout_job_id}{character(1). A RFC4122-complliant ID for the checkout
 job request.}
 
@@ -160,6 +161,10 @@ formatted in Markdown.}
 must match exactly to be removed. Items not found in the collection are
 ignored. (ADD DESCRIPTION OF LIST OBJECT)}
 
+\item{remove_contents}{list. List of items to remove from the collection.
+Items must match exactly to be removed. Items not found in the collection
+are ignored.}
+
 \item{source_url}{character(1). Cloud URL for source data.}
 
 \item{output_format}{character(1). Specifies the output format. Either
@@ -175,6 +180,8 @@ verbatim JSON metadata for bundles that match the query.}
 pointer parameter for use with pagination. The API client should not need to
 set this parameter directly; it should instead directly fetch the URL given
 in the "Link" header.}
+
+\item{json}{character(1) of a json query to be executed.}
 
 \item{attachments}{list. The set of bundle metadata items to be included in
 the payload of a notification request to a subscriptionendpoint. Each
@@ -219,6 +226,9 @@ request body.  Either "application/json" or "multipart/form-data".}
 \item{form_fields}{list. A collection of static form fields to be supplied in
 the request body, alongside the actual notification payload.}
 
+\item{hmac_key_id}{character(1). An optional key ID to use with
+"hmac_secret_key".}
+
 \item{hmac_secret_key}{character(1). The key for signing requests to the
 subscriber's URL. The signature will be constructed according to
 https://tools.ietf.org/html/draft-cavage-http-signatures and transmitted in
@@ -233,12 +243,7 @@ of the payload field collides with that of a field in `form_fields`, this
 porperty can be used to rename the payload and avoid the collision. This
 property is ignored unless `encoding` is `multipart/form-data`.}
 
-\item{hmac-key-id}{character(1). An optional key ID to use with
-"hmac_secret_key".}
-
-\item{remove-contents}{list. List of items to remove from the collection.
-Items must match exactly to be removed. Items not found in the collection
-are ignored.}
+\item{...}{Other arguments}
 }
 \description{
 Methods to access the Human Cell Atlas's Data Coordination Platform (HCA DCP)

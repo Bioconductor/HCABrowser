@@ -4,14 +4,16 @@
 \alias{filter.HCABrowser}
 \title{Filter HCABrowser objects}
 \usage{
-\method{filter}{HCABrowser}(hca, ...)
+\method{filter}{HCABrowser}(.data, ..., .preserve)
 }
 \arguments{
-\item{hca}{a HCABrowser object to perform a query on.}
+\item{.data}{an HCABrowser object to perform a query on.}
 
 \item{...}{further argument to be tranlated into a query to select from.
 These arguments can be passed in two ways, either as a single expression or
 as a series of expressions that are to be seperated by commas.}
+
+\item{.preserve}{unused.}
 }
 \value{
 a HCABrowser object containing the resulting query.

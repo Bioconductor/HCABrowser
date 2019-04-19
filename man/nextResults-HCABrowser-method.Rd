@@ -8,7 +8,7 @@
 \S4method{nextResults}{HCABrowser}(result)
 }
 \arguments{
-\item{hca}{A Human Cell Atlas object the has further bundles to display}
+\item{result}{A HCABrowser object that has further bundles to display.}
 }
 \value{
 A Human Cell Atlas object that displays the next results

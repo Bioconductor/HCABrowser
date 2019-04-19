@@ -7,6 +7,13 @@
 \usage{
 \S4method{values}{HCABrowser}(x, fields = c(), ...)
 }
+\arguments{
+\item{x}{An HCABrowser Object.}
+
+\item{fields}{a character vector of fields to display avaiable values for.}
+
+\item{...}{Other arguments.}
+}
 \description{
 List all values for certain fields
 }

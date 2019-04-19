@@ -4,16 +4,18 @@
 \alias{select.HCABrowser}
 \title{Select fields from a HCABrowser object}
 \usage{
-\method{select}{HCABrowser}(hca, ..., .output_format = c("raw",
+\method{select}{HCABrowser}(.data, ..., .output_format = c("raw",
   "summary"))
 }
 \arguments{
-\item{hca}{a HCABrowser object to perform a selection on}
+\item{.data}{an HCABrowser object to perform a selection on}
 
 \item{...}{further argument to be tranlated into an expression to select from.
 These arguments can be passed in two ways, either as a character vector or
 as a series of expressions that are the fields that are to be selected
 seperated by commas.}
+
+\item{.output_format}{unused.}
 }
 \value{
 a HCABrowser object containing the results of the selection.

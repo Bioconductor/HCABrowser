@@ -8,6 +8,13 @@ HCABrowser(url = "https://dss.data.humancellatlas.org/v1",
   fields_path = system.file("extdata", "fields_and_values.json", package
   = "HCABrowser"), per_page = 10)
 }
+\arguments{
+\item{url}{character(1) the url of the Human Cell Atlas resource.}
+
+\item{fields_path}{character(1) path to the fields json file.}
+
+\item{per_page}{numeric(1) numbers of pages to view at a time.}
+}
 \description{
 The HCABrowser Class
 }
