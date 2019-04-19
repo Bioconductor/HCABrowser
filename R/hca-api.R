@@ -42,8 +42,8 @@
     if (include_token) {
         token <- get_token()
         header['access_token'] <- token$credentials[['access_token']]
-        header['token_type'] <- token_type = token$credentials[['token_type']]
-        header['expires_in'] <- expires_in = token$credentials[['expires_in']]
+        header['token_type'] <- token$credentials[['token_type']]
+        header['expires_in'] <- token$credentials[['expires_in']]
     }
     do.call(add_headers, header)
 }
@@ -53,7 +53,7 @@
 {
     if (is.null(dbpath))
         dbpath <- BiocFileCache()
-    if (is(dbpath, "BiocFileCache")) {
+    if (methods::is(dbpath, "BiocFileCache")) {
         nrec <- NROW(bfcquery(dbpath, url, "rname", exact = TRUE))
         if (nrec == 0L)
             dbpath <- bfcnew(dbpath, url)
@@ -64,7 +64,7 @@
                 "\n  'bfc' contains duplicate record names",
                     "\n      url: ", url,
                     "\n      bfccache(): ", bfccache(dbpath),
-                    "\n      rname: ", txdb_name
+                    "\n      rname: ", bfc(dbpath)$rname
             )
     }
 }
@@ -209,7 +209,7 @@
 
 #' @importFrom httr PUT
 .hca_put <-
-    function(url, body, include_token)
+    function(hca, url, body, include_token)
 {
     header <- .build_header(include_token)
     response <- httr::PUT(hca@url, header, body, encode="json")
@@ -220,7 +220,7 @@
     function(hca, checkout_job_id, replica=c('aws', 'gcp', 'azure'))
 {
     replica <- match.arg(replica)
-    args <- list=(replica=replica)
+    args <- list(replica=replica)
     url <- .build_url(hca@url, .apis['getBundlesCheckout'], checkout_job_id, args)
     .hca_get(url, include_token=FALSE)
 }
@@ -283,7 +283,7 @@
     function(hca, uuid, replica=c('aws', 'gcp', 'azure'))
 {
     replica <- match.arg(replica)
-    args <- list=(replica=replica)
+    args <- list(replica=replica)
     url <- .build_url(hca@url, .apis['deleteCollection'], uuid, args)
     .hca_delete(url)
 }
@@ -419,24 +419,23 @@
 #'
 #' @usage
 #'
-#' getBundlesCheckout(checkout_job_id, ...)
-#' deleteBundle(uuid, ...)
-#' getBundle(uuid, ...)
-#' putBundle(uuid, ...)
-#' postBundle(uuid, ...)
-#' postBundlesCheckout(uuid, ...)
-#' putCollection(uuid, ...)
-#' deleteCollection(uuid, ...)
-#' getCollection(uuid, ...)
-#' patchCollection(uuid, ...)
-#' getFile(uuid, ...)
-#' headFile(uuid, ...)
-#' putFile(uuid, ...)
-#' postSearch(replica, ...)
-#' getSubscriptions(replica, ...)
-#' putSubscription(replica, ...)
-#' deleteSubscription(replica, ...)
-#' getSubscription(replica, ...)
+#' getBundlesCheckout(hca, ...)
+#' deleteBundle(hca, ...)
+#' getBundle(hca, ...)
+#' putBundle(hca, ...)
+#' postBundlesCheckout(hca, ...)
+#' putCollection(hca, ...)
+#' deleteCollection(hca, ...)
+#' getCollection(hca, ...)
+#' patchCollection(hca, ...)
+#' getFile(hca, ...)
+#' headFile(hca, ...)
+#' putFile(hca, ...)
+#' postSearch(hca, ...)
+#' getSubscriptions(hca, ...)
+#' putSubscription(hca, ...)
+#' deleteSubscription(hca, ...)
+#' getSubscription(hca, ...)
 #' 
 #' @param add_contents list. List of items to remove from the collection. Items
 #'  must match exactly to be removed. Items not found in the collection are
@@ -511,13 +510,17 @@
 #' @param form_fields list. A collection of static form fields to be supplied in
 #'  the request body, alongside the actual notification payload.
 #'
-#' @param hmac-key-id character(1). An optional key ID to use with
+#' @param hca An HCABrowser object that is the subject of the request.
+#'
+#' @param hmac_key_id character(1). An optional key ID to use with
 #'  "hmac_secret_key".
 #'
 #' @param hmac_secret_key character(1). The key for signing requests to the
 #'  subscriber's URL. The signature will be constructed according to
 #'  https://tools.ietf.org/html/draft-cavage-http-signatures and transmitted in
 #'  the HTTP `Authorization` header.
+#'
+#' @param json character(1) of a json query to be executed.
 #'
 #' @param method The HTTP request method to use when delivering a notification
 #'  to the subscriber.
@@ -543,7 +546,7 @@
 #' @param reason character(1). User-friendly reason for the bundle or timestamp-
 #'   specific bundle deletion.
 #'
-#' @param remove-contents list. List of items to remove from the collection.
+#' @param remove_contents list. List of items to remove from the collection.
 #'  Items must match exactly to be removed. Items not found in the collection
 #'  are ignored.
 #'
@@ -563,6 +566,8 @@
 #' @param uuid character(1). A RFC4122-compliant ID for the bundle.
 #'
 #' @param version character(1). Timestamp of bundle creation in RFC3339.
+#'
+#' @param ... Other arguments
 #'
 #' @examples
 #' hca <- HCABrowser()
@@ -684,7 +689,7 @@ setMethod("getSubscription", "HCABrowser", .getSubscription)
 #'
 #' Fetch the next set of bundles from a Human Cell Atlas Object
 #'
-#' @param hca A Human Cell Atlas object the has further bundles to display
+#' @param result A HCABrowser object that has further bundles to display.
 #'
 #' @return A Human Cell Atlas object that displays the next results
 #'

@@ -42,6 +42,10 @@
 
 #' List supported fields of an HCABrowser object
 #'
+#' @param hca An HCABrowser object.
+#'
+#' @return A tibble indicating fields that can be queried upon.
+#'
 #' @export
 setMethod("fields", "HCABrowser", .fields)
 
@@ -59,6 +63,10 @@ setMethod("fields", "HCABrowser", .fields)
 }
 
 #' List all values for certain fields
+#'
+#' @param x An HCABrowser Object.
+#' @param fields a character vector of fields to display avaiable values for.
+#' @param ... Other arguments.
 #'
 #' @importFrom S4Vectors values
 #' @export
@@ -203,7 +211,8 @@ setMethod("values", "HCABrowser", .values)
 
 #' Filter HCABrowser objects
 #'
-#' @param hca a HCABrowser object to perform a query on.
+#' @param .data an HCABrowser object to perform a query on.
+#' @param .preserve unused.
 #' @param ... further argument to be tranlated into a query to select from.
 #'  These arguments can be passed in two ways, either as a single expression or
 #'  as a series of expressions that are to be seperated by commas.
@@ -223,8 +232,9 @@ setMethod("values", "HCABrowser", .values)
 #' @export
 #' @importFrom dplyr filter
 #' @importFrom rlang quo_get_expr quos
-filter.HCABrowser <- function(hca, ...)
+filter.HCABrowser <- function(.data, ..., .preserve)
 {
+    hca <- .data
     dots <- quos(...)
     es_query <- c(hca@es_query, dots)
     search_term <- .temp(es_query)
@@ -237,11 +247,12 @@ filter.HCABrowser <- function(hca, ...)
 
 #' Select fields from a HCABrowser object
 #'
-#' @param hca a HCABrowser object to perform a selection on
+#' @param .data an HCABrowser object to perform a selection on
 #' @param ... further argument to be tranlated into an expression to select from.
 #'  These arguments can be passed in two ways, either as a character vector or
 #'  as a series of expressions that are the fields that are to be selected
 #'  seperated by commas.
+#' @param .output_format unused.
 #'
 #' @return a HCABrowser object containing the results of the selection.
 #'
@@ -257,8 +268,9 @@ filter.HCABrowser <- function(hca, ...)
 #' @export
 #' @importFrom dplyr select
 #' @importFrom rlang quo_get_expr
-select.HCABrowser <- function(hca, ..., .output_format = c('raw', 'summary'))
+select.HCABrowser <- function(.data, ..., .output_format = c('raw', 'summary'))
 {
+    hca <- .data
     sources <- quos(...)
     output_format <- match.arg(.output_format)
     sources <- c(hca@es_source, sources)

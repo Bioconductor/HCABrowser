@@ -88,10 +88,15 @@ setOldClass('quosures')
 #'
 #' @author Daniel Van Twisk
 #'
+#' @param url character(1) the url of the Human Cell Atlas resource.
+#' @param fields_path character(1) path to the fields json file.
+#' @param per_page numeric(1) numbers of pages to view at a time.
+#'
 #' @examples
 #' hca <- HCABrowser()
 #' hca
 #'
+#' @importFrom methods new
 #' @export
 HCABrowser <-
     function(url='https://dss.data.humancellatlas.org/v1',
@@ -107,7 +112,7 @@ HCABrowser <-
 ProjectBrowser <-
     function(url='https://dss.data.humancellatlas.org/v1')
 {
-    pb <- .ProjectBrowser(url=url, fields_path=fields_path, project_results="tbl_df")
+    pb <- .ProjectBrowser(url=url, project_results="tbl_df")
     pb
 }
              
@@ -170,7 +175,10 @@ setGeneric('link', function(object, ...) standardGeneric('link'))
 #'  Returns a tibble either showing bundles or files based on whichever is
 #'  activated.
 #'
-#' @param object A Human Cell Atlas object
+#' @param object A Human Cell Atlas object.
+#' @param n numeric(1) number of elements to return.
+#' @param all logical(1) whether to return all elements.
+#' @param .output_format unused.
 #'
 #' @return a tibble
 #'
@@ -215,7 +223,7 @@ setGeneric('pullProject', function(hca, ...) standardGeneric('pullProject'))
     projects <- as.character(projects$value)
     res <- lapply(projects, function(x) {
         hca_projects <- hca %>%
-            filter(project_title == x) %>%
+            filter("project_title" == x) %>%
             select(.project_selections)
         hca_res <- results(hca_projects)[1,]
         hca_res[,!grepl("[1-9]$", colnames(hca_res))]
@@ -238,7 +246,7 @@ setMethod('showProject', 'HCABrowser', .showProject)
 .pullProject <-
     function(hca, project, n)
 {
-    hca %>% filter(project_title == project) %>% pullBundles(n)
+    hca %>% filter("project_title" == project) %>% pullBundles(n)
 }
 
 setMethod('pullProject', 'HCABrowser', .pullProject)
@@ -256,7 +264,10 @@ setMethod('pullProject', 'HCABrowser', .pullProject)
 
 #' Activate files or bundles of Human
 #'
-#' @name activate-HCABrowser
+#' @param hca An HCABrowser object
+#' @param what Either "bundles" or "files". Deterimines whether bundles or files
+#'  should be shown.
+#'
 #' @importFrom tidygraph activate
 #' @export
 setMethod('activate', 'HCABrowser', .activate.HCABrowser)
@@ -398,7 +409,7 @@ setMethod('pullFiles', 'HCABrowser', .pullFiles)
 .showBundles <- function(hca, bundle_fqids)
 {
     bundle_fqids <- vapply(strsplit(bundle_fqids, '[.]'), function(x) { x[1] }, character(1))
-    hca %>% filter(uuid %in% bundle_fqids)
+    hca %>% filter("uuid" %in% bundle_fqids)
     #hca %>% downloadHCA() %>% filter(bundle_fqid %in% bundle_fqids)
 }
 
@@ -430,6 +441,7 @@ setMethod('showBundles', 'HCABrowser', .showBundles)
 }
 
 #' @export
+#' @importFrom methods show
 setMethod('show', 'SearchResult', .show_SearchResult)
 
 .show_HCABrowser <- function(object)
@@ -457,5 +469,6 @@ setMethod('show', 'SearchResult', .show_SearchResult)
     print(results(object))
 }
 
+#' @export
 setMethod('show', 'HCABrowser', .show_HCABrowser)
 
