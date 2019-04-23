@@ -154,7 +154,7 @@ hca
 
 ## Querying the HCABrowser
 
-To show which fieldss are available to query, use the `supportedFilters()` method.
+To show which fields are available to query, use the `supportedFilters()` method.
 
 ```{r fields}
 hca <- HCABrowser()
