@@ -3,7 +3,7 @@
 \docType{methods}
 \name{activate,HCABrowser-method}
 \alias{activate,HCABrowser-method}
-\title{Activate files or bundles of Human}
+\title{Activate files or bundles of HCABrowser Object}
 \usage{
 \S4method{activate}{HCABrowser}(hca, what = c("bundles", "files"))
 }
@@ -14,5 +14,5 @@
 should be shown.}
 }
 \description{
-Activate files or bundles of Human
+Activate files or bundles of HCABrowser Object
 }

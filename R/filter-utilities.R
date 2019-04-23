@@ -220,13 +220,14 @@ setMethod("values", "HCABrowser", .values)
 #' @return a HCABrowser object containing the resulting query.
 #'
 #' @examples
-#'
+#' \dontrun{
 #' hca <- HCABrowser()
 #' hca2 <- hca %>% filter()
 #' hca2
 #'
 #' hca3 <- hca %>% filter()
 #' hca3
+#' }
 #'
 #'
 #' @export
@@ -257,14 +258,14 @@ filter.HCABrowser <- function(.data, ..., .preserve)
 #' @return a HCABrowser object containing the results of the selection.
 #'
 #' @examples
-#'
+#' \dontrun{
 #' hca <- HCABrowser()
 #' hca2 <- hca %>% select(paired_end)
 #' hca2
 #'
 #' hca3 <- hca %>% select(c('organ.text', 'paired_end'))
 #' hca3
-#'
+#' }
 #' @export
 #' @importFrom dplyr select
 #' @importFrom rlang quo_get_expr

@@ -2,7 +2,7 @@
 context("HCA-API")
 ################################################################################
 
-hca <- HumanCellAtlas()
+#hca <- HumanCellAtlas()
 
 test_that("getBundlesCheckout", {
     
@@ -53,7 +53,7 @@ test_that("putFile", {
 })
 
 test_that("postSearch", {
-    hca <- HumanCellAtlas()
+#    hca <- HumanCellAtlas()
 
     es_query <- list(
         query = list(

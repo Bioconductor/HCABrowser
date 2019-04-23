@@ -19,8 +19,8 @@ character(1) of bundle fqids
 Obtain bunlde fqids from a HCABrowser object
 }
 \examples{
-
+\dontrun{
 hca <- HCABrowser()
 hca <- hca \%>\% pullBundles
-
+}
 }

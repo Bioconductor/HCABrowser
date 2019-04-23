@@ -19,4 +19,5 @@ setGeneric("getSubscription", function(hca, ...) standardGeneric("getSubscriptio
 
 setGeneric("nextResults", function(result, ...) standardGeneric("nextResults"))
 
+#' @export
 setGeneric("fields", function(hca, ...) standardGeneric("fields"))

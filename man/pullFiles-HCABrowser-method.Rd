@@ -19,8 +19,8 @@ character(1) of
 Obtain file uuids from a HCABrowser object
 }
 \examples{
-
+\dontrun{
 hca <- HCABrowser()
 hca <- hca \%>\% pullFiles
-
+}
 }

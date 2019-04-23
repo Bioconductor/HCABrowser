@@ -17,11 +17,11 @@ A HCABrowser object with the search reset
 Reset the query of a HCABrowser object to the default query
 }
 \examples{
-
+\dontrun{
 hca <- HCABrowser()
 hca <- hca \%>\% filter(organ.text == brain)
 hca <- hca \%>\% filter(organ.text != brain)
 hca <- hca \%>\% resetEsQuery
 hca
-
+}
 }

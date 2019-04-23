@@ -1,6 +1,5 @@
 #' @importFrom httr oauth_app oauth_endpoints oauth2.0_token
 #' @importFrom googleAuthR gar_auth gar_auto_auth gar_set_client
-###' @export
 
 get_token <- function() {
 #  if(Sys.getenv('HCA_TOKEN') != '')  return(Sys.getenv('GDC_TOKEN'))

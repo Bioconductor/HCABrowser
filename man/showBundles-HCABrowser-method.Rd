@@ -19,9 +19,9 @@ A HCABrowser object displaying the selected bundles
 Obtain all bundles from an hca object using there bundle fqids
 }
 \examples{
-
+\dontrun{
 hca <- HCABrowser()
 hca_bundles <- hca \%>\% pullBundles('')
 hca_bundles
-
+}
 }

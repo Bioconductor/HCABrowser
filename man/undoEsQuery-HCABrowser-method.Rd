@@ -19,12 +19,12 @@ A HCABrowser object with n fewer queries
 Undo previous filter queries on a HCABrowser object
 }
 \examples{
-
+\dontrun{
 hca <- HCABrowser()
 hca <- hca \%>\% filter(organ.text == brain)
 hca <- hca \%>\% filter(organ.text == heart)
 hca <- hca \%>\% filter(organ.text != brain)
 hca <- hca \%>\% undoEsquery(n = 2)
 hca
-
+}
 }

@@ -95,7 +95,6 @@ setOldClass('quosures')
 #' @examples
 #' hca <- HCABrowser()
 #' hca
-#'
 #' @importFrom methods new
 #' @export
 HCABrowser <-
@@ -108,11 +107,23 @@ HCABrowser <-
     .init_HCABrowser(hca)
 }
 
+#' The Project Browser Class
+
+#' @description A still tentative class that displays Human Cell Atlas
+#'  information by projects.
+#'
+#' @param url character(1) The url of the Human Cell Atlas.
+#'
+#' @author Daniel Van Twisk
+#'
+#' @examples
+#' pb <- ProjectBrowser()
+#' pb
 #' @export
 ProjectBrowser <-
     function(url='https://dss.data.humancellatlas.org/v1')
 {
-    pb <- .ProjectBrowser(url=url, project_results="tbl_df")
+    pb <- .ProjectBrowser(url=url, project_results=tibble())
     pb
 }
              
@@ -262,7 +273,7 @@ setMethod('pullProject', 'HCABrowser', .pullProject)
     hca
 }
 
-#' Activate files or bundles of Human
+#' Activate files or bundles of HCABrowser Object
 #'
 #' @param hca An HCABrowser object
 #' @param what Either "bundles" or "files". Deterimines whether bundles or files
@@ -291,11 +302,11 @@ setMethod('activate', 'HCABrowser', .activate.HCABrowser)
 #' @return a HCABrowser with updated per_page value
 #'
 #' @examples
-#'
+#'\dontrun{
 #' hca <- HCABrowser()
 #' hca <- per_page(hca, 5)
 #' hca
-#'
+#'}
 #' @importFrom utils head
 #' @export
 setMethod('per_page', 'HCABrowser', .set_per_page)
@@ -322,14 +333,14 @@ setMethod('per_page', 'HCABrowser', .set_per_page)
 #' @return A HCABrowser object with n fewer queries
 #'
 #' @examples
-#'
+#'\dontrun{
 #' hca <- HCABrowser()
 #' hca <- hca %>% filter(organ.text == brain)
 #' hca <- hca %>% filter(organ.text == heart)
 #' hca <- hca %>% filter(organ.text != brain)
 #' hca <- hca %>% undoEsquery(n = 2)
 #' hca
-#'
+#'}
 #' @export
 setMethod('undoEsQuery', 'HCABrowser', .undo_esquery)
 
@@ -349,13 +360,13 @@ setMethod('undoEsQuery', 'HCABrowser', .undo_esquery)
 #' @return A HCABrowser object with the search reset
 #'
 #' @examples
-#'
+#'\dontrun{
 #' hca <- HCABrowser()
 #' hca <- hca %>% filter(organ.text == brain)
 #' hca <- hca %>% filter(organ.text != brain)
 #' hca <- hca %>% resetEsQuery
 #' hca
-#' 
+#'}
 #' @importFrom dplyr pull
 #' @export
 setMethod('resetEsQuery', 'HCABrowser', .reset_esquery)
@@ -374,10 +385,10 @@ setMethod('resetEsQuery', 'HCABrowser', .reset_esquery)
 #' @return character(1) of bundle fqids
 #'
 #' @examples
-#'
+#'\dontrun{
 #' hca <- HCABrowser()
 #' hca <- hca %>% pullBundles
-#'
+#'}
 #' @export
 setMethod('pullBundles', 'HCABrowser', .pullBundles)
 
@@ -399,10 +410,10 @@ setMethod('pullBundles', 'HCABrowser', .pullBundles)
 #' @return character(1) of 
 #'
 #' @examples
-#'
+#'\dontrun{
 #' hca <- HCABrowser()
 #' hca <- hca %>% pullFiles
-#'
+#'}
 #' @export
 setMethod('pullFiles', 'HCABrowser', .pullFiles)
 
@@ -421,11 +432,11 @@ setMethod('pullFiles', 'HCABrowser', .pullFiles)
 #' @return A HCABrowser object displaying the selected bundles
 #'
 #' @examples
-#'
+#'\dontrun{
 #' hca <- HCABrowser()
 #' hca_bundles <- hca %>% pullBundles('')
 #' hca_bundles
-#'
+#'}
 #' @export
 setMethod('showBundles', 'HCABrowser', .showBundles)
 

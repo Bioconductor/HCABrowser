@@ -24,12 +24,12 @@ a HCABrowser object containing the results of the selection.
 Select fields from a HCABrowser object
 }
 \examples{
-
+\dontrun{
 hca <- HCABrowser()
 hca2 <- hca \%>\% select(paired_end)
 hca2
 
 hca3 <- hca \%>\% select(c('organ.text', 'paired_end'))
 hca3
-
+}
 }

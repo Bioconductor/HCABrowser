@@ -21,7 +21,6 @@ The HCABrowser Class
 \examples{
 hca <- HCABrowser()
 hca
-
 }
 \author{
 Daniel Van Twisk

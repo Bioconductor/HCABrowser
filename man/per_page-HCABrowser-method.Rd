@@ -19,9 +19,9 @@ a HCABrowser with updated per_page value
 note that no more than 10 pages can be displayed at once
 }
 \examples{
-
+\dontrun{
 hca <- HCABrowser()
 hca <- per_page(hca, 5)
 hca
-
+}
 }
