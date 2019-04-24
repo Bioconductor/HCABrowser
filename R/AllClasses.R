@@ -20,7 +20,15 @@ setOldClass('tbl_df')
 
 setOldClass('quosure')
 setOldClass('quosures')
-#' @export
+
+#' The HCABrowser Class
+#'
+#' @author Daniel Van Twisk
+#'
+#' @param url character(1) the url of the Human Cell Atlas resource.
+#' @param fields_path character(1) path to the fields json file.
+#' @param per_page numeric(1) numbers of pages to view at a time.
+#' @exportClass HCABrowser
 .HCABrowser <- setClass("HCABrowser",
     slots = c(
         activated = "character",
@@ -35,7 +43,16 @@ setOldClass('quosures')
     )
 )
 
-#' @export
+#' The Project Browser Class
+#'
+#' @description A still tentative class that displays Human Cell Atlas
+#'  information by projects.
+#'
+#' @param url character(1) The url of the Human Cell Atlas.
+#'
+#' @author Daniel Van Twisk
+#'
+#' @exportClass ProjectBrowser
 .ProjectBrowser <- setClass("ProjectBrowser",
     slots = c(
         url = "character",
@@ -108,7 +125,7 @@ HCABrowser <-
 }
 
 #' The Project Browser Class
-
+#'
 #' @description A still tentative class that displays Human Cell Atlas
 #'  information by projects.
 #'
@@ -132,7 +149,7 @@ ProjectBrowser <-
 .last_hit <- function(object) object@last_hit
 .total_hits <- function(object) object@total_hits
 .es_query <- function(object) object@es_query
-.results <- function(object) object@results
+.priv_results <- function(object) object@results
 .link <- function(object) object@link
 
 setGeneric('first_hit', function(object, ...) standardGeneric('first_hit'))
@@ -201,9 +218,16 @@ setMethod('first_hit', 'SearchResult', .first_hit)
 setMethod('last_hit', 'SearchResult', .last_hit)
 setMethod('total_hits', 'SearchResult', .total_hits)
 setMethod('es_query', 'SearchResult', .es_query)
-setMethod('results', 'SearchResult', .results)
+
+#' Get results of SearchResult object
+#'
+#' @param object A Searchresult to obtain the result slot value from
+#'
+#' @export
+setMethod('results', 'SearchResult', .priv_results)
 setMethod('link', 'SearchResult', .link)
 
+#' @export
 setGeneric('undoEsQuery', function(hca, ...) standardGeneric('undoEsQuery'))
 setGeneric('resetEsQuery', function(hca, ...) standardGeneric('resetEsQuery'))
 
@@ -308,7 +332,7 @@ setMethod('activate', 'HCABrowser', .activate.HCABrowser)
 #' hca
 #'}
 #' @importFrom utils head
-#' @export
+#' @exportMethod per_page
 setMethod('per_page', 'HCABrowser', .set_per_page)
 
 .undo_esquery <-
@@ -341,7 +365,7 @@ setMethod('per_page', 'HCABrowser', .set_per_page)
 #' hca <- hca %>% undoEsquery(n = 2)
 #' hca
 #'}
-#' @export
+#' @exportMethod undoEsQuery
 setMethod('undoEsQuery', 'HCABrowser', .undo_esquery)
 
 .reset_esquery <-
@@ -437,7 +461,7 @@ setMethod('pullFiles', 'HCABrowser', .pullFiles)
 #' hca_bundles <- hca %>% pullBundles('')
 #' hca_bundles
 #'}
-#' @export
+#' @exportMethod showBundles
 setMethod('showBundles', 'HCABrowser', .showBundles)
 
 .show_SearchResult <- function(object)
@@ -451,8 +475,12 @@ setMethod('showBundles', 'HCABrowser', .showBundles)
     print(results(object))
 }
 
-#' @export
+#' Show Search Result
+#'
+#' @param object a SearchResult object to show
+#'
 #' @importFrom methods show
+#' @export
 setMethod('show', 'SearchResult', .show_SearchResult)
 
 .show_HCABrowser <- function(object)
@@ -480,6 +508,10 @@ setMethod('show', 'SearchResult', .show_SearchResult)
     print(results(object))
 }
 
+#' Show HCABrowser object
+#'
+#' @param object An HCAbrowser object to show
+#'
 #' @export
 setMethod('show', 'HCABrowser', .show_HCABrowser)
 

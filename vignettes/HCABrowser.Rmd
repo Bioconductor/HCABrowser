@@ -19,7 +19,8 @@ abstract: >
 vignette: >
   %\VignetteIndexEntry{Introduction to Accessing the HCABrowser using the
         HCABrowser package}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{HCABrowser}
   %\VignetteEncoding{UTF-8}
 ---
 

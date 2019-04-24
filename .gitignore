@@ -5,3 +5,5 @@
 bq.oauth
 .Rbuildignore
 
+doc
+Meta
