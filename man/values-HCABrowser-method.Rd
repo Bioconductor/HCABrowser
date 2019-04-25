@@ -14,6 +14,17 @@
 
 \item{...}{Other arguments.}
 }
+\value{
+a list of possible values for a filter
+}
 \description{
 List all values for certain fields
+}
+\examples{
+hca <- HCABrowser()
+vals <- hca \%>\% values
+vals
+vals2 <- hca \%>\% values('organ.text')
+vals2
+
 }

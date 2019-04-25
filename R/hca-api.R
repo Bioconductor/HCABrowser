@@ -64,7 +64,7 @@
                 "\n  'bfc' contains duplicate record names",
                     "\n      url: ", url,
                     "\n      bfccache(): ", bfccache(dbpath),
-                    "\n      rname: ", bfc(dbpath)$rname
+                    "\n      rname: ", bfccache(dbpath)$rname
             )
     }
 }
@@ -569,6 +569,8 @@
 #'
 #' @param ... Other arguments
 #'
+#' @return an HCABrowser object
+#'
 #' @examples
 #' hca <- HCABrowser()
 #' #addmore
@@ -694,6 +696,10 @@ setMethod("getSubscription", "HCABrowser", .getSubscription)
 #' @return A Human Cell Atlas object that displays the next results
 #'
 #' @author Daniel Van Twisk
+#'
+#' @name nextResults
+#' @aliases nextResults,HCABrowser-method
+#' @docType methods
 #' 
 #' @examples
 #'

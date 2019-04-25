@@ -10,6 +10,9 @@
 \arguments{
 \item{object}{a SearchResult object to show}
 }
+\value{
+outputs a text represntation of the object
+}
 \description{
 Show Search Result
 }

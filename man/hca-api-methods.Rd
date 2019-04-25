@@ -245,6 +245,9 @@ property is ignored unless `encoding` is `multipart/form-data`.}
 
 \item{...}{Other arguments}
 }
+\value{
+an HCABrowser object
+}
 \description{
 Methods to access the Human Cell Atlas's Data Coordination Platform (HCA DCP)
 by means of the platform's REST API.

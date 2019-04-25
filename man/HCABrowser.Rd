@@ -15,6 +15,9 @@ HCABrowser(url = "https://dss.data.humancellatlas.org/v1",
 
 \item{per_page}{numeric(1) numbers of pages to view at a time.}
 }
+\value{
+an HCABrowser object
+}
 \description{
 The HCABrowser Class
 }

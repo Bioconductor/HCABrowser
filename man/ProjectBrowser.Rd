@@ -9,6 +9,9 @@ ProjectBrowser(url = "https://dss.data.humancellatlas.org/v1")
 \arguments{
 \item{url}{character(1) The url of the Human Cell Atlas.}
 }
+\value{
+a ProjectBrowser object
+}
 \description{
 A still tentative class that displays Human Cell Atlas
  information by projects.

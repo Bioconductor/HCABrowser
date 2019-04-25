@@ -22,14 +22,8 @@ a HCABrowser object containing the resulting query.
 Filter HCABrowser objects
 }
 \examples{
-\dontrun{
 hca <- HCABrowser()
-hca2 <- hca \%>\% filter()
+hca2 <- hca \%>\% filter(organ.text == "brain")
 hca2
-
-hca3 <- hca \%>\% filter()
-hca3
-}
-
 
 }

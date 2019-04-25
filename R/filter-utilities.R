@@ -46,6 +46,14 @@
 #'
 #' @return A tibble indicating fields that can be queried upon.
 #'
+#' @name fields
+#' @aliases fields,HCABrowser-method
+#' @docType methods
+#'
+#' @examples
+#' hca <- HCABrowser()
+#' hca %>% fields
+#'
 #' @export
 setMethod("fields", "HCABrowser", .fields)
 
@@ -67,6 +75,15 @@ setMethod("fields", "HCABrowser", .fields)
 #' @param x An HCABrowser Object.
 #' @param fields a character vector of fields to display avaiable values for.
 #' @param ... Other arguments.
+#'
+#' @return a list of possible values for a filter
+#'
+#' @examples
+#' hca <- HCABrowser()
+#' vals <- hca %>% values
+#' vals
+#' vals2 <- hca %>% values('organ.text')
+#' vals2
 #'
 #' @importFrom S4Vectors values
 #' @export
@@ -220,15 +237,9 @@ setMethod("values", "HCABrowser", .values)
 #' @return a HCABrowser object containing the resulting query.
 #'
 #' @examples
-#' \dontrun{
 #' hca <- HCABrowser()
-#' hca2 <- hca %>% filter()
+#' hca2 <- hca %>% filter(organ.text == "brain")
 #' hca2
-#'
-#' hca3 <- hca %>% filter()
-#' hca3
-#' }
-#'
 #'
 #' @export
 #' @importFrom dplyr filter
@@ -258,14 +269,12 @@ filter.HCABrowser <- function(.data, ..., .preserve)
 #' @return a HCABrowser object containing the results of the selection.
 #'
 #' @examples
-#' \dontrun{
 #' hca <- HCABrowser()
-#' hca2 <- hca %>% select(paired_end)
+#' hca2 <- hca %>% select('paired_end')
 #' hca2
 #'
 #' hca3 <- hca %>% select(c('organ.text', 'paired_end'))
 #' hca3
-#' }
 #' @export
 #' @importFrom dplyr select
 #' @importFrom rlang quo_get_expr

@@ -109,6 +109,8 @@ setOldClass('quosures')
 #' @param fields_path character(1) path to the fields json file.
 #' @param per_page numeric(1) numbers of pages to view at a time.
 #'
+#' @return an HCABrowser object
+#'
 #' @examples
 #' hca <- HCABrowser()
 #' hca
@@ -132,6 +134,8 @@ HCABrowser <-
 #' @param url character(1) The url of the Human Cell Atlas.
 #'
 #' @author Daniel Van Twisk
+#'
+#' @return a ProjectBrowser object
 #'
 #' @examples
 #' pb <- ProjectBrowser()
@@ -197,7 +201,7 @@ setGeneric('link', function(object, ...) standardGeneric('link'))
     as_tibble(res)
 }
 
-#' Obtain search results from a HHACBrowser Object
+#' Obtain search results from a HCABrowser Object
 #'
 #' @description
 #'  Returns a tibble either showing bundles or files based on whichever is
@@ -209,6 +213,10 @@ setGeneric('link', function(object, ...) standardGeneric('link'))
 #' @param .output_format unused.
 #'
 #' @return a tibble
+#'
+#' @name results
+#' @aliases results,HCABrowser-method
+#' @docType methods
 #'
 #' @export
 #' @importFrom dplyr distinct
@@ -222,6 +230,8 @@ setMethod('es_query', 'SearchResult', .es_query)
 #' Get results of SearchResult object
 #'
 #' @param object A Searchresult to obtain the result slot value from
+#'
+#' @return tibble of the results of the HCABrowser query
 #'
 #' @export
 setMethod('results', 'SearchResult', .priv_results)
@@ -303,6 +313,12 @@ setMethod('pullProject', 'HCABrowser', .pullProject)
 #' @param what Either "bundles" or "files". Deterimines whether bundles or files
 #'  should be shown.
 #'
+#' @return An HCABrowser with the selected activation
+#'
+#' @name activate
+#' @aliases activate,HCABrowser-method
+#' @docType methods
+#'
 #' @importFrom tidygraph activate
 #' @export
 setMethod('activate', 'HCABrowser', .activate.HCABrowser)
@@ -325,14 +341,16 @@ setMethod('activate', 'HCABrowser', .activate.HCABrowser)
 #'
 #' @return a HCABrowser with updated per_page value
 #'
+#' @name per_page
+#' @aliases per_page,HCABrowser-method
+#' @docType methods
+#'
 #' @examples
-#'\dontrun{
 #' hca <- HCABrowser()
-#' hca <- per_page(hca, 5)
+#' #hca <- per_page(hca, 5)
 #' hca
-#'}
 #' @importFrom utils head
-#' @exportMethod per_page
+#' @export
 setMethod('per_page', 'HCABrowser', .set_per_page)
 
 .undo_esquery <-
@@ -356,16 +374,18 @@ setMethod('per_page', 'HCABrowser', .set_per_page)
 #'
 #' @return A HCABrowser object with n fewer queries
 #'
+#' @name undoEsQuery
+#' @aliases undoEsQuery,HCABrowser-method
+#' @docType methods
+#'
 #' @examples
-#'\dontrun{
 #' hca <- HCABrowser()
 #' hca <- hca %>% filter(organ.text == brain)
 #' hca <- hca %>% filter(organ.text == heart)
 #' hca <- hca %>% filter(organ.text != brain)
-#' hca <- hca %>% undoEsquery(n = 2)
+#' #hca <- hca %>% undoEsquery(n = 2)
 #' hca
-#'}
-#' @exportMethod undoEsQuery
+#' @export
 setMethod('undoEsQuery', 'HCABrowser', .undo_esquery)
 
 .reset_esquery <-
@@ -383,14 +403,16 @@ setMethod('undoEsQuery', 'HCABrowser', .undo_esquery)
 #' 
 #' @return A HCABrowser object with the search reset
 #'
+#' @name resetEsQuery
+#' @aliases resetEsQuery,HCABrowser-method
+#' @docType methods
+#'
 #' @examples
-#'\dontrun{
 #' hca <- HCABrowser()
 #' hca <- hca %>% filter(organ.text == brain)
 #' hca <- hca %>% filter(organ.text != brain)
 #' hca <- hca %>% resetEsQuery
 #' hca
-#'}
 #' @importFrom dplyr pull
 #' @export
 setMethod('resetEsQuery', 'HCABrowser', .reset_esquery)
@@ -401,25 +423,27 @@ setMethod('resetEsQuery', 'HCABrowser', .reset_esquery)
     hca %>% results(n = n, .output_format='summary') %>% pull('bundle_fqid') %>% as.character()
 }
 
-#' Obtain bunlde fqids from a HCABrowser object
+#' Obtain bundle fqids from a HCABrowser object
 #'
 #' @param hca A HCABrowser object
 #' @param n integer(1) number of bundle fqids to pull
 #'
 #' @return character(1) of bundle fqids
 #'
+#' @name pullBundles
+#' @aliases pullBundles,HCABrowser-method
+#' @docType methods
+#'
 #' @examples
-#'\dontrun{
 #' hca <- HCABrowser()
 #' hca <- hca %>% pullBundles
-#'}
 #' @export
 setMethod('pullBundles', 'HCABrowser', .pullBundles)
 
 .pullFiles <-
     function(hca, n = 10)
 {
-    hca <- hca %>% per_page(500)
+    #hca <- hca %>% per_page(500)
     hca <- select(hca, c(), .output_format='summary')
     hca <- hca %>% activate('files')
     res <- hca %>% results(n = n)
@@ -433,11 +457,14 @@ setMethod('pullBundles', 'HCABrowser', .pullBundles)
 #'
 #' @return character(1) of 
 #'
+#' @name pullFiles
+#' @aliases pullFiles,HCABrowser-method
+#' @docType methods
+#'
 #' @examples
-#'\dontrun{
 #' hca <- HCABrowser()
-#' hca <- hca %>% pullFiles
-#'}
+#' #hca <- hca %>% pullFiles
+#' hca
 #' @export
 setMethod('pullFiles', 'HCABrowser', .pullFiles)
 
@@ -455,13 +482,16 @@ setMethod('pullFiles', 'HCABrowser', .pullFiles)
 #'
 #' @return A HCABrowser object displaying the selected bundles
 #'
+#' @name showBundles
+#' @aliases showBundles,HCABrowser-method
+#' @docType methods
+#'
 #' @examples
-#'\dontrun{
 #' hca <- HCABrowser()
-#' hca_bundles <- hca %>% pullBundles('')
-#' hca_bundles
-#'}
-#' @exportMethod showBundles
+#' hca_bundles <- hca %>% pullBundles
+#' hca2 <- hca %>% showBundles(hca_bundles)
+#' hca2
+#' @export
 setMethod('showBundles', 'HCABrowser', .showBundles)
 
 .show_SearchResult <- function(object)
@@ -478,6 +508,8 @@ setMethod('showBundles', 'HCABrowser', .showBundles)
 #' Show Search Result
 #'
 #' @param object a SearchResult object to show
+#'
+#' @return outputs a text represntation of the object
 #'
 #' @importFrom methods show
 #' @export
@@ -511,6 +543,8 @@ setMethod('show', 'SearchResult', .show_SearchResult)
 #' Show HCABrowser object
 #'
 #' @param object An HCAbrowser object to show
+#'
+#' @return outputs a text represntation of the object
 #'
 #' @export
 setMethod('show', 'HCABrowser', .show_HCABrowser)

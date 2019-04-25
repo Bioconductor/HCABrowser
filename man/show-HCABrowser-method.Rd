@@ -10,6 +10,9 @@
 \arguments{
 \item{object}{An HCAbrowser object to show}
 }
+\value{
+outputs a text represntation of the object
+}
 \description{
 Show HCABrowser object
 }

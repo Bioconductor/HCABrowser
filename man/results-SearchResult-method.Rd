@@ -10,6 +10,9 @@
 \arguments{
 \item{object}{A Searchresult to obtain the result slot value from}
 }
+\value{
+tibble of the results of the HCABrowser query
+}
 \description{
 Get results of SearchResult object
 }
