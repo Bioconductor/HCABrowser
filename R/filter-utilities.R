@@ -257,6 +257,15 @@ filter.HCABrowser <- function(.data, ..., .preserve)
     select(hca, selected)
 }
 
+#' @export
+filter.ProjectBrowser <- function(.data, ..., .preserve)
+{
+    if (length(list(...)) == 0)
+        return('{}')
+    hca <- .data
+    dots <- quos(...)
+}
+
 #' Select fields from a HCABrowser object
 #'
 #' @param .data an HCABrowser object to perform a selection on

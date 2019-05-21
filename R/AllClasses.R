@@ -57,7 +57,7 @@ setOldClass('quosures')
     slots = c(
         url = "character",
         project_results = "tbl_df"
-   )
+    )
 )
 
 #' @importFrom dplyr mutate_if
