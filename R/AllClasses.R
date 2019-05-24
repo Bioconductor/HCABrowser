@@ -5,6 +5,12 @@
 #    postSearch(hca, 'aws', 'raw', per_page=10)
 }
 
+.init_ProjectBrowser <- function(project)
+{
+    res <- filter(project, c())
+    projectGet(project, res)
+}
+
 #' @importFrom tibble tibble
 #' @importFrom dplyr %>%
 setOldClass('tbl_df')
@@ -56,7 +62,10 @@ setOldClass('quosures')
 .ProjectBrowser <- setClass("ProjectBrowser",
     slots = c(
         url = "character",
-        project_results = "tbl_df"
+        project_results = "tbl_df",
+        es_query = "quosures",
+        es_source = "quosures",
+        per_page = "numeric"
     )
 )
 
@@ -142,10 +151,12 @@ HCABrowser <-
 #' pb
 #' @export
 ProjectBrowser <-
-    function(url='https://dss.data.humancellatlas.org/v1')
+    function(url='https://service.explore.data.humancellatlas.org/repository/projects',
+             per_page = 15)
 {
-    pb <- .ProjectBrowser(url=url, project_results=tibble())
-    pb
+    project <- .ProjectBrowser(url=url, per_page = per_page, project_results=tibble(),
+                               es_query = quos(), es_source=quos())
+    .init_ProjectBrowser(project)
 }
              
 

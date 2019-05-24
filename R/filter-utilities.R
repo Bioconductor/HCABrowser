@@ -260,10 +260,16 @@ filter.HCABrowser <- function(.data, ..., .preserve)
 #' @export
 filter.ProjectBrowser <- function(.data, ..., .preserve)
 {
-    if (length(list(...)) == 0)
-        return('{}')
-    hca <- .data
-    dots <- quos(...)
+    if (length(list(...)) == 0) {
+        ret <- paste0('filter=', curl::curl_escape('{}'))
+        ret
+    }
+    else {
+        #hca <- .data
+        #dots <- quos(...)
+        ret <- paste0('filter=', curl::curl_escape('{}'))
+        ret
+    }
 }
 
 #' Select fields from a HCABrowser object

@@ -22,6 +22,12 @@
     res
 }
 
+.parse_project_get <- function(results)
+{
+#    browser()
+#    lapply(results[[1]], 
+}
+
 #' @importFrom plyr rbind.fill
 #' @importFrom stringr str_sub
 #' @importFrom tidyr crossing
