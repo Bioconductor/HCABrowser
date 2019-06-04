@@ -24,8 +24,14 @@
 
 .parse_project_get <- function(results)
 {
-#    browser()
-#    lapply(results[[1]], 
+    browser()
+    upfront <- lapply(results[[1]], function(x) {
+        temp <- x
+        temp["fileTypeSummaries"] <- NULL
+        temp["projectSummary"] <- NULL
+        unlist(temp)
+    })
+    upfront
 }
 
 #' @importFrom plyr rbind.fill
