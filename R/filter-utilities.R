@@ -89,6 +89,33 @@ setMethod("fields", "HCABrowser", .fields)
 #' @export
 setMethod("values", "HCABrowser", .values)
 
+.binary_op_project <- function(sep)
+{
+    force(sep)
+    function(e1, e2) {
+        field <- as.character(substitute(e1))
+        
+        value <- try({
+            e2
+        }, silent = TRUE)
+        if (inherits(value, "try-error")) {
+            value <- as.character(substitute(e2))
+            if(value[1] == 'c')
+                value <- value[-1]
+            value
+        }
+
+        fun <- "is"
+
+        leaf <- list(value)
+
+        names(leaf) <- field
+        leaf <- list(leaf)
+        names(leaf) <- fun
+        leaf
+    }
+}
+
 .is_bool_connector <- function(x)
 {
     if (length(x) == 0)
@@ -380,6 +407,9 @@ select.HCABrowser <- function(.data, ..., .output_format = c('raw', 'summary'))
 ## combine filters
 .LOG_OP_REG$`&` <- .combine_op("&")
 .LOG_OP_REG$`|` <- .combine_op("|")
+
+.LOG_OP_REG_PROJECT$`==` <- .binary_op_project("==")
+.LOG_OP_REG_PROJECT$`%in%` <- .binary_op_project("==")
 
 `%startsWith%` <- function(e1, e2){}
 `%endsWith%` <- function(e1, e2){}

@@ -29,7 +29,10 @@
         temp <- x
         temp["fileTypeSummaries"] <- NULL
         temp["projectSummary"] <- NULL
-        unlist(temp)
+        temp <- unlist(temp)
+        df <- as.data.frame(matrix(unname(temp), nrow = 1))
+        names(df) <- names(temp)
+        df
     })
     upfront
 }
