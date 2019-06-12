@@ -34,7 +34,8 @@
         names(df) <- names(temp)
         df
     })
-    upfront
+    aa <- as_tibble(mtcars)
+    aa
 }
 
 #' @importFrom plyr rbind.fill

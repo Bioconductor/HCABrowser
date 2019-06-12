@@ -8,7 +8,7 @@
 .init_ProjectBrowser <- function(project)
 {
     res <- filter(project, c())
-    projectGet(project, res)
+    res
 }
 
 #' @importFrom tibble tibble
@@ -65,6 +65,7 @@ setOldClass('quosures')
         project_results = "tbl_df",
         es_query = "quosures",
         es_source = "quosures",
+        search_term = "list",
         per_page = "numeric"
     )
 )

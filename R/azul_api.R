@@ -13,5 +13,6 @@ projectGet <- function(project, filter, per_page=15)
     url <- project@url
     url <- paste0(url, '?', filter, '&size=', per_page, '&sort=projectTitle&order=asc')
     res <- httr::GET(url)
-    .project_content(res)
+    project@project_results <- .project_content(res)
+    project
 }

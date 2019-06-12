@@ -109,10 +109,30 @@ setMethod("values", "HCABrowser", .values)
 
         leaf <- list(value)
 
-        names(leaf) <- field
-        leaf <- list(leaf)
         names(leaf) <- fun
+        leaf <- list(leaf)
+        names(leaf) <- field
         leaf
+    }
+}
+
+.combine_op_project <- function(sep)
+{
+    force(sep)
+    function(e1, e2) {
+        
+        fun <- "should"
+        if (sep == '&')
+            fun <- "filter"
+
+        if(.is_bool_connector(e1))
+            e1 <- list(bool = e1)
+        if(.is_bool_connector(e2))
+            e2 <- list(bool = e2)
+
+        con <- list(list(e1, e2))
+        names(con) <- fun
+        con
     }
 }
 
@@ -225,10 +245,16 @@ setMethod("values", "HCABrowser", .values)
         lapply(x, .get_selections, FALSE)
 }
 
+.project_filter_loop <- function(li, expr)
+{
+    res <- rlang::eval_tidy(expr, data = .LOG_OP_REG_PROJECT)
+    res
+}
+
 #' @importFrom rlang eval_tidy f_rhs f_env
 .hca_filter_loop <- function(li, expr)
 {
-    res <- rlang::eval_tidy(expr, data= .LOG_OP_REG)
+    res <- rlang::eval_tidy(expr, data = .LOG_OP_REG)
     if(length(li) == 0) {
         if(.is_bool_connector(res))
             list(filter=list(list(bool = res)))
@@ -287,15 +313,19 @@ filter.HCABrowser <- function(.data, ..., .preserve)
 #' @export
 filter.ProjectBrowser <- function(.data, ..., .preserve)
 {
-    if (length(list(...)) == 0) {
+    dots = quos(...)
+    if (length(dots) == 0) {
         ret <- paste0('filter=', curl::curl_escape('{}'))
         ret
     }
     else {
-        #hca <- .data
-        #dots <- quos(...)
-        ret <- paste0('filter=', curl::curl_escape('{}'))
-        ret
+        project <- .data
+        es_query <- c(project@es_query)
+        search_term <- Reduce(.project_filter_loop, dots, init = list())
+        search_term <- list(file = search_term)
+        project@search_term <- search_term
+        ret <- paste0('filters=', curl::curl_escape(jsonlite::toJSON(search_term)))
+        projectGet(project, ret)
     }
 }
 
@@ -408,8 +438,10 @@ select.HCABrowser <- function(.data, ..., .output_format = c('raw', 'summary'))
 .LOG_OP_REG$`&` <- .combine_op("&")
 .LOG_OP_REG$`|` <- .combine_op("|")
 
+.LOG_OP_REG_PROJECT <- list()
 .LOG_OP_REG_PROJECT$`==` <- .binary_op_project("==")
 .LOG_OP_REG_PROJECT$`%in%` <- .binary_op_project("==")
+.LOG_OP_REG_PROJECT$`&` <- .combine_op_project("&")
 
 `%startsWith%` <- function(e1, e2){}
 `%endsWith%` <- function(e1, e2){}
