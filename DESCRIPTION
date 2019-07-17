@@ -5,12 +5,12 @@ Version: 0.99.6
 Authors@R: c(
     person(
         "Daniel", "Van Twisk",
-        email = "Daniel.VanTwisk@RoswellPark.com",
+        email = "Daniel.VanTwisk@RoswellPark.org",
         role = "aut"
     ),
     person(
         "Martin", "Morgan",
-        email = "Martin.Morgan@RoswellPark.com",
+        email = "Martin.Morgan@RoswellPark.org",
         role = "aut"
     ),
     person(

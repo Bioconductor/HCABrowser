@@ -10,6 +10,7 @@
 
 projectGet <- function(project, filter, per_page=15)
 {
+    browser()
     url <- project@url
     url <- paste0(url, '?', filter, '&size=', per_page, '&sort=projectTitle&order=asc')
     res <- httr::GET(url)
