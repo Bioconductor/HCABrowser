@@ -57,6 +57,14 @@
 #' @export
 setMethod("fields", "HCABrowser", .fields)
 
+.project_fields <- function(hca)
+{
+    names(hca@terms)
+}
+
+#' @export
+setMethod("fields", "ProjectBrowser", .project_fields)
+
 .values <- function(x, fields=c(), ...)
 {
     hca <- x
@@ -88,6 +96,60 @@ setMethod("fields", "HCABrowser", .fields)
 #' @importFrom S4Vectors values
 #' @export
 setMethod("values", "HCABrowser", .values)
+
+.project_values <- function(x, fields)
+{
+    term <- x@terms
+    field <- term[[fields]]
+    field <- unlist(field)
+    field <- head(field, -3)
+    uu <- matrix(field, nrow = 2)
+    uu <- t(uu)
+    uu <- as.data.frame(uu)
+    names(uu) <- c('value', 'hits')
+    as_tibble(uu)
+}
+
+#' @export
+setMethod("values", "ProjectBrowser", .project_values)
+
+.binary_op_project <- function(sep)
+{
+    force(sep)
+    function(e1, e2) {
+        field <- as.character(substitute(e1))
+        value <- as.character(substitute(e2))
+        
+        fun <- "is"
+
+        leaf <- list(value)
+
+        names(leaf) <- fun
+        leaf <- list(leaf)
+        names(leaf) <- field
+        leaf
+    }
+}
+
+.combine_op_project <- function(sep)
+{
+    force(sep)
+    function(e1, e2) {
+        
+        fun <- "should"
+        if (sep == '&')
+            fun <- "filter"
+
+        if(.is_bool_connector(e1))
+            e1 <- list(bool = e1)
+        if(.is_bool_connector(e2))
+            e2 <- list(bool = e2)
+
+        con <- list(list(e1, e2))
+        names(con) <- fun
+        con
+    }
+}
 
 .is_bool_connector <- function(x)
 {
@@ -201,7 +263,7 @@ setMethod("values", "HCABrowser", .values)
 #' @importFrom rlang eval_tidy f_rhs f_env
 .hca_filter_loop <- function(li, expr)
 {
-    res <- rlang::eval_tidy(expr, data= .LOG_OP_REG)
+    res <- rlang::eval_tidy(expr, data = .LOG_OP_REG)
     if(length(li) == 0) {
         if(.is_bool_connector(res))
             list(filter=list(list(bool = res)))
@@ -255,6 +317,93 @@ filter.HCABrowser <- function(.data, ..., .preserve)
     
     selected <- unlist(.get_selections(search_term))
     select(hca, selected)
+}
+
+.binary_op <- function(sep)
+{
+    force(sep)
+    function(e1, e2) {
+        field <- as.character(substitute(e1))
+
+        value <- try({
+            e2
+        }, silent = TRUE)
+        if (inherits(value, "try-error")) {
+            value <- as.character(substitute(e2))
+            if(value[1] == 'c')
+                value <- value[-1]
+            value
+        }
+
+        fun <- "term"
+
+        if(length(value) > 1)
+            fun <- "terms"
+
+        if(sep %in% .range)
+            fun <- "range"
+
+        if(sep %in% .regexp_ops) {
+            fun <- 'regexp'
+            ## TODO parse regex string to catch protected characters
+            if(sep == 'contains')
+                value <- paste0('.*', value, '.*')
+            if(sep == 'startsWith')
+                value <- paste0(value, '.*')
+            if(sep == 'endsWith')
+                value <- paste0('.*', value)
+        }
+
+        field <- .convert_names_to_filters(NULL, field)
+
+        leaf <- list(value)
+        if(fun == 'range') {
+            names(leaf) <- .range[sep]
+            leaf <- list(leaf)
+        }
+        names(leaf) <- field
+        leaf <- list(leaf)
+        names(leaf) <- fun
+
+        if(sep == "!=")
+            leaf <- list(must_not = leaf)
+
+        leaf
+    }
+}
+
+.project_filter_loop <- function(li, expr)
+{
+    res <- rlang::eval_tidy(expr, data = .LOG_OP_REG_PROJECT)
+    res
+}
+
+.project_temp <- function(dots)
+{
+    res <- Reduce(.project_filter_loop, dots, init = list())
+    res
+}
+
+#' @export
+filter.ProjectBrowser <- function(.data, ..., .preserve)
+{
+    dots = quos(...)
+    if (length(dots) == 0) {
+        project <- .data
+        ret <- paste0('filter=', curl::curl_escape('{}'))
+        project@current_filter <- ret
+        projectGet(project, ret)
+    }
+    else {
+        project <- .data
+        es_query <- c(project@es_query, dots)
+        search_term <- Reduce(.project_filter_loop, es_query, init = list())
+        project@es_query <- es_query
+        project@search_term <- search_term
+        ret <- paste0('filters=', curl::curl_escape(jsonlite::toJSON(search_term)))
+        project@current_filter <- ret
+        projectGet(project, ret)
+    }
 }
 
 #' Select fields from a HCABrowser object
@@ -365,6 +514,11 @@ select.HCABrowser <- function(.data, ..., .output_format = c('raw', 'summary'))
 ## combine filters
 .LOG_OP_REG$`&` <- .combine_op("&")
 .LOG_OP_REG$`|` <- .combine_op("|")
+
+.LOG_OP_REG_PROJECT <- list()
+.LOG_OP_REG_PROJECT$`==` <- .binary_op_project("==")
+.LOG_OP_REG_PROJECT$`%in%` <- .binary_op_project("==")
+.LOG_OP_REG_PROJECT$`&` <- .combine_op_project("&")
 
 `%startsWith%` <- function(e1, e2){}
 `%endsWith%` <- function(e1, e2){}

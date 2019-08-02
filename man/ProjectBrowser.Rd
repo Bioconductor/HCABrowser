@@ -4,7 +4,9 @@
 \alias{ProjectBrowser}
 \title{The Project Browser Class}
 \usage{
-ProjectBrowser(url = "https://dss.data.humancellatlas.org/v1")
+
+  ProjectBrowser(url = "https://service.explore.data.humancellatlas.org/repository/projects",
+  per_page = 15)
 }
 \arguments{
 \item{url}{character(1) The url of the Human Cell Atlas.}

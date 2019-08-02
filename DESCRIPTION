@@ -1,16 +1,16 @@
 Package: HCABrowser
 Type: Package
 Title: Browse the Human Cell Atlas data portal
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: c(
     person(
         "Daniel", "Van Twisk",
-        email = "Daniel.VanTwisk@RoswellPark.com",
+        email = "Daniel.VanTwisk@RoswellPark.org",
         role = "aut"
     ),
     person(
         "Martin", "Morgan",
-        email = "Martin.Morgan@RoswellPark.com",
+        email = "Martin.Morgan@RoswellPark.org",
         role = "aut"
     ),
     person(
