@@ -709,3 +709,4 @@ setMethod("getSubscription", "HCABrowser", .getSubscription)
 #'
 #' @export
 setMethod("nextResults", "HCABrowser", .nextResults_HCABrowser)
+

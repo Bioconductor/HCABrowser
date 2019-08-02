@@ -57,6 +57,14 @@
 #' @export
 setMethod("fields", "HCABrowser", .fields)
 
+.project_fields <- function(hca)
+{
+    names(hca@terms)
+}
+
+#' @export
+setMethod("fields", "ProjectBrowser", .project_fields)
+
 .values <- function(x, fields=c(), ...)
 {
     hca <- x
@@ -89,22 +97,29 @@ setMethod("fields", "HCABrowser", .fields)
 #' @export
 setMethod("values", "HCABrowser", .values)
 
+.project_values <- function(x, fields)
+{
+    term <- x@terms
+    field <- term[[fields]]
+    field <- unlist(field)
+    field <- head(field, -3)
+    uu <- matrix(field, nrow = 2)
+    uu <- t(uu)
+    uu <- as.data.frame(uu)
+    names(uu) <- c('value', 'hits')
+    as_tibble(uu)
+}
+
+#' @export
+setMethod("values", "ProjectBrowser", .project_values)
+
 .binary_op_project <- function(sep)
 {
     force(sep)
     function(e1, e2) {
         field <- as.character(substitute(e1))
+        value <- as.character(substitute(e2))
         
-        value <- try({
-            e2
-        }, silent = TRUE)
-        if (inherits(value, "try-error")) {
-            value <- as.character(substitute(e2))
-            if(value[1] == 'c')
-                value <- value[-1]
-            value
-        }
-
         fun <- "is"
 
         leaf <- list(value)
@@ -245,12 +260,6 @@ setMethod("values", "HCABrowser", .values)
         lapply(x, .get_selections, FALSE)
 }
 
-.project_filter_loop <- function(li, expr)
-{
-    res <- rlang::eval_tidy(expr, data = .LOG_OP_REG_PROJECT)
-    res
-}
-
 #' @importFrom rlang eval_tidy f_rhs f_env
 .hca_filter_loop <- function(li, expr)
 {
@@ -310,21 +319,89 @@ filter.HCABrowser <- function(.data, ..., .preserve)
     select(hca, selected)
 }
 
+.binary_op <- function(sep)
+{
+    force(sep)
+    function(e1, e2) {
+        field <- as.character(substitute(e1))
+
+        value <- try({
+            e2
+        }, silent = TRUE)
+        if (inherits(value, "try-error")) {
+            value <- as.character(substitute(e2))
+            if(value[1] == 'c')
+                value <- value[-1]
+            value
+        }
+
+        fun <- "term"
+
+        if(length(value) > 1)
+            fun <- "terms"
+
+        if(sep %in% .range)
+            fun <- "range"
+
+        if(sep %in% .regexp_ops) {
+            fun <- 'regexp'
+            ## TODO parse regex string to catch protected characters
+            if(sep == 'contains')
+                value <- paste0('.*', value, '.*')
+            if(sep == 'startsWith')
+                value <- paste0(value, '.*')
+            if(sep == 'endsWith')
+                value <- paste0('.*', value)
+        }
+
+        field <- .convert_names_to_filters(NULL, field)
+
+        leaf <- list(value)
+        if(fun == 'range') {
+            names(leaf) <- .range[sep]
+            leaf <- list(leaf)
+        }
+        names(leaf) <- field
+        leaf <- list(leaf)
+        names(leaf) <- fun
+
+        if(sep == "!=")
+            leaf <- list(must_not = leaf)
+
+        leaf
+    }
+}
+
+.project_filter_loop <- function(li, expr)
+{
+    res <- rlang::eval_tidy(expr, data = .LOG_OP_REG_PROJECT)
+    res
+}
+
+.project_temp <- function(dots)
+{
+    res <- Reduce(.project_filter_loop, dots, init = list())
+    res
+}
+
 #' @export
 filter.ProjectBrowser <- function(.data, ..., .preserve)
 {
     dots = quos(...)
     if (length(dots) == 0) {
+        project <- .data
         ret <- paste0('filter=', curl::curl_escape('{}'))
-        ret
+        project@current_filter <- ret
+        projectGet(project, ret)
     }
     else {
         project <- .data
-        es_query <- c(project@es_query)
-        search_term <- Reduce(.project_filter_loop, dots, init = list())
-        search_term <- list(file = search_term)
+        es_query <- c(project@es_query, dots)
+        search_term <- Reduce(.project_filter_loop, es_query, init = list())
+        project@es_query <- es_query
         project@search_term <- search_term
         ret <- paste0('filters=', curl::curl_escape(jsonlite::toJSON(search_term)))
+        project@current_filter <- ret
         projectGet(project, ret)
     }
 }

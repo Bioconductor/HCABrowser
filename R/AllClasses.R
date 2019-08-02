@@ -7,7 +7,7 @@
 
 .init_ProjectBrowser <- function(project)
 {
-    res <- filter(project, c())
+    res <- filter(project)
     res
 }
 
@@ -62,11 +62,16 @@ setOldClass('quosures')
 .ProjectBrowser <- setClass("ProjectBrowser",
     slots = c(
         url = "character",
-        project_results = "tbl_df",
+        results = "tbl_df",
+        activated = 'character',
         es_query = "quosures",
         es_source = "quosures",
         search_term = "list",
-        per_page = "numeric"
+        per_page = "numeric",
+        current_filter = "character",
+        terms = "list",
+        search_after = "character",
+        search_after_uid = "character"
     )
 )
 
@@ -155,8 +160,8 @@ ProjectBrowser <-
     function(url='https://service.explore.data.humancellatlas.org/repository/projects',
              per_page = 15)
 {
-    project <- .ProjectBrowser(url=url, per_page = per_page, project_results=tibble(),
-                               es_query = quos(), es_source=quos())
+    project <- .ProjectBrowser(url=url, per_page = per_page, results=tibble(),
+                               es_query = quos(), es_source=quos(), activated = 'projects')
     .init_ProjectBrowser(project)
 }
              
@@ -233,6 +238,20 @@ setGeneric('link', function(object, ...) standardGeneric('link'))
 #' @export
 #' @importFrom dplyr distinct
 setMethod('results', 'HCABrowser', .results)
+
+.project_results <- function(object)
+{
+    res <- object@results
+    if(object@activated == "projects")
+        sel <- c('projects.projectTitle', 'samples.sampleEntityType', 'samples.organ', 'protocols.libraryConstructionApproach', 'protocols.pairedEnd', 'donorOrganisms.genusSpecies', 'samples.disease')
+    if(object@activated == "samples")
+        sel <- c('samples.id', 'projects.projectTitle', 'samples.sampleEntityType', 'samples.organ', 'samples.organPart', 'cellSuspensions.selectedCellType', 'protocols.libraryConstructionApproach', 'protocols.pairedEnd', 'donorOrganisms.genusSpecies', 'donorOrganisms.organismAge', 'donorOrganisms.biologicalSex', 'samples.disease')
+    if(object@activated == "files")
+        sel <- c('samples.id', 'samples.sampleEntityType', 'samples.organ', 'samples.organPart', 'cellSuspensions.selectCellType', 'protocols.libraryConstructionApproach', 'protocols.pairedEnd', 'donorOrganisms.genusSpecies', 'donorOrganisms.organismAge', 'donorOrganism.biologicalSex', 'samples.disease')
+    select(res, sel)
+}
+
+setMethod('results', 'ProjectBrowser', .project_results)
 
 setMethod('first_hit', 'SearchResult', .first_hit)
 setMethod('last_hit', 'SearchResult', .last_hit)
@@ -312,9 +331,9 @@ setMethod('pullProject', 'HCABrowser', .pullProject)
     function(hca, what=c('bundles', 'files'))
 {
     type <- match.arg(what)
-    if(what == 'bundles')
+    if(type == 'bundles')
         hca@activated <- 'bundles'
-    else if(what == 'files')
+    else if(type == 'files')
         hca@activated <- 'files'
     hca
 }
@@ -343,6 +362,27 @@ setMethod('activate', 'HCABrowser', .activate.HCABrowser)
     hca@per_page <- n
     select(hca, c())
 }
+
+.activate.ProjectBrowser <-
+    function(hca, what = c('projects', 'samples', 'files'))
+{
+    type <- match.arg(what)
+    if(type == 'projects') {
+        hca@url <- 'https://service.explore.data.humancellatlas.org/repository/projects'
+        hca@activated <- 'projects'
+    }
+    else if (type == 'samples') {
+        hca@url <- 'https://service.explore.data.humancellatlas.org/repository/samples'
+        hca@activated <- 'samples'
+    }
+    else if (type == 'files') {
+        hca@url <- 'https://service.explore.data.humancellatlas.org/repository/files'
+        hca@activated <- 'files'
+    }
+    filter(hca)
+}
+
+setMethod('activate', 'ProjectBrowser', .activate.ProjectBrowser)
 
 #' Set per_page argument of HCABrowser object
 #'
@@ -561,3 +601,12 @@ setMethod('show', 'SearchResult', .show_SearchResult)
 #' @export
 setMethod('show', 'HCABrowser', .show_HCABrowser)
 
+.show_ProjectBrowser <- function(object)
+{
+    cat('class:', class(object), '\n')
+    cat('Using azul backend at:\n ', object@url, '\n\n')
+    cat('Showing', object@activated, 'with', object@per_page ,'results per page\n')
+    print(results(object))
+}
+
+setMethod('show', 'ProjectBrowser', .show_ProjectBrowser)
