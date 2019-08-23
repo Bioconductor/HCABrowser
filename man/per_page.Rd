@@ -4,7 +4,7 @@
 \name{per_page}
 \alias{per_page}
 \alias{per_page,HCABrowser-method}
-\title{Set per_page argument of HCABrowser object}
+\title{Set per_page argument of an HCABrowser object}
 \usage{
 \S4method{per_page}{HCABrowser}(hca, n)
 }

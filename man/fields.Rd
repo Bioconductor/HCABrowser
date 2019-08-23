@@ -4,21 +4,31 @@
 \name{fields}
 \alias{fields}
 \alias{fields,HCABrowser-method}
+\alias{fields,ProjectBrowser-method}
 \title{List supported fields of an HCABrowser object}
 \usage{
 \S4method{fields}{HCABrowser}(hca)
+
+\S4method{fields}{ProjectBrowser}(hca)
 }
 \arguments{
 \item{hca}{An HCABrowser object.}
 }
 \value{
 A tibble indicating fields that can be queried upon.
+
+A tibble indicating fields that can be queried upon.
 }
 \description{
 List supported fields of an HCABrowser object
+
+List supported fields of an ProjectBrowser object
 }
 \examples{
-hca <- HCABrowser()
+hca <- ProjectBrowser()
+hca \%>\% fields
+
+hca <- ProjectBrowser()
 hca \%>\% fields
 
 }

@@ -29,5 +29,23 @@ projectGet <- function(project, filter, per_page=15)
     project
 }
 
+#' Next Results
+#'
+#' Fetch the next set of bundles from a ProjectBrowser Object
+#'
+#' @return A ProjectBrowser object that displays the next results
+#'
+#' @author Daniel Van Twisk
+#'
+#' @name nextResults
+#' @aliases nextResults,ProjectBrowser-method
+#' @docType methods
+#' 
+#' @examples
+#'
+#' hca <- ProjectBrowser()
+#' hca <- nextResults(hca)
+#' hca
+#'
 #' @export
 setMethod("nextResults", "ProjectBrowser", .nextResults_ProjectBrowser)

@@ -4,10 +4,13 @@
 \name{results}
 \alias{results}
 \alias{results,HCABrowser-method}
+\alias{results,ProjectBrowser-method}
 \title{Obtain search results from a HCABrowser Object}
 \usage{
 \S4method{results}{HCABrowser}(object, n = object@per_page,
   all = FALSE, .output_format = c("raw", "summary"))
+
+\S4method{results}{ProjectBrowser}(object)
 }
 \arguments{
 \item{object}{A Human Cell Atlas object.}
@@ -20,8 +23,13 @@
 }
 \value{
 a tibble
+
+a tibble
 }
 \description{
+Returns a tibble either showing bundles or files based on whichever is
+ activated.
+
 Returns a tibble either showing bundles or files based on whichever is
  activated.
 }

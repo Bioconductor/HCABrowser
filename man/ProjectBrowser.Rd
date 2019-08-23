@@ -10,6 +10,8 @@
 }
 \arguments{
 \item{url}{character(1) The url of the Human Cell Atlas.}
+
+\item{per_page}{the number of results to display per request.}
 }
 \value{
 a ProjectBrowser object

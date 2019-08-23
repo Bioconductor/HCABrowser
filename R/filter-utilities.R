@@ -51,7 +51,7 @@
 #' @docType methods
 #'
 #' @examples
-#' hca <- HCABrowser()
+#' hca <- ProjectBrowser()
 #' hca %>% fields
 #'
 #' @export
@@ -62,6 +62,18 @@ setMethod("fields", "HCABrowser", .fields)
     names(hca@terms)
 }
 
+#' List supported fields of an ProjectBrowser object
+#'
+#' @return A tibble indicating fields that can be queried upon.
+#'
+#' @name fields
+#' @aliases fields,ProjectBrowser-method
+#' @docType methods
+#'
+#' @examples
+#' hca <- ProjectBrowser()
+#' hca %>% fields
+#'
 #' @export
 setMethod("fields", "ProjectBrowser", .project_fields)
 
@@ -110,6 +122,20 @@ setMethod("values", "HCABrowser", .values)
     as_tibble(uu)
 }
 
+#' List all values for certain fields in a ProjectBrowser Object
+#'
+#' @param x A ProjectBrowser Object.
+#' @param fields a character vector of fields to display avaiable values for.
+#' @param ... Other arguments.
+#'
+#' @return a list of possible values for a filter
+#'
+#' @examples
+#' hca <- ProjectBrowser()
+#' vals <- hca %>% values('organ')
+#' vals
+#'
+#' @importFrom S4Vectors values
 #' @export
 setMethod("values", "ProjectBrowser", .project_values)
 
@@ -136,17 +162,7 @@ setMethod("values", "ProjectBrowser", .project_values)
     force(sep)
     function(e1, e2) {
         
-        fun <- "should"
-        if (sep == '&')
-            fun <- "filter"
-
-        if(.is_bool_connector(e1))
-            e1 <- list(bool = e1)
-        if(.is_bool_connector(e2))
-            e2 <- list(bool = e2)
-
-        con <- list(list(e1, e2))
-        names(con) <- fun
+        con <- list(e1, e2)
         con
     }
 }
@@ -384,6 +400,7 @@ filter.HCABrowser <- function(.data, ..., .preserve)
     res
 }
 
+#' @importFrom curl curl_escape
 #' @export
 filter.ProjectBrowser <- function(.data, ..., .preserve)
 {

@@ -4,9 +4,13 @@
 \name{activate}
 \alias{activate}
 \alias{activate,HCABrowser-method}
+\alias{activate,ProjectBrowser-method}
 \title{Activate files or bundles of HCABrowser Object}
 \usage{
 \S4method{activate}{HCABrowser}(hca, what = c("bundles", "files"))
+
+\S4method{activate}{ProjectBrowser}(hca, what = c("projects", "samples",
+  "files"))
 }
 \arguments{
 \item{hca}{An HCABrowser object}
@@ -19,4 +23,6 @@ An HCABrowser with the selected activation
 }
 \description{
 Activate files or bundles of HCABrowser Object
+
+Activate projects, samples, or files to display in the ProjectBrowser Object
 }

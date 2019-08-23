@@ -146,6 +146,7 @@ HCABrowser <-
 #' @description A still tentative class that displays Human Cell Atlas
 #'  information by projects.
 #'
+#' @param per_page the number of results to display per request.
 #' @param url character(1) The url of the Human Cell Atlas.
 #'
 #' @author Daniel Van Twisk
@@ -251,6 +252,20 @@ setMethod('results', 'HCABrowser', .results)
     select(res, sel)
 }
 
+#' Obtain search results from a ProjectBrowser Object
+#'
+#' @description
+#'  Returns a tibble either showing bundles or files based on whichever is
+#'  activated.
+#'
+#' @return a tibble
+#'
+#' @name results
+#' @aliases results,ProjectBrowser-method
+#' @docType methods
+#'
+#' @export
+#' @importFrom dplyr distinct
 setMethod('results', 'ProjectBrowser', .project_results)
 
 setMethod('first_hit', 'SearchResult', .first_hit)
@@ -314,10 +329,39 @@ setMethod('getProjects', 'HCABrowser', .getProjects)
 .showProject <-
     function(hca, project)
 {
+    res <- hca@results
+#i    if (is.character(project))
+#        res[, "projects.projectTitle"
+    res <- as.data.frame(res[project, ])
+    pt <- as.character(res[, "projects.projectTitle"])
+    hca <- HCABrowser()
+    hca <- hca %>% filter(project_title == pt)
+    hca <- hca %>% select(c('project_description', 'publication.authors', 'publication.publication_title'))
+    hca <- as.data.frame(hca@results@results)[1,]
+    cat('\nProject Title\t', as.character(res[,"projects.projectTitle"]), '\n')
+    cat('\n')
+    cat('Project Details\n')
+    cat('Project Label\t\t\t', as.character(res[,"projects.projectShortname"]), '\n')
+    cat('Species\t\t\t\t', as.character(res[,"donorOrganisms.genusSpecies"]), '\n')
+    cat('Organ\t\t\t\t', as.character(res[,"specimens.organ"]), '\n')
+    cat('Organ Part\t\t\t', as.character(res[,"specimens.organPart"]), '\n')
+    cat('Known Diseases (Specimens)\t', as.character(res[,"specimens.disease"]), "\n")
+    cat('Library Construction Approach\t', as.character(res[,"protocols.libraryConstructionApproach"]), "\n")
+    cat('Paired End\t\t\t', as.character(res[, "protocols.pairedEnd"]), "\n")
+    cat('File Type\t\t\t', as.character(res[,"fileTypeSummaries.fileType"]), "\n")
+    cat('Cell Count Estimate\t\t', as.character(res[,"fileTypeSummaries.count"]), "\n")
+    
+    cat("\nDescription\n")
+    cat(as.character(hca[,"project_json.project_core.project_description"]), "\n")
+
+    cat("\n")
+
+#    cat('Publications\t\t', as.character(hca[,'publication.publication_title']), "\n")
+    cat('Laboratory\t\t\t', as.character(res[,'projects.laboratory']), "\n")
     
 }
 
-setMethod('showProject', 'HCABrowser', .showProject)
+setMethod('showProject', 'ProjectBrowser', .showProject)
 
 .pullProject <-
     function(hca, project, n)
@@ -326,6 +370,16 @@ setMethod('showProject', 'HCABrowser', .showProject)
 }
 
 setMethod('pullProject', 'HCABrowser', .pullProject)
+
+.pullProject_project <- function(hca, project, n)
+{
+    hca <- as.data.frame(hca@results[project,])
+    pj <- as.character(hca[,"projects.projectTitle"])
+    hh <- HCABrowser()
+    hh %>% filter("project_title" == pj) %>% pullBundles(n)
+}
+
+setMethod('pullProject', 'ProjectBrowser', .pullProject_project)
 
 .activate.HCABrowser <-
     function(hca, what=c('bundles', 'files'))
@@ -382,9 +436,17 @@ setMethod('activate', 'HCABrowser', .activate.HCABrowser)
     filter(hca)
 }
 
+#' Activate projects, samples, or files to display in the ProjectBrowser Object
+#'
+#' @name activate
+#' @aliases activate,ProjectBrowser-method
+#' @docType methods
+#'
+#' @importFrom tidygraph activate
+#' @export
 setMethod('activate', 'ProjectBrowser', .activate.ProjectBrowser)
 
-#' Set per_page argument of HCABrowser object
+#' Set per_page argument of an HCABrowser object
 #'
 #' @description note that no more than 10 pages can be displayed at once
 #'
@@ -576,10 +638,10 @@ setMethod('show', 'SearchResult', .show_SearchResult)
         cat(' ', deparse(rlang::quo_get_expr(i), width.cutoff = 500), '\n')
     cat('\n')
     cat('Current Selection:\n')
-    for(i in object@es_source)
-        cat(
-            paste(strwrap(paste0('"', unname(rlang::eval_tidy(i)), '"', collapse = ', '), indent = 2, exdent = 2), collapse = "\n"),
-        "\n")
+#    for(i in object@es_source)
+#        cat(
+#            paste(strwrap(paste0('"', unname(rlang::eval_tidy(i)), '"', collapse = ', '), indent = 2, exdent = 2), collapse = "\n"),
+#        "\n")
     cat('\n')
     cat('class: ', class(object@results), "\n", 
         "  bundle ", first_hit(object@results), " - ", last_hit(object@results), " of ",
@@ -609,4 +671,12 @@ setMethod('show', 'HCABrowser', .show_HCABrowser)
     print(results(object))
 }
 
+#' Show ProjectBrowser
+#'
+#' @param object a ProjectBrowser object to show
+#'
+#' @return outputs a text represntation of the object
+#'
+#' @importFrom methods show
+#' @export
 setMethod('show', 'ProjectBrowser', .show_ProjectBrowser)
