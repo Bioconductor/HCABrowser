@@ -224,15 +224,15 @@ hca2 <- hca %>% filter(organ.text == Brain | organ.text == brain)
 hca2
 ```
 
-If we also wish to search for results based on the NCBI Taxon ID for human,
-9606, as well as brain, we can perform this query in a variety of ways.
+If we also wish to search for results based on the NCBI Taxon ID for mouse,
+10090, as well as brain, we can perform this query in a variety of ways.
 ```{r multiFilter}
 hca2 <- hca %>% filter(organ.text %in% c('Brain', 'brain')) %>%
-                filter('specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 9606)
+                filter('specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090)
 hca2 <- hca %>% filter(organ.text %in% c('Brain', 'brain'),
-                       'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 9606)
+                       'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090)
 hca <- hca %>% filter(organ.text %in% c('Brain', 'brain') &
-                      'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 9606)
+                      'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090)
 hca
 ```
 
