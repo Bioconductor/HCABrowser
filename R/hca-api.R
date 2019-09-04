@@ -1,24 +1,21 @@
 ## https://dss.integration.data.humancellatlas.org/
 
-.apis <- c(
-    getBundlesCheckout = "/bundles/%s/checkout",
-    deleteBundle = "/bundles/%s",
-    getBundle = "/bundles/%s",
-    putBundle = "/bundles/%s",
-    postBundlesCheckout = "/bundles/%s/checkout",
-    putCollection = "/collections",
-    deleteCollection = "/collections/%s",
-    getCollection = "/collections/%s",
-    patchCollection = "/collections/%s",
-    getFile = "/files/%s",
-    headFile = "/files/%s",
-    putFile = "/files/%s",
-    postSearch = "/search",
-    getSubscriptions = "/subscriptions",
-    putSubscriptions = "/subscriptions",
-    deleteSubscriptions = "/subscriptions/%s",
-    getSubscription = "/subscriptions/%s"
-)
+#' @export
+.HCABrowser <- setClass("HCABrowser", contains=c("Service"))
+
+HCABrowser <- function() {
+    .HCASession(
+        Service(
+            service = "HCABrowser",
+            host = "dss.data.humancellatlas.org",
+            api_url = "https://dss.data.humancellatlas.org/v1/swagger.json",
+            config = httr::config(ssl_verifypeer = 0L, ssl_verifyhost = 0L, http_version = 0L),
+            package = "HCABrowser",
+            schemes = "https"
+        )
+    )
+}
+
 
 .build_url <- function(url, tag, uuid=NULL, args=NULL){
     if(!is.null(uuid)) tag <- sprintf(tag, uuid)
@@ -132,24 +129,6 @@
 #    .return_response(response)
 }
 
-#' @importFrom httr HEAD
-.hca_head <-
-    function(url)
-{
-    header <- .build_header(include_token=FALSE)
-    response <- httr::HEAD(url, header)
-    .return_response(response)
-}
-
-#' @importFrom httr PATCH
-.hca_patch <-
-    function(url, body)
-{
-    header <- .build_header(include_token=TRUE)
-    response <- httr::PATCH(url, header, body=body, encode="json")
-    .return_response(response)
-}
-
 .hca_post_get_response <-
     function(url, body)
 {
@@ -169,15 +148,13 @@
         link <- character(0)
     else
         link <- str_replace(link, '<(.*)>.*', '\\1')
-    results <- .parse_postSearch_results(res[['results']])
     if (length(res[['results']]) == 0) {
         first_hit <- 0L
         last_hit <- 0L
     }
     else
         last_hit <- length(res[['results']]) + first_hit - 1L
-    .SearchResult(results = as_tibble(results),
-        total_hits = res[['total_hits']], link=link, first_hit = first_hit,
+    .SearchResult(results = res, link=link, first_hit = first_hit,
         last_hit = last_hit)
 }
 
@@ -206,140 +183,6 @@
     else
         NULL
 }
-
-#' @importFrom httr PUT
-.hca_put <-
-    function(hca, url, body, include_token)
-{
-    header <- .build_header(include_token)
-    response <- httr::PUT(hca@url, header, body, encode="json")
-    .return_response(response)
-}
-
-.getBundlesCheckout <-
-    function(hca, checkout_job_id, replica=c('aws', 'gcp', 'azure'))
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica)
-    url <- .build_url(hca@url, .apis['getBundlesCheckout'], checkout_job_id, args)
-    .hca_get(url, include_token=FALSE)
-}
-
-.deleteBundle <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        reason = NULL)
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica, version=version)
-    url <- .build_url(hca@url, .apis['deleteBundle'], uuid, args)
-    .hca_delete(url)
-}
-
-.getBundle <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        directurls=NULL, presignedurls=FALSE, token=NULL)
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica, version=version, directurls=directurls,
-                  presignedurls=presignedurls, token=token)
-    url <- .build_url(hca@url, .apis['getBundle'], uuid, args)
-    .hca_get(url, include_token=FALSE)
-}
-
-.putBundle <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version=NULL,
-        creator_uid, files)
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica, version=version)
-    body <- list(creator_uid=creator_uid, files=files)
-    url <- .build_url(hca@url, .apis['putBundle'], uuid, args)
-    .hca_put(url, body, include_token=FALSE)
-}
-
-.postBundlesCheckout <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), destination=NULL,
-        email=NULL)
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica, version=version)
-    body <- list(destination=destination, email=email)
-    url <- .build_url(hca@url, .apis['postBundlesCheckout'], uuid, args)
-    .hca_post(url, body)
-}
-
-.putCollection <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version, contents,
-        description, details, name)
-{
-    replica <- match.arg(replica)
-    body <- list(contents=contents, description=description, details=details,
-                 name=name)
-    url <- .build_url(hca@url, .apis['putCollection'], uuid, NULL)
-    .hca_put(url, body, include_token=TRUE)
-}
-
-.deleteCollection <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'))
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica)
-    url <- .build_url(hca@url, .apis['deleteCollection'], uuid, args)
-    .hca_delete(url)
-}
-
-.getCollection <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version=NULL)
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica, version=version)
-    url <- .build_url(hca@url, .apis['getCollection'], uuid, args)
-    .hca_get(url, include_token=TRUE)
-}
-
-.patchCollection <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version, add_contents,
-        description, details, name, remove_contents)
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica, version=version)
-    body <- list(add_contents=add_contents, description=description,
-                 details=details, name=name, remove_contents=remove_contents)
-    url <- .build_url(hca@url, .apis['patchCollection'], uuid, args)
-    .hca_patch(url, body)
-}
-
-.getFile <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), token=NULL, version=NULL)
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica, version=version, token=token)
-    paths <- vapply(uuid, function(x) {
-        url <- .build_url(hca@url, .apis['getFile'], x, args)
-        .hca_get_file(url, include_token=FALSE)
-    }, character(1))
-    as_tibble(data.frame(uuid = uuid, path = paths))
-}
-
-.headFile <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'), version=NULL)
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica, version=version)
-    url <- .build_url(hca@url, .apis['getFile'], uuid, args)
-    .hca_head(url)
-}
-
-.putFile <-
-    function(hca, uuid, creator_uid, source_url, version=NULL)
-{
-    replica <- match.arg(replica)
-    args <- list(version=version)
-    body <- list(creator_uid=creator_uid, source_url=source_url)
-    url <- .build_url(hca@url, .apis['putFile'], uuid, args)
-    .hca_put(url, body, include_token=FALSE)
-}
-
 .postSearch <-
     function(hca, replica=c('aws', 'gcp', 'azure'),
         output_format=c('summary', 'raw'), es_query=NULL, per_page=100,
@@ -361,48 +204,6 @@
     post_res <- .hca_post(url, body)
     hca@results <- post_res
     hca
-}
-
-.getSubscriptions <-
-    function(hca, replica=c('aws', 'gcp', 'azure'))
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica)
-    url <- .build_url(hca@url, .apis['getSubscriptions'], NULL, args)
-    .hca_get(url, include_token=TRUE)
-}
-
-.putSubscription <-
-    function(hca, replica=c('aws', 'gcp', 'azure'), attachments, callback_url,
-        encoding, es_query, form_fields, hmac_key_id, hmac_secret_key,
-        method, payload_form_field)
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica)
-    body <- list(attachments=attachments, callback_url=callback_url,
-                 encoding=encoding, es_query=es_query, form_fields=form_fields,
-                 hmac_key_id=hmac_key_id, hmac_secret_key=hmac_secret_key,
-                 method=method, payload_form_field=payload_form_field)
-    url <- .build_url(hca@url, .apis['putSubscription'], NULL, args)
-    .hca_put(url, body, include_token=TRUE)
-}
-
-.deleteSubscription <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'))
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica)
-    url <- .build_url(hca@url, .apis['deleteSubscription'], uuid, args)
-    .hca_delete(url)
-}
-
-.getSubscription <-
-    function(hca, uuid, replica=c('aws', 'gcp', 'azure'))
-{
-    replica <- match.arg(replica)
-    args <- list(replica=replica)
-    url <- .build_url(hca@url, .apis['getSubscription'], uuid, args)
-    .hca_get(url, include_token=TRUE)
 }
 
 #' HCA API methods
@@ -579,82 +380,6 @@
 #' @name hca-api-methods
 #' @author Daniel Van Twisk
 NULL
- 
-#'
-#' Check the status of a checkout request 
-#'
-#' @description Check the status of a checkout request 
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("getBundlesCheckout", "HCABrowser", .getBundlesCheckout)
-
-#' Delete a bundle or a specific bundle version
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("deleteBundle", "HCABrowser", .deleteBundle)
-
-#' Retrieve a bundle given a UUID and optionally a version
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("getBundle", "HCABrowser", .getBundle)
-
-#' Create a bundle
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("putBundle", "HCABrowser", .putBundle)
-
-#' Check out a bundle to DSS-namaged or user-managed cloud object storage
-#' destination
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("postBundlesCheckout", "HCABrowser", .postBundlesCheckout)
-
-#' Create a collection
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("putCollection", "HCABrowser", .putCollection)
-
-#' Delete a collection
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("deleteCollection", "HCABrowser", .deleteCollection)
-
-#' Retrieve a collection given a UUID
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("getCollection", "HCABrowser", .getCollection)
-
-#' Update a collection
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("patchCollection", "HCABrowser", .patchCollection)
-
-#' Retrieve a file given a UUID and optionally a version
-#'
-#' @rdname hca-api-methods
-#' @export
-setMethod("getFile", "HCABrowser", .getFile)
-
-#' Retrieve a file's metadata given an UUID and optionally a version
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("headFile", "HCABrowser", .headFile)
-
-#' Create a new version of a file
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("putFile", "HCABrowser", .putFile)
 
 #' Find bundles by searching their metadata with an Elasticsearch query
 #'
@@ -662,30 +387,6 @@ setMethod("putFile", "HCABrowser", .putFile)
 #'
 #' @export
 setMethod("postSearch", "HCABrowser", .postSearch)
-
-#' Retrieve a user's event Subscription
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("getSubscriptions", "HCABrowser", .getSubscriptions)
-
-#' Creates an event subscription
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("putSubscription", "HCABrowser", .putSubscription)
-
-#' Delete an event subscription
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("deleteSubscription", "HCABrowser", .deleteSubscription)
-
-#' Retrieve an event subscription given a UUID
-#'
-#' @rdname hca-api-methods
-###' @export
-setMethod("getSubscription", "HCABrowser", .getSubscription)
 
 #' Next Results
 #'
