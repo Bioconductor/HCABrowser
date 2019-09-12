@@ -1,22 +1,5 @@
 ## https://dss.integration.data.humancellatlas.org/
 
-#' @export
-.HCABrowser <- setClass("HCABrowser", contains=c("Service"))
-
-HCABrowser <- function() {
-    .HCASession(
-        Service(
-            service = "HCABrowser",
-            host = "dss.data.humancellatlas.org",
-            api_url = "https://dss.data.humancellatlas.org/v1/swagger.json",
-            config = httr::config(ssl_verifypeer = 0L, ssl_verifyhost = 0L, http_version = 0L),
-            package = "HCABrowser",
-            schemes = "https"
-        )
-    )
-}
-
-
 .build_url <- function(url, tag, uuid=NULL, args=NULL){
     if(!is.null(uuid)) tag <- sprintf(tag, uuid)
     url <- paste0(url, tag)
