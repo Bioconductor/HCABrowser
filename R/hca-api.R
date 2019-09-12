@@ -1,54 +1,5 @@
 ## https://dss.integration.data.humancellatlas.org/
 
-.build_url <- function(url, tag, uuid=NULL, args=NULL){
-    if(!is.null(uuid)) tag <- sprintf(tag, uuid)
-    url <- paste0(url, tag)
-    if(!is.null(args)) {
-        args[vapply(args, is.null, logical(1))] <- NULL
-        args <- paste0(names(args), rep("=", length(args)), as.character(args))
-        args <- paste0(args, collapse="&")
-        url <- paste0(url, "?", args)
-    }
-    url
-}
-
-#' @importFrom httr add_headers
-.build_header <- function(include_token)
-{
-    header <- list(
-        `Content-Type` = "application/json",
-        `Accept` = "application/json"
-    )
-    if (include_token) {
-        token <- get_token()
-        header['access_token'] <- token$credentials[['access_token']]
-        header['token_type'] <- token$credentials[['token_type']]
-        header['expires_in'] <- token$credentials[['expires_in']]
-    }
-    do.call(add_headers, header)
-}
-
-#' @importFrom BiocFileCache BiocFileCache bfcnew bfcrpath bfccache
-.retrieve_BiocFileCache_dbpath <- function(url)
-{
-    if (is.null(dbpath))
-        dbpath <- BiocFileCache()
-    if (methods::is(dbpath, "BiocFileCache")) {
-        nrec <- NROW(bfcquery(dbpath, url, "rname", exact = TRUE))
-        if (nrec == 0L)
-            dbpath <- bfcnew(dbpath, url)
-        else if (nrec == 1L)
-            dbpath <- bfcrpath(dbpath, url)
-        else
-            stop(
-                "\n  'bfc' contains duplicate record names",
-                    "\n      url: ", url,
-                    "\n      bfccache(): ", bfccache(dbpath),
-                    "\n      rname: ", bfccache(dbpath)$rname
-            )
-    }
-}
-
 #' @importFrom readr read_tsv
 .save_as_BiocFileCache <- function(dbpath, url)
 {
@@ -56,137 +7,14 @@
     readr::read_tsv(fname)
 }
 
-#' @importFrom httr content stop_for_status
-#' @importFrom jsonlite fromJSON
-.return_response <-
-    function(response, expected_response=c('json', 'file'))
+#' @importFrom httr content
+#' @export
+parseToSearchResults <-
+    function(res)
 {
-    expected_response <- match.arg(expected_response)
-    stop_for_status(response)
-    suppressMessages(response <- content(response, as = "text"))
-    if (expected_response == 'json')
-        fromJSON(response, simplifyDataFrame=FALSE, simplifyMatrix=FALSE,
-            flatten=FALSE)
-    else if (expected_response == 'file')
-        readr::read_tsv(file=response)
-}
-
-#' @importFrom httr DELETE
-.hca_delete <-
-    function(url, body)
-{
-    header <- .build_header(include_token=TRUE)
-    response <- httr::DELETE(url, header, body=body, encode="json")
-    .return_response(response)
-} 
-
-#' @importFrom httr GET
-.hca_get <-
-    function(url, include_token)
-{
-    header <- .build_header(include_token)
-    if(include_token) response <- httr::GET(url, header)
-    else response <- httr::GET(url)   
-    .return_response(response)
-}
-
-#' @importFrom BiocFileCache BiocFileCache bfcrpath bfcquery bfcnew bfccount
-#' @importFrom httr write_disk
-.hca_get_file <-
-    function(url, include_token)
-{
-    url_split <- unlist(strsplit(url, '?', fixed = TRUE))
-    ## Include 2 parts one is the unique identifier without extra "relpica", etc.
-    ## rname <- url1
-    ## if(bfccount(bfcquery(bfc, rname)) == 0) bfcnew(bfc, rname) else bfcrpath(bfc, rname)
-    bfc <- BiocFileCache()
-    rname <- url_split[1]
-    if (bfccount(bfcquery(bfc, rname)) == 0) {
-        path = bfcnew(bfc, rname)
-        httr::GET(url, write_disk(path))
-    }
-    bfcrpath(bfc, rname)
-#    header <- .build_header(include_token)
-#    if(include_token) response <- httr::GET(url, header)
-#    else response <- httr::GET(url)   
-#    .return_response(response)
-}
-
-.hca_post_get_response <-
-    function(url, body)
-{
-    header <- .build_header(include_token=FALSE)
-    if (is.character(body))
-        httr::POST(url, header, body=body, encode="raw")#, httr::verbose())
-    else
-        httr::POST(url, header, body=body, encode="json")#, httr::verbose())
-}
-
-.hca_post_parse_response <-
-    function(response, first_hit)
-{
-    res <- .return_response(response)
-    link <- httr::headers(response)[['link']]
-    if (is.null(link))
-        link <- character(0)
-    else
-        link <- str_replace(link, '<(.*)>.*', '\\1')
-    if (length(res[['results']]) == 0) {
-        first_hit <- 0L
-        last_hit <- 0L
-    }
-    else
-        last_hit <- length(res[['results']]) + first_hit - 1L
-    .SearchResult(results = res, link=link, first_hit = first_hit,
-        last_hit = last_hit)
-}
-
-#' @importFrom dplyr as_tibble
-#' @importFrom httr POST headers
-#' @importFrom stringr str_replace
-.hca_post <-
-    function(url, body, first_hit = 1L)
-{
-    response <- .hca_post_get_response(url, body)
-    .hca_post_parse_response(response, first_hit)
-}
-
-.nextResults_HCABrowser <- function(result)
-{
-    sr <- result@results
-    if (length(sr@link) > 0) {
-        es_query <- result@search_term
-        if (length(result@search_term) == 0)
-            es_query <- list(es_query = list(query = list(bool = NULL)))
-        result@results <- .hca_post(link(sr),
-            body = es_query,
-            first_hit = last_hit(sr) + 1L)
-        result
-    }
-    else
-        NULL
-}
-.postSearch <-
-    function(hca, replica=c('aws', 'gcp', 'azure'),
-        output_format=c('summary', 'raw'), es_query=NULL, per_page=100,
-        search_after=NULL, json=NULL)
-{
-    replica <- match.arg(replica)
-    output_format <- match.arg(output_format)
-    args <- list(replica=replica, output_format=output_format,
-                 per_page=per_page, search_after=search_after)
-    if (is.null(es_query)) {
-        es_query <- hca@search_term
-        if (length(es_query) == 0)
-            es_query <- list(es_query = list(query = list(bool = NULL)))
-    }
-    body <- es_query
-    if (!is.null(json))
-        body <- json
-    url <- .build_url(hca@url, .apis['postSearch'], NULL, args)
-    post_res <- .hca_post(url, body)
-    hca@results <- post_res
-    hca
+    res <- httr::content(res)
+    #SearchResult()
+    res
 }
 
 #' HCA API methods
@@ -363,34 +191,4 @@
 #' @name hca-api-methods
 #' @author Daniel Van Twisk
 NULL
-
-#' Find bundles by searching their metadata with an Elasticsearch query
-#'
-#' @rdname hca-api-methods
-#'
-#' @export
-setMethod("postSearch", "HCABrowser", .postSearch)
-
-#' Next Results
-#'
-#' Fetch the next set of bundles from a Human Cell Atlas Object
-#'
-#' @param result A HCABrowser object that has further bundles to display.
-#'
-#' @return A Human Cell Atlas object that displays the next results
-#'
-#' @author Daniel Van Twisk
-#'
-#' @name nextResults
-#' @aliases nextResults,HCABrowser-method
-#' @docType methods
-#' 
-#' @examples
-#'
-#' hca <- HCABrowser()
-#' hca <- nextResults(hca)
-#' hca
-#'
-#' @export
-setMethod("nextResults", "HCABrowser", .nextResults_HCABrowser)
 

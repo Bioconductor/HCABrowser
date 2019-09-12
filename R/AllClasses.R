@@ -10,9 +10,11 @@
 setOldClass('tbl_df')
 .SearchResult <- setClass("SearchResult",
     slots = c(
+        es_query = 'list',
+        results = 'list',
+        total_hits = 'integer',
         first_hit = 'integer',
         last_hit = 'integer',
-        results = 'list',
         link = 'character'
     )
 )
@@ -55,7 +57,7 @@ setOldClass('quosures')
 #' @importFrom methods new
 #' @export
 HCABrowser <-
-    function(host='https://dss.data.humancellatlas.org/v1',
+    function(host='dss.data.humancellatlas.org',
              api_url='https://dss.data.humancellatlas.org/v1/swagger.json',
              per_page=10)
 {
@@ -96,16 +98,15 @@ setMethod('last_hit', 'SearchResult', .last_hit)
 setMethod('total_hits', 'SearchResult', .total_hits)
 setMethod('es_query', 'SearchResult', .es_query)
 
-#' @importFrom jsonlite toJSON
 .getEsQuery <-
     function(object)
 {
     query <- object@es_query
     if (length(query) == 0)
-        query <- list(es_query = list(query = list(bool = NULL)))
+        query <- list(es_query = list(NULL))
     else
         query <- .temp(query)
-    jsonlite::toJSON(query)
+    query
 }
 
 #' Get Elastic Search query as JSON

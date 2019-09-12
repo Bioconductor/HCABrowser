@@ -4,16 +4,16 @@
 \alias{HCABrowser}
 \title{The HCABrowser Class}
 \usage{
-HCABrowser(url = "https://dss.data.humancellatlas.org/v1",
-  fields_path = system.file("extdata", "fields_and_values.json", package
-  = "HCABrowser"), per_page = 10)
+HCABrowser(host = "dss.data.humancellatlas.org",
+  api_url = "https://dss.data.humancellatlas.org/v1/swagger.json",
+  per_page = 10)
 }
 \arguments{
+\item{per_page}{numeric(1) numbers of pages to view at a time.}
+
 \item{url}{character(1) the url of the Human Cell Atlas resource.}
 
 \item{fields_path}{character(1) path to the fields json file.}
-
-\item{per_page}{numeric(1) numbers of pages to view at a time.}
 }
 \value{
 an HCABrowser object
