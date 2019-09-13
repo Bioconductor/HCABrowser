@@ -1,23 +1,22 @@
 
-.init_HCABrowser <- function(hca)
-{
-    select(hca, .initial_source)
-#    postSearch(hca, 'aws', 'raw', per_page=10)
-}
-
-#' @importFrom tibble tibble
 #' @importFrom dplyr %>%
-setOldClass('tbl_df')
 .SearchResult <- setClass("SearchResult",
     slots = c(
         es_query = 'list',
         results = 'list',
-        total_hits = 'integer',
-        first_hit = 'integer',
-        last_hit = 'integer',
-        link = 'character'
+        total_hits = 'integer'
+        #first_hit = 'integer',
+        #last_hit = 'integer',
+        #link = 'character'
     )
 )
+
+#' @export
+SearchResult <-
+    function(es_query, results, total_hits)
+{
+    .SearchResult(es_query=es_query, results=results, total_hits=total_hits)
+}
 
 setOldClass('quosure')
 setOldClass('quosures')
@@ -103,7 +102,7 @@ setMethod('es_query', 'SearchResult', .es_query)
 {
     query <- object@es_query
     if (length(query) == 0)
-        query <- list(es_query = list(NULL))
+        query <- list(es_query =NULL)
     else
         query <- .temp(query)
     query
