@@ -113,7 +113,7 @@ setMethod('es_query', 'SearchResult', .es_query)
 #' @param hca An HCABrowser object
 #'
 #' @return A json object of the elastic search query in the HCABrowser object
-#' @examples
+#' @export
 setMethod('getEsQuery', 'HCABrowser', .getEsQuery)
 
 #' Get results of SearchResult object
