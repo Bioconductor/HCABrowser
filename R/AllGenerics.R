@@ -17,7 +17,27 @@ setGeneric("putSubscription", function(hca, ...) standardGeneric("putSubscriptio
 setGeneric("deleteSubscription", function(hca, ...) standardGeneric("deleteSubscription"))
 setGeneric("getSubscription", function(hca, ...) standardGeneric("getSubscription"))
 
-#' @export
+setGeneric('undoEsQuery', function(hca, ...) standardGeneric('undoEsQuery'))
+setGeneric('resetEsQuery', function(hca, ...) standardGeneric('resetEsQuery'))
+
+setGeneric('per_page', function(hca, ...) standardGeneric('per_page'))
+
+setGeneric('pullBundles', function(hca, ...) standardGeneric('pullBundles'))
+setGeneric('pullFiles', function(hca, ...) standardGeneric('pullFiles'))
+setGeneric('showBundles', function(hca, bundle_fqids, ...) standardGeneric('showBundles'))
+setGeneric('downloadHCA', function(hca, ...) standardGeneric('downloadHCA'))
+setGeneric('activate', function(hca, ...) standardGeneric('activate'))
+setGeneric('getProjects', function(hca, ...) standardGeneric('getProjects'))
+setGeneric('showProject', function(hca, ...) standardGeneric('showProject'))
+setGeneric('pullProject', function(hca, ...) standardGeneric('pullProject'))
+
 setGeneric("nextResults", function(result, ...) standardGeneric("nextResults"))
 
 setGeneric("fields", function(hca, ...) standardGeneric("fields"))
+
+setGeneric('first_hit', function(object, ...) standardGeneric('first_hit'))
+setGeneric('last_hit', function(object, ...) standardGeneric('last_hit'))
+setGeneric('total_hits', function(object, ...) standardGeneric('total_hits'))
+setGeneric('es_query', function(object, ...) standardGeneric('es_query'))
+setGeneric('results', function(object, ...) standardGeneric('results'))
+setGeneric('link', function(object, ...) standardGeneric('link'))
