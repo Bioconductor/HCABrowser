@@ -57,8 +57,6 @@
                 value <- paste0('.*', value)
         }
 
-        #field <- .convert_names_to_filters(NULL, field)
-
         leaf <- list(value)
         if(fun == 'range') {
             names(leaf) <- .range[sep]
@@ -221,16 +219,12 @@ select.HCABrowser <- function(.data, ..., .output_format = c('raw', 'summary'))
     if (length(sources) && sources[1] == 'c')
         sources <- sources[-1]
 
-    sources <- .convert_names_to_filters(hca, sources)
-    sources <- unique(sources)
-
     search_term <- hca@search_term
     if(length(search_term) == 0)
         search_term <- list(es_query = list(query = NULL))
     search_term$es_query$"_source" <- sources
     hca@search_term <- search_term
-
-    postSearch(hca, 'aws', output_format = output_format, per_page = hca@per_page)
+    hca
 }
 
 .LOG_OP_REG <- list()

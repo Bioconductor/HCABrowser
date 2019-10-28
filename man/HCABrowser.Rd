@@ -9,21 +9,22 @@ HCABrowser(host = "dss.data.humancellatlas.org",
   per_page = 10)
 }
 \arguments{
+\item{host}{character(1) path to hca-dcp server}
+
+\item{api_url}{character(1) path to schema}
+
 \item{per_page}{numeric(1) numbers of pages to view at a time.}
-
-\item{url}{character(1) the url of the Human Cell Atlas resource.}
-
-\item{fields_path}{character(1) path to the fields json file.}
 }
 \value{
-an HCABrowser object
+An HCABrowser object.
 }
 \description{
 The HCABrowser Class
 }
 \examples{
-hca <- HCABrowser()
-hca
+ hca <- HCABrowser()
+ hca
+
 }
 \author{
 Daniel Van Twisk

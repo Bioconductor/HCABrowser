@@ -80,7 +80,10 @@ library(HCABrowser)
 
 The `r Biocpkg("HCABrowser")` package relies on having network
 connectivety. Also, the HCA's Data Coordination Platform (DCP) must
-also be operational.
+also be operational. This package is meant for users who have a working
+knowledge of the HCA DCP's schema to provide the user with the
+fill richness of the HCA's content. For a more simple-to-use way to access and
+download data from The Human Cell Atlas, please use the `HCAExplorer` package.
 
 The `HCABrowser` object serves as the representation of the Human Cell
 Atlas. Upon creation, it will automatically peform a cursorary query and
@@ -90,51 +93,28 @@ to users. The output also displays the url of the instance of the HCA DCP being
 used, the current query, whether bundles or files are being displayed, and the
 number of bundles in the results
 
-By default, ten bundles per page will be displayed in the result and the
-default url to the HCA DCP will be used. Currently, the maximum number of
-bundles that can be shown per query is ten. These two values can be changed in
-the constructor.
+By default, ten bundles per page will be displayed in the result for "raw"
+output and 100 will be displayed for "summary" output. The `host` argument
+dictates the hca-dcp the client will be accessing while the `api_url` argument
+dictates what schema the client will be accessing.  These three values can be
+changed in the constructor. The default values are given below.
 
 If the HCA cannot be reached, an error will be thrown displaying the status of
 the request.
 
 ```{r createHCA}
-hca <- HCABrowser(url = 'https://dss.data.humancellatlas.org/v1', per_page = 10)
+hca <- HCABrowser(host = 'dss.data.humancellatlas.org/v1',
+                  api_url='https://dss.data.humancellatlas.org/v1/swagger.json')
 hca
 ```
 
 Upon displaying the object, multiple fields can be seen:
 - The class: `HCABrowser`
-- The hca dcp address that is currently being used.
+- The hca dcp host address that is currently being used.
 - The current query (assigned using `filter()`)
 - The current selection (assigned using `select()`)
     - You may notice that some columns are already selected. These columns are
       automatically selected to allow the user some initial view of the hca.
-- The bundles being shown and whether a `link` to more results is availiable
-- The number of bundles or files being shown per_page
-- The results `tibble` of the query
-
-The results `tibble` can be obtained using the `results()` method.
-
-```{r results}
-results(hca)
-```
-
-To toggle whether bundles or files are being displayed in the `tibble`, the
-`activate()` method can be used to choose which to display.
-
-```{r activate}
-## Bundles are diaplyed be default
-nrow(results(hca))
-
-## The HCABrowser object is activated here by 'files'
-hca <- hca %>% activate('files')
-hca
-nrow(results(hca))
-
-## Revert back to showing bundles with 'bundles'
-hca <- hca %>% activate('bundles')
-```
 
 To change how many pages are being displayed, the `per_page()` method can be
 used.
@@ -148,31 +128,12 @@ used.
 Since there are far more bundles in the HCA than can be shown, if `link` is
 `True`, the next set of bundles can be obtained using the `nextResults` method.
 
-```{r nextResults}
+```{r nextResults, eval=FALSE}
 hca <- nextResults(hca)
 hca
 ```
 
 ## Querying the HCABrowser
-
-To show which fields are available to query, use the `supportedFilters()` method.
-
-```{r fields}
-hca <- HCABrowser()
-hca %>% fields
-```
-
-The `abbreviated_fields` column indicates the shortest possible name that can be
-used to reference the field. The `field_names` columns shows the whole schema
-name on the json schema.
-
-Availiable values to these fields can be found using the `values()` method.
-If the parameter `fields` is specified, it will display values related to those
-field. If not specified, the values for all fields will be shown.
-
-```{r valuess}
-hca %>% values(c('organ.text', 'library_construction_approach.text'))
-```
 
 The HCA extends the functionality of the `r CRANpkg("dplyr")` package's `filter()`
 and `select()` methods.
@@ -203,15 +164,6 @@ Queries can be negated by placing the `!` symbol in front
 Combination operators can be used to combine queries
 - `&`
 - `|`
-
-As an example, in order to find HCA resources associated with the brain. It can
-the be seen by looking at the result of the `fields` method, that
-`organ.text` can be used to reference `files.specimen_from_organism.organ.text`.
-Running `organ.text` through `values`, we see the following:
-
-```{r availabeOrgan}
-hca %>% values('organ.text')
-```
 
 Now we see that "brain" and "Brain" are available values. Since these values are
 the result of input by other users, there may be errors or inconsistencies. To
@@ -252,7 +204,7 @@ The `HCABrowser` object can undo the most recent queries run on it.
 ```{r undoQuery}
 hca <- hca %>% filter(organ.text == heart)
 hca <- hca %>% filter(organ.text != brain)
-hca <- hca %>% undoEsQuery(n = 2)
+hca <- undoEsQuery(hca, n = 2)
 hca
 ```
 
@@ -260,7 +212,7 @@ If one would want to start from a fresh query but retain the modifications made
 to the `HCABrowser` object, the `resetEsQuery()` method can be used.
 
 ```
-hca <- hca %>% resetEsQuery
+hca <- resetEsQuery(hca)
 hca
 ```
 
@@ -270,7 +222,6 @@ Using `fields()`, we can find that the fields `paired_end` and
 
 ```{r select}
 hca2 <- hca %>% select('paired_end', 'organ.ontology')
-#hca2 <- hca %>% select(paired_end, organ.ontology)
 hca2 <- hca %>% select(c('paired_end', 'organ.ontology'))
 hca2
 ```
@@ -281,32 +232,6 @@ Note that unabbreviated names must be used for these kinds of queries.
 
 ```{r jsonQuery}
 
-```
-
-## Obtaining results from the HCABrowser object
-
-Once the user is satisfied with their query, the `results()` method can be
-used to create a tibble of the first `n` bundles in the search.
-Note that since the maximum page size is `10`, the method will need to make
-multiple requests to the hca dcp. This may take some time for large requests.
-
-```{r downloadHCA}
-res <- hca %>% results(n = 36)
-res
-```
-
-One can also simply pull bundles from the HCABrowser object's results.
-
-```{r pullBundles}
-bundle_fqids <- hca %>% pullBundles(n = 1)
-bundle_fqids
-```
-
-One can query using just the bundle fqids by using the `showBundles` method.
-
-```{r showBundles}
-hca <- hca %>% showBundles(bundle_fqids = bundle_fqids)
-hca
 ```
 
 ```{r sessionInfo}
