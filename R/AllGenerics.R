@@ -8,3 +8,6 @@ setGeneric('link', function(x, ...) standardGeneric('link'))
 setGeneric('undoEsQuery', function(x, ...) standardGeneric('undoEsQuery'))
 setGeneric('resetEsQuery', function(x, ...) standardGeneric('resetEsQuery'))
 setGeneric('per_page', function(x, ...) standardGeneric('per_page'))
+
+setGeneric('searchPost', function(x, ...) standardGeneric('searchPost'))
+setGeneric('bundleGet', function(x, ...) standardGeneric('bundleGet'))

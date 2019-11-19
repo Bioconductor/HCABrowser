@@ -140,6 +140,21 @@ setMethod('resetEsQuery', 'HCABrowser', .reset_esquery)
     #print(results(object))
 }
 
+.searchPost <- function(json_request_body, output_format = "summary", replica='aws')
+{
+    
+}
+
+.bundleGet <- function(x, replica = 'aws') 
+{
+    res <- apiClient$BundlesUuidGet(uuid = x, replica = replica)
+    li <- lapply(res$bundle$files, function(x) unlist(x$toJSON()))
+    res <- do.call(rbind, li)
+    as_tibble(res)
+}
+
+setMethod("bundleGet", "character", .bundleGet)
+
 #' Show Search Result
 #'
 #' @param object a SearchResult object to show

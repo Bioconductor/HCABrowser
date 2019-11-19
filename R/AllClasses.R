@@ -33,12 +33,17 @@
 SearchResult <-
     function(es_query, results, first_hit, last_hit, total_hits)
 {
-    .SearchResult(es_query=es_query, results=results, first_hit = first_hit,
-                  last_hit = last_hit, total_hits=total_hits)
+    .SearchResult(es_query = es_query, results = results, first_hit = first_hit,
+                  last_hit = last_hit, total_hits = total_hits)
 }
 
 setOldClass('quosure')
 setOldClass('quosures')
+
+###' importFrom R6 R6Class
+#R6::R6Class("HCAApi", inherit = HCABrowser::DefaultApi)
+#setOldClass(c("DefaultApi", "R6"))
+#setOldClass(c("HCAApi", "DefaultApi"))
 
 #' The HCABrowser Class
 #'
@@ -54,9 +59,9 @@ setOldClass('quosures')
 #'  hca <- HCABrowser()
 #'  hca
 #'
+#' @importFrom HCABrowser DefaultApi
 #' @exportClass HCABrowser
 .HCABrowser <- setClass("HCABrowser",
-    contains=c("Service"),
     slots = c(
         es_query = "quosures",
         es_source = "quosures",
@@ -82,19 +87,10 @@ setOldClass('quosures')
 #'
 #' @export
 HCABrowser <-
-    function(host='dss.data.humancellatlas.org',
-             api_url='https://dss.data.humancellatlas.org/v1/swagger.json',
-             per_page=10)
+    function(per_page=10)
 {
     hca <- .HCABrowser(
-        Service(
-            service = "HCABrowser",
-            host = host,
-            api_url=api_url,
-            config = httr::config(ssl_verifypeer = 0L, ssl_verifyhost = 0L, http_version = 0L),
-            package = "HCABrowser",
-            schemes = "https"
-        ),
+        api=DefaultApi$new(),
         es_query=quos(),
         es_source=quos()
     )

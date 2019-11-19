@@ -22,9 +22,9 @@ Description: Search, browse, reference, and download resources from
     the Human Cell Atlas data portal. Development of this package is
     supported through funds from the Chan / Zuckerberg initiative.
 Depends: R (>= 3.6.0),
-         dplyr,
-         AnVIL
+         dplyr
 Imports: BiocFileCache,
+         R6,
          S4Vectors,
          curl,
          googleAuthR,
@@ -38,7 +38,9 @@ Imports: BiocFileCache,
          tibble,
          tidygraph,
          tidyr,
-         utils
+         utils,
+         R6,
+         caTools
 Suggests: BiocStyle,
           knitr,
           rmarkdown,
