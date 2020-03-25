@@ -38,6 +38,25 @@ setMethod('es_query', 'SearchResult', .es_query)
 setMethod('results', 'SearchResult', .priv_results)
 setMethod('link', 'SearchResult', .link)
 
+.getEsQuery <-
+    function(x)
+{
+    query <- x@es_query
+    if (length(query) == 0)
+        query <- list(es_query =NULL)
+    else
+        query <- .temp(query)
+    query
+}
+
+#' Get Elastic Search query as JSON
+#'
+#' @param x An HCABrowser object
+#'
+#' @return A json object of the elastic search query in the HCABrowser object
+#' @export
+setMethod('getEsQuery', 'HCABrowser', .getEsQuery)
+
 .set_per_page <- function(x, n)
 {
     x@per_page <- n
@@ -137,7 +156,6 @@ setMethod('resetEsQuery', 'HCABrowser', .reset_esquery)
     "  link: ", length(link(object))>0, "\n",
     sep = ''
     )
-    #print(results(object))
 }
 
 #' Show Search Result

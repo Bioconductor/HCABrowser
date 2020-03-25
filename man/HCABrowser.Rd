@@ -4,14 +4,10 @@
 \alias{HCABrowser}
 \title{The HCABrowser Class}
 \usage{
-HCABrowser(host = "dss.data.humancellatlas.org",
-  api_url = "https://dss.data.humancellatlas.org/v1/swagger.json",
-  per_page = 10)
+HCABrowser(host = "dss.data.humancellatlas.org", per_page = 10)
 }
 \arguments{
 \item{host}{character(1) path to hca-dcp server}
-
-\item{api_url}{character(1) path to schema}
 
 \item{per_page}{numeric(1) numbers of pages to view at a time.}
 }
