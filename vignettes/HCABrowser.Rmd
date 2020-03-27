@@ -234,6 +234,62 @@ Note that unabbreviated names must be used for these kinds of queries.
 
 ```
 
+# Use examples
+
+The remainder of this vignette will review applicable uses for this package.
+
+## Obtain a File
+
+```
+hca <- HCABrowser()
+
+result <- hca$Find_bundles_by_searching_their_metadata_with_an_Elasticsearch_query(json_request_body=getEsQuery(hca), replica='aws')
+result <- parseToSearchResults(result)
+
+bundles <- lapply(results(result), function(results) {
+    uuid <- stringr::str_split(results[["bundle_fqid"]], '\\.')[[1]][[1]]
+
+    tryCatch({
+    checkout_id <- httr::content(hca$dss.api.bundles.checkout.post(uuid=uuid, replica='aws'))$checkout_job_id
+
+    bundle_checkout_status <- httr::content(hca$dss.api.bundles.checkout.get(checkout_job_id=checkout_id, replica='aws'))$status
+
+    bundle <- hca$Retrieve_a_bundle_given_a_UUID_and_optionally_a_version.(uuid=uuid, replica='aws')
+    httr::content(bundle)
+    }, error = function(e) {
+        message('Missing checkout request')
+    }, finally = {
+        NULL
+    })
+})
+
+bundles
+```
+
+## Download Expression Matrix
+
+```
+# Add to filter (functions like json)
+hca <- hca %>% filter('files.project_json.project_core.project_title' == 'Census of Immume Cells')
+
+# Use ropenapi to access search function
+ret <- hca$Find_bundles_by_searching_their_metadata_with_an_Elasticsearch_query(getEsQuery(hca), replica='aws', output_format='raw')
+
+# Prepare SearchResult object
+ret <- parseToSearchResults(ret)
+res <- results(ret)
+
+# Process SearchResult object, fetch file, save results file to BiocFileCache
+for(bundles in res) {
+    file <- bundles[['metadata']][['manifest']][['files']]
+    if (endsWith('results', file)) {
+        file <- hca$`Retrieve_a_file_given_a_UUID_and_optionally_a_version.`(uuid=file, replica='aws')
+        saveToBiocFileCache(file)
+    }
+}
+```
+
+
 ```{r sessionInfo}
 sessionInfo()
 ```
