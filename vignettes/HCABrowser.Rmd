@@ -240,10 +240,10 @@ The remainder of this vignette will review applicable uses for this package.
 
 ## Obtain a File
 
-```
+```{r getFile}
 hca <- HCABrowser()
 
-result <- hca$Find_bundles_by_searching_their_metadata_with_an_Elasticsearch_query(json_request_body=getEsQuery(hca), replica='aws')
+result <- hca$Find_bundles_by_searching_their_metadata_with_an_Elasticsearch_query(es_query=getEsQuery(hca), replica='aws', output_format='raw')
 result <- parseToSearchResults(result)
 
 bundles <- lapply(results(result), function(results) {
