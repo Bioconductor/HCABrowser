@@ -238,7 +238,9 @@ Note that unabbreviated names must be used for these kinds of queries.
 
 The remainder of this vignette will review applicable uses for this package.
 
-## Obtain a File
+## Download a Bundle
+
+## Download a File
 
 ```{r getFile}
 hca <- HCABrowser()
@@ -266,7 +268,7 @@ bundles <- lapply(results(result), function(results) {
 bundles
 ```
 
-## Download Expression Matrix
+## Download an Expression Matrix
 
 ```
 # Add to filter (functions like json)
@@ -288,6 +290,10 @@ for(bundles in res) {
     }
 }
 ```
+
+## Download all fastq files in a project
+
+## Download all 10x-Seq T-Cell Bundles
 
 
 ```{r sessionInfo}
