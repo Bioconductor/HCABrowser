@@ -240,16 +240,34 @@ The remainder of this vignette will review applicable uses for this package.
 
 ## Download a Bundle
 
-## Download a File
-
-```{r getFile}
+```{r getBundle}
 hca <- HCABrowser()
 
+hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' == "brain")
 result <- hca$Find_bundles_by_searching_their_metadata_with_an_Elasticsearch_query(es_query=getEsQuery(hca), replica='aws', output_format='raw')
 result <- parseToSearchResults(result)
 
 bundles <- lapply(results(result), function(results) {
     uuid <- stringr::str_split(results[["bundle_fqid"]], '\\.')[[1]][[1]]
+     hca$Retrieve_a_bundle_given_a_UUID_and_optionally_a_version.(uuid=uuid, replica='aws')
+})
+
+bundles
+```
+
+## Download a File
+
+```{r getFile}
+hca <- HCABrowser()
+
+hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' == "brain")
+result <- hca$Find_bundles_by_searching_their_metadata_with_an_Elasticsearch_query(es_query=getEsQuery(hca), replica='aws', output_format='raw')
+result <- parseToSearchResults(result)
+
+bundles <- lapply(results(result), function(results) {
+    uuid <- stringr::str_split(results[["bundle_fqid"]], '\\.')[[1]][[1]]
+
+    bundle <- c()
 
     tryCatch({
     checkout_id <- httr::content(hca$dss.api.bundles.checkout.post(uuid=uuid, replica='aws'))$checkout_job_id
@@ -265,10 +283,18 @@ bundles <- lapply(results(result), function(results) {
     })
 })
 
-bundles
+files <- lapply(bundles, function(bundle) {
+    uuid <- bundle[['bundle']]['uuid']
+    hca$Retrieve_a_file_given_a_UUID_and_optionally_a_version.(uuid=uu, replica='aws')
+})
+
+files
 ```
 
 ## Download an Expression Matrix
+
+In addition to the method shown below, the HCAMatrixBrowser package can be
+used itself to download expression matrix data.
 
 ```
 # Add to filter (functions like json)
@@ -293,11 +319,10 @@ for(bundles in res) {
 
 ## Download all fastq files in a project
 
-## Download all 10x-Seq T-Cell Bundles
 
 
-```{r sessionInfo}
-sessionInfo()
+```{r fastq}
+
 ```
 
 # Developer notes
