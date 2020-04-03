@@ -261,7 +261,7 @@ bundles
 hca <- HCABrowser()
 
 hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' == "brain")
-result <- hca$Find_bundles_by_searching_their_metadata_with_an_Elasticsearch_query(es_query=getEsQuery(hca), replica='aws', output_format='raw')
+result <- hca$searchBundles(hca, es_query=getEsQuery(hca), replica='aws', output_format='raw')
 result <- parseToSearchResults(result)
 
 bundles <- lapply(results(result), function(results) {
@@ -270,11 +270,11 @@ bundles <- lapply(results(result), function(results) {
     bundle <- c()
 
     tryCatch({
-    checkout_id <- httr::content(hca$dss.api.bundles.checkout.post(uuid=uuid, replica='aws'))$checkout_job_id
+    checkout_id <- httr::content(checkoutBundle(hca, uuid=uuid, replica='aws'))$checkout_job_id
 
-    bundle_checkout_status <- httr::content(hca$dss.api.bundles.checkout.get(checkout_job_id=checkout_id, replica='aws'))$status
+    bundle_checkout_status <- httr::content(getBundleCheckout(hca, checkout_job_id=checkout_id, replica='aws'))$status
 
-    bundle <- hca$Retrieve_a_bundle_given_a_UUID_and_optionally_a_version.(uuid=uuid, replica='aws')
+    bundle <- getBundle(uuid=uuid, replica='aws')
     httr::content(bundle)
     }, error = function(e) {
         message('Missing checkout request')
@@ -285,7 +285,7 @@ bundles <- lapply(results(result), function(results) {
 
 files <- lapply(bundles, function(bundle) {
     uuid <- bundle[['bundle']]['uuid']
-    hca$Retrieve_a_file_given_a_UUID_and_optionally_a_version.(uuid=uu, replica='aws')
+    getFile(hca, uuid=uu, replica='aws')
 })
 
 files
@@ -301,7 +301,7 @@ used itself to download expression matrix data.
 hca <- hca %>% filter('files.project_json.project_core.project_title' == 'Census of Immume Cells')
 
 # Use ropenapi to access search function
-ret <- hca$Find_bundles_by_searching_their_metadata_with_an_Elasticsearch_query(getEsQuery(hca), replica='aws', output_format='raw')
+ret <- searchBundles(hca, getEsQuery(hca), replica='aws', output_format='raw')
 
 # Prepare SearchResult object
 ret <- parseToSearchResults(ret)
@@ -311,7 +311,7 @@ res <- results(ret)
 for(bundles in res) {
     file <- bundles[['metadata']][['manifest']][['files']]
     if (endsWith('results', file)) {
-        file <- hca$`Retrieve_a_file_given_a_UUID_and_optionally_a_version.`(uuid=file, replica='aws')
+        file <- searchBundles(hca, uuid=file, replica='aws')
         saveToBiocFileCache(file)
     }
 }

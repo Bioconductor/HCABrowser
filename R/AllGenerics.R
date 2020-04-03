@@ -9,3 +9,13 @@ setGeneric('undoEsQuery', function(x, ...) standardGeneric('undoEsQuery'))
 setGeneric('resetEsQuery', function(x, ...) standardGeneric('resetEsQuery'))
 setGeneric('getEsQuery', function(x, ...) standardGeneric('getEsQuery'))
 setGeneric('per_page', function(x, ...) standardGeneric('per_page'))
+
+## Api Methods
+
+setGeneric('listBundles', function(x, ...) standardGeneric('listBundles'))
+setGeneric('getBundleCheckout', function(x, ...) standardGeneric('getBundleCheckout'))
+setGeneric('getBundle', function(x, ...) standardGeneric('getBundle'))
+setGeneric('checkoutBundle', function(x, ...) standardGeneric('checkoutBundle'))
+setGeneric('getFile', function(x, ...) standardGeneric('getFile'))
+setGeneric('headFile', function(x, ...) standardGeneric('headFile'))
+setGeneric('searchBundles', function(x, ...) standardGeneric('searchBundles'))
