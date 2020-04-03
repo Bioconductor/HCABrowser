@@ -170,20 +170,20 @@ the result of input by other users, there may be errors or inconsistencies. To
 be safe, both fields can be queried with the following query:
 
 ```{r firstFilter}
-hca2 <- hca %>% filter(organ.text == c('Brain', 'brain'))
-hca2 <- hca %>% filter(organ.text %in% c('Brain', 'brain'))
-hca2 <- hca %>% filter(organ.text == Brain | organ.text == brain)
+hca2 <- hca %>% filter('files.specimen_from_organism_json.organ.text' == c('Brain', 'brain'))
+hca2 <- hca %>% filter('files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain'))
+hca2 <- hca %>% filter('files.specimen_from_organism_json.organ.text' == Brain | 'files.specimen_from_organism_json.organ.text' == brain)
 hca2
 ```
 
 If we also wish to search for results based on the NCBI Taxon ID for mouse,
 10090, as well as brain, we can perform this query in a variety of ways.
 ```{r multiFilter}
-hca2 <- hca %>% filter(organ.text %in% c('Brain', 'brain')) %>%
+hca2 <- hca %>% filter('files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain')) %>%
                 filter('specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090)
-hca2 <- hca %>% filter(organ.text %in% c('Brain', 'brain'),
+hca2 <- hca %>% filter('files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain'),
                        'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090)
-hca <- hca %>% filter(organ.text %in% c('Brain', 'brain') &
+hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain') &
                       'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090)
 hca
 ```
@@ -202,8 +202,8 @@ hca2
 The `HCABrowser` object can undo the most recent queries run on it.
 
 ```{r undoQuery}
-hca <- hca %>% filter(organ.text == heart)
-hca <- hca %>% filter(organ.text != brain)
+hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' == heart)
+hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' != brain)
 hca <- undoEsQuery(hca, n = 2)
 hca
 ```
