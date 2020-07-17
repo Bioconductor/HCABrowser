@@ -1,28 +1,41 @@
 
-.init_HCABrowser <- function(hca)
-{
-    select(hca, .initial_source)
-#    postSearch(hca, 'aws', 'raw', per_page=10)
-}
-
-.init_ProjectBrowser <- function(project)
-{
-    res <- filter(project)
-    res
-}
-
-#' @importFrom tibble tibble
 #' @importFrom dplyr %>%
-setOldClass('tbl_df')
 .SearchResult <- setClass("SearchResult",
     slots = c(
+        es_query = 'list',
+        results = 'list',
+        total_hits = 'integer',
         first_hit = 'integer',
         last_hit = 'integer',
-        total_hits = 'integer',
-        results = 'tbl_df',
         link = 'character'
     )
 )
+
+#' The SearchResults Class
+#'
+#' @description A glass generated after parsing a search query with
+#'  the method parseToSearchResults. Contains a list of all information
+#'  gleaned from the search query.
+#'
+#' @param es_query A quosure of the current es_query.
+#' @param results A list of all result from the qeury.
+#' @param first_hit numeric(1) the first bundle currently shown.
+#' @param last_hit numeric(1) the last bundle currently shown.
+#' @param total_hits numeric(1) the number of bundles that can be shown.
+#'
+#' @return A Search Result object
+#'
+#' @examples
+#'  sr <- new("SearchResult")
+#'  sr
+#'
+#' @export
+SearchResult <-
+    function(es_query, results, first_hit, last_hit, total_hits)
+{
+    .SearchResult(es_query=es_query, results=results, first_hit = first_hit,
+                  last_hit = last_hit, total_hits=total_hits)
+}
 
 setOldClass('quosure')
 setOldClass('quosures')
@@ -31,16 +44,20 @@ setOldClass('quosures')
 #'
 #' @author Daniel Van Twisk
 #'
-#' @param url character(1) the url of the Human Cell Atlas resource.
-#' @param fields_path character(1) path to the fields json file.
 #' @param per_page numeric(1) numbers of pages to view at a time.
+#' @param host character(1) path to hca-dcp server
+#' @param api_url character(1) path to schema
+#'
+#' @return An HCABrowser object.
+#'
+#' @examples
+#'  hca <- HCABrowser()
+#'  hca
+#'
 #' @exportClass HCABrowser
 .HCABrowser <- setClass("HCABrowser",
+    contains=c("Service"),
     slots = c(
-        activated = "character",
-        url = "character",
-        fields_path = "character",
-        supported_fields = "tbl_df",
         es_query = "quosures",
         es_source = "quosures",
         search_term = "list",
@@ -49,68 +66,34 @@ setOldClass('quosures')
     )
 )
 
-#' @importFrom dplyr mutate_if
-.get_supportedFields <- function(hca)
-{
-    if(is.null(hca))
-        field_names=names(jsonlite::fromJSON(system.file("extdata", "fields_and_values.json", package="HCABrowser")))
-    else
-        field_names <- names(jsonlite::fromJSON(hca@fields_path))
-    names_split <- strsplit(field_names, '[.]')
-    abbreviated_names <- vapply(names_split, function(x) {
-        short_name <- c()
-        for(i in rev(seq_along(x))){
-            if(i != length(x))
-                short_name <- paste0(x[i], '.', short_name)
-            else
-                short_name <- x[i]
-            uni <- field_names[grepl(paste0('[.]', short_name, '$'), field_names)]
-            if (length(uni) == 1) {
-#                if (i + 1 == length(x)) {
-#                    second_split <- strsplit(short_name, '[.]')[[1]]
-#                    uni <- field_names[grepl(paste0('[.]', second_split, '[.]'), field_names)]
-#                    if (length(uni) == 1)
-#                        short_name <- second_split[1]
-#                }
-                return(short_name)
-            }
-        }
-        short_name
-    }, character(1))
-    df <- cbind(abbreviated_names, field_names)
-
-    manifest_full <- .manifest_fields
-    manifest_full <- c(manifest_full, 'manifest.creator_uid', 'manifest.format', 'manifest.version')
-    manifest_full <- data.frame(abbreviated_names = manifest_full, field_names = manifest_full)
-    df <- rbind(df, manifest_full)
-    df <- mutate_if(df, is.factor, as.character)
-
-    df <- df[order(df[,1]),]
-
-    as_tibble(df)
-}
-
 #' The HCABrowser Class
 #'
 #' @author Daniel Van Twisk
 #'
-#' @param url character(1) the url of the Human Cell Atlas resource.
-#' @param fields_path character(1) path to the fields json file.
 #' @param per_page numeric(1) numbers of pages to view at a time.
+#' @param host character(1) path to hca-dcp server
+#' @param api_url character(1) path to hca-dcp api file
 #'
-#' @return an HCABrowser object
+#' @return An HCABrowser object.
 #'
 #' @examples
-#' hca <- HCABrowser()
-#' hca
-#' @importFrom methods new
+#'  hca <- HCABrowser()
+#'  hca
+#'
 #' @export
 HCABrowser <-
-    function(url='https://dss.data.humancellatlas.org/v1',
-             fields_path=system.file("extdata", "fields_and_values.json", package="HCABrowser"),
+    function(host='dss.data.humancellatlas.org',
+             api_url='https://dss.data.humancellatlas.org/v1/swagger.json',
              per_page=10)
 {
-    hca <- .HCABrowser(url=url, fields_path=fields_path, per_page=per_page, activated="bundles", search_term=list(), es_query=quos(), es_source=quos(), supported_fields = tibble())
-    hca@supported_fields <- .get_supportedFields(hca)
-    .init_HCABrowser(hca)
+    .HCABrowser(
+        Service(
+            service = "HCA",
+            config = httr::config(ssl_verifypeer = 0L, ssl_verifyhost = 0L),
+            host = host,
+            api_url = api_url
+        ),
+        es_query=quos(),
+        es_source=quos()
+    )
 }

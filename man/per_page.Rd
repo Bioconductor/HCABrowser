@@ -6,10 +6,10 @@
 \alias{per_page,HCABrowser-method}
 \title{Set per_page argument of an HCABrowser object}
 \usage{
-\S4method{per_page}{HCABrowser}(hca, n)
+\S4method{per_page}{HCABrowser}(x, n)
 }
 \arguments{
-\item{hca}{a HCABrowser object}
+\item{x}{an HCABrowser object}
 
 \item{n}{the new per_page value}
 }
@@ -20,7 +20,7 @@ a HCABrowser with updated per_page value
 note that no more than 10 pages can be displayed at once
 }
 \examples{
-hca <- HCABrowser()
-#hca <- per_page(hca, 5)
-hca
+x <- HCABrowser()
+#x <- per_page(x, 5)
+x
 }

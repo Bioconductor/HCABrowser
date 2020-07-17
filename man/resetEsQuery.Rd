@@ -6,10 +6,10 @@
 \alias{resetEsQuery,HCABrowser-method}
 \title{Reset the query of a HCABrowser object to the default query}
 \usage{
-\S4method{resetEsQuery}{HCABrowser}(hca)
+\S4method{resetEsQuery}{HCABrowser}(x)
 }
 \arguments{
-\item{hca}{A HCABrowser object}
+\item{x}{A HCABrowser object}
 }
 \value{
 A HCABrowser object with the search reset
@@ -18,9 +18,9 @@ A HCABrowser object with the search reset
 Reset the query of a HCABrowser object to the default query
 }
 \examples{
-hca <- HCABrowser()
-hca <- hca \%>\% filter(organ.text == brain)
-hca <- hca \%>\% filter(organ.text != brain)
-hca <- hca \%>\% resetEsQuery
-hca
+x <- HCABrowser()
+x <- x \%>\% filter(organ.text == brain)
+x <- x \%>\% filter(organ.text != brain)
+x <- x \%>\% resetEsQuery
+x
 }

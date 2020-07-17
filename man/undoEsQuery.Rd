@@ -6,10 +6,10 @@
 \alias{undoEsQuery,HCABrowser-method}
 \title{Undo previous filter queries on a HCABrowser object}
 \usage{
-\S4method{undoEsQuery}{HCABrowser}(hca, n = 1L)
+\S4method{undoEsQuery}{HCABrowser}(x, n = 1L)
 }
 \arguments{
-\item{hca}{A HCABrowser object}
+\item{x}{A HCABrowser object}
 
 \item{n}{integer(1) the number of filter queries to undo}
 }
@@ -20,10 +20,10 @@ A HCABrowser object with n fewer queries
 Undo previous filter queries on a HCABrowser object
 }
 \examples{
-hca <- HCABrowser()
-hca <- hca \%>\% filter(organ.text == brain)
-hca <- hca \%>\% filter(organ.text == heart)
-hca <- hca \%>\% filter(organ.text != brain)
-#hca <- hca \%>\% undoEsquery(n = 2)
-hca
+x <- HCABrowser()
+x <- x \%>\% filter(organ.text == brain)
+x <- x \%>\% filter(organ.text == heart)
+x <- x \%>\% filter(organ.text != brain)
+#x <- x \%>\% undoEsquery(n = 2)
+x
 }

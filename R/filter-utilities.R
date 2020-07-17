@@ -1,24 +1,3 @@
-.manifest_fields <- c(
-    'content_type',
-    'crc32c',
-    'indexed',
-    'name',
-    's3-etag',
-    'sha1',
-    'sha256',
-    'size',
-    'uuid',
-    'version'
-)
-
-.manifest_fields <- paste0('manifest.files.', .manifest_fields)
-
-.initial_source <- c(
-    "project_title", "project_short_name", "organ.text"#,
-#    "library_construction_approach.text",
-#    "specimen_from_organism_json.genus_species.text",
-#    "disease.text"#, .manifest_fields
-)
 
 .range_ops = list(
     '<' = "lt",
@@ -34,65 +13,6 @@
 .match_ops = list(
     '==' = '='
 )
-
-.fields <- function(hca)
-{
-    hca@supported_fields
-}
-
-#' List supported fields of an HCABrowser object
-#'
-#' @param hca An HCABrowser object.
-#'
-#' @return A tibble indicating fields that can be queried upon.
-#'
-#' @name fields
-#' @aliases fields,HCABrowser-method
-#' @docType methods
-#'
-#' @examples
-#' hca <- HCABrowser()
-#' fields(hca)
-#'
-#' @export
-setMethod("fields", "HCABrowser", .fields)
-
-.project_fields <- function(hca)
-{
-    names(hca@terms)
-}
-
-.values <- function(x, fields=c(), ...)
-{
-    hca <- x
-    fields_json <- jsonlite::fromJSON(hca@fields_path)
-    fields <- .convert_names_to_filters(hca, fields)
-    if (length(fields) > 0)
-        fields_json <- fields_json[fields]
-    value <- unlist(fields_json, use.names=FALSE)
-    field_names <- rep(names(fields_json), lengths(fields_json))
-    fields <- data.frame(field_names, value)
-    as_tibble(fields)
-}
-
-#' List all values for certain fields
-#'
-#' @param x An HCABrowser Object.
-#' @param fields a character vector of fields to display avaiable values for.
-#' @param ... Other arguments.
-#'
-#' @return a list of possible values for a filter
-#'
-#' @examples
-#' hca <- HCABrowser()
-#' vals <- hca %>% values
-#' vals
-#' vals2 <- hca %>% values('organ.text')
-#' vals2
-#'
-#' @importFrom S4Vectors values
-#' @export
-setMethod("values", "HCABrowser", .values)
 
 .is_bool_connector <- function(x)
 {
@@ -136,8 +56,6 @@ setMethod("values", "HCABrowser", .values)
             if(sep == 'endsWith')
                 value <- paste0('.*', value)
         }
-
-        field <- .convert_names_to_filters(NULL, field)
 
         leaf <- list(value)
         if(fun == 'range') {
@@ -254,65 +172,9 @@ filter.HCABrowser <- function(.data, ..., .preserve)
     hca <- .data
     dots <- quos(...)
     es_query <- c(hca@es_query, dots)
-    search_term <- .temp(es_query)
-    hca@search_term <- search_term
     hca@es_query <- es_query
     
-    selected <- unlist(.get_selections(search_term))
-    select(hca, selected)
-}
-
-.binary_op <- function(sep)
-{
-    force(sep)
-    function(e1, e2) {
-        field <- as.character(substitute(e1))
-
-        value <- try({
-            e2
-        }, silent = TRUE)
-        if (inherits(value, "try-error")) {
-            value <- as.character(substitute(e2))
-            if(value[1] == 'c')
-                value <- value[-1]
-            value
-        }
-
-        fun <- "term"
-
-        if(length(value) > 1)
-            fun <- "terms"
-
-        if(sep %in% .range)
-            fun <- "range"
-
-        if(sep %in% .regexp_ops) {
-            fun <- 'regexp'
-            ## TODO parse regex string to catch protected characters
-            if(sep == 'contains')
-                value <- paste0('.*', value, '.*')
-            if(sep == 'startsWith')
-                value <- paste0(value, '.*')
-            if(sep == 'endsWith')
-                value <- paste0('.*', value)
-        }
-
-        field <- .convert_names_to_filters(NULL, field)
-
-        leaf <- list(value)
-        if(fun == 'range') {
-            names(leaf) <- .range[sep]
-            leaf <- list(leaf)
-        }
-        names(leaf) <- field
-        leaf <- list(leaf)
-        names(leaf) <- fun
-
-        if(sep == "!=")
-            leaf <- list(must_not = leaf)
-
-        leaf
-    }
+    hca
 }
 
 #' Select fields from a HCABrowser object
@@ -356,51 +218,12 @@ select.HCABrowser <- function(.data, ..., .output_format = c('raw', 'summary'))
     if (length(sources) && sources[1] == 'c')
         sources <- sources[-1]
 
-    sources <- .convert_names_to_filters(hca, sources)
-    sources <- unique(sources)
-
     search_term <- hca@search_term
     if(length(search_term) == 0)
         search_term <- list(es_query = list(query = NULL))
     search_term$es_query$"_source" <- sources
     hca@search_term <- search_term
-
-    postSearch(hca, 'aws', output_format = output_format, per_page = hca@per_page)
-}
-
-.convert_names_to_filters <- function(hca, sources)
-{
-    if(is.null(hca))
-        fields <- .get_supportedFields(NULL)
-    else
-        fields <- fields(hca)
-    fields <- data.frame(fields)[,2]
-
-    sources <- vapply(sources, function(x) {
-        if (x == 'uuid')
-            return(x)
-        name <- fields[grepl(paste0('[.]', x, '$'), fields)]
-        if (length(name) > 1) {
-            txt <- vapply(name, function(y) {
-                paste0(y, '\n')
-            }, character(1))
-            mes <- paste0('Field "', x, '" matched more than one field. Please select one:\n')  
-            txt <- c(mes, txt)
-            stop(txt)
-        }
-        if (length(name) == 0) {
-            if (x %in% fields)
-                name <- x
-            else {
-                #message(paste0('Field "', x, '" may not be supported.'))
-                name <- x
-            }
-        }
-        name
-            
-    }, character(1))    
-    names(sources) <- NULL
-    sources
+    hca
 }
 
 .LOG_OP_REG <- list()

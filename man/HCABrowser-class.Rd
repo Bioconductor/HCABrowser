@@ -6,14 +6,22 @@
 \alias{.HCABrowser}
 \title{The HCABrowser Class}
 \arguments{
-\item{url}{character(1) the url of the Human Cell Atlas resource.}
-
-\item{fields_path}{character(1) path to the fields json file.}
-
 \item{per_page}{numeric(1) numbers of pages to view at a time.}
+
+\item{host}{character(1) path to hca-dcp server}
+
+\item{api_url}{character(1) path to schema}
+}
+\value{
+An HCABrowser object.
 }
 \description{
 The HCABrowser Class
+}
+\examples{
+ hca <- HCABrowser()
+ hca
+
 }
 \author{
 Daniel Van Twisk
