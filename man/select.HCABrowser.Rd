@@ -4,8 +4,7 @@
 \alias{select.HCABrowser}
 \title{Select fields from a HCABrowser object}
 \usage{
-\method{select}{HCABrowser}(.data, ..., .output_format = c("raw",
-  "summary"))
+\method{select}{HCABrowser}(.data, ..., .output_format = c("raw", "summary"))
 }
 \arguments{
 \item{.data}{an HCABrowser object to perform a selection on}

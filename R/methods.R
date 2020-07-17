@@ -1,13 +1,6 @@
-#' @import S4Vectors curl jsonlite plyr stringr tibble tidygraph tidyr
 #' @importFrom methods new
 #' @importFrom BiocFileCache bfcquery
 #' @importFrom AnVIL Service
-
-.init_HCABrowser <- function(x)
-{
-    select(x, .initial_source)
-    #    postSearch(x, 'aws', 'raw', per_page=10)
-}
 
 .first_hit <- function(x) x@first_hit
 .last_hit <- function(x) x@last_hit
@@ -54,7 +47,6 @@ setMethod('link', 'SearchResult', .link)
 #' @param x An HCABrowser object
 #'
 #' @return A json object of the elastic search query in the HCABrowser object
-#' @export
 setMethod('getEsQuery', 'HCABrowser', .getEsQuery)
 
 .set_per_page <- function(x, n)
@@ -125,7 +117,7 @@ function(x)
     x@search_term <- list()
     x@es_query <- quos()
     x@es_source <- quos()
-    select(x, .initial_source)
+    x
 }
 
 #' Reset the query of a HCABrowser object to the default query

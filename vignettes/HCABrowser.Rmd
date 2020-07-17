@@ -103,8 +103,8 @@ If the HCA cannot be reached, an error will be thrown displaying the status of
 the request.
 
 ```{r createHCA}
-hca <- HCABrowser(host = 'dss.data.humancellatlas.org/v1',
-                  api_url='https://dss.data.humancellatlas.org/v1/swagger.json')
+hca <- HCABrowser(api_url='https://dss.data.humancellatlas.org/v1/swagger.json',
+                  host = 'dss.data.humancellatlas.org/v1')
 hca
 ```
 
@@ -119,11 +119,6 @@ Upon displaying the object, multiple fields can be seen:
 To change how many pages are being displayed, the `per_page()` method can be
 used.
 (Note the hca dcp had a maximum of 10 bundles per page to be shown at a time)
-
-```{r per_page}
-#hca2 <- hca %>% per_page(n = 5)
-#hca2
-```
 
 Since there are far more bundles in the HCA than can be shown, if `link` is
 `True`, the next set of bundles can be obtained using the `nextResults` method.
@@ -226,14 +221,6 @@ hca2 <- hca %>% select(c('paired_end', 'organ.ontology'))
 hca2
 ```
 
-Finally, instead of a using the `filter` and `select` methods, one can query
-the Human Cell Atlas by using a json query and the `postSearch()` method.
-Note that unabbreviated names must be used for these kinds of queries.
-
-```{r jsonQuery}
-
-```
-
 # Use examples
 
 The remainder of this vignette will review applicable uses for this package.
@@ -244,12 +231,12 @@ The remainder of this vignette will review applicable uses for this package.
 hca <- HCABrowser()
 
 hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' == "brain")
-result <- hca$Find_bundles_by_searching_their_metadata_with_an_Elasticsearch_query(es_query=getEsQuery(hca), replica='aws', output_format='raw')
+result <- searchBundles(hca, replica='aws', output_format='raw')
 result <- parseToSearchResults(result)
 
 bundles <- lapply(results(result), function(results) {
     uuid <- stringr::str_split(results[["bundle_fqid"]], '\\.')[[1]][[1]]
-     hca$Retrieve_a_bundle_given_a_UUID_and_optionally_a_version.(uuid=uuid, replica='aws')
+    getBundle(hca, uuid=uuid, replica='aws')
 })
 
 bundles
@@ -261,7 +248,7 @@ bundles
 hca <- HCABrowser()
 
 hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' == "brain")
-result <- hca$searchBundles(hca, es_query=getEsQuery(hca), replica='aws', output_format='raw')
+result <- searchBundles(hca, replica='aws', output_format='raw')
 result <- parseToSearchResults(result)
 
 bundles <- lapply(results(result), function(results) {
@@ -285,7 +272,7 @@ bundles <- lapply(results(result), function(results) {
 
 files <- lapply(bundles, function(bundle) {
     uuid <- bundle[['bundle']]['uuid']
-    getFile(hca, uuid=uu, replica='aws')
+    getFile(hca, uuid=uuid, replica='aws')
 })
 
 files
