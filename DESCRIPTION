@@ -1,7 +1,7 @@
 Package: HCABrowser
 Type: Package
 Title: Browse the Human Cell Atlas data portal
-Version: 1.7.0
+Version: 1.7.1
 Authors@R: c(
     person(
         "Daniel", "Van Twisk",
@@ -41,7 +41,7 @@ License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/Bioconductor/HCABrowser
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 biocViews: DataImport, Sequencing, SingleCell
 BugReports:
     https://github.com/Bioconductor/HCABrowser/issues
