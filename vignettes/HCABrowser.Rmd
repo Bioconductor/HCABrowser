@@ -1,14 +1,14 @@
 ---
 title: "The HCABrowser Package"
-author: "Daniel Van Twisk"
-date: "`r format(Sys.Date(), '%A, %B %d, %Y')`"
-always_allow_html: yes
+package: HCABrowser
+author:
+- name: "Daniel Van Twisk"
+- name: "Martin Morgan"
+  affiliation: "Roswell Park Comprehensive Cancer Center"
 output:
-  BiocStyle::html_document:
-    df_print: paged
-    toc_float: true
+  BiocStyle::html_document
 abstract: >
-  The [Human Cell Atlas] (HCA) (https://www.humancellatlas.org/) was created in
+  The Human Cell Atlas (HCA) (https://www.humancellatlas.org/) was created in
   order to create comprehensive reference maps of all human cells as a basis for
   both understanding human health and diagnosing, monitoring, and treating
   disease. The *HCABrowser* Biocondctor pacakge provides infrastructure for
@@ -17,32 +17,28 @@ abstract: >
   changes to the package are planned to incorperate higer level functionality to
   upload user generated data to the the Human Cell Atlas platform.
 vignette: >
-  %\VignetteIndexEntry{Introduction to Accessing the HCABrowser using the
-        HCABrowser package}
-  %\VignetteEngine{knitr::knitr}
-  %\VignetteIndexEntry{HCABrowser}
+  %\VignetteIndexEntry{The HCABrowser Package}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r init, results='hide', echo=FALSE, warning=FALSE, message=FALSE}
-library(knitr)
-opts_chunk$set(warning=FALSE, message=FALSE)
-BiocStyle::markdown()
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
-
 
 # What is the Human Cell Atlas?
 
 From the [Human Cell Atlas (HCA) website](https://www.humancellatlas.org/):
 
-> The cell is the core unit of the human body—the key to understanding the
-biology of health and the ways in which molecular dysfunction leads to disease.
-Yet our characterization of the hundreds of types and subtypes of cells in the
-human body is limited, based partly on techniques that have limited resolution
-and classifications that do not always map neatly to each other. Genomics has
-offered a systematic approach, but it has largely been applied in bulk to many
-cell types at once—masking critical differences between cells—and in isolation
-from other valuable sources of data.
+> The cell is the core unit of the human body -- the key to
+understanding the biology of health and the ways in which molecular
+dysfunction leads to disease.  Yet our characterization of the
+hundreds of types and subtypes of cells in the human body is limited,
+based partly on techniques that have limited resolution and
+classifications that do not always map neatly to each other. Genomics
+has offered a systematic approach, but it has largely been applied in
+bulk to many cell types at once -- masking critical differences
+between cells -- and in isolation from other valuable sources of data.
 
 > Recent advances in single-cell genomic analysis of cells and tissues have put
 systematic, high-resolution and comprehensive reference maps of all human cells
@@ -78,12 +74,15 @@ library(HCABrowser)
 
 ## Connecting to the Human Cell Atlas
 
-The `r Biocpkg("HCABrowser")` package relies on having network
+The [HCABrowser][] package relies on having network
 connectivety. Also, the HCA's Data Coordination Platform (DCP) must
-also be operational. This package is meant for users who have a working
-knowledge of the HCA DCP's schema to provide the user with the
-fill richness of the HCA's content. For a more simple-to-use way to access and
-download data from The Human Cell Atlas, please use the `HCAExplorer` package.
+also be operational. This package is meant for users who have a
+working knowledge of the HCA DCP's schema to provide the user with the
+fill richness of the HCA's content. For a more simple-to-use way to
+access and download data from The Human Cell Atlas, please use the
+`HCAExplorer` package.
+
+[HCABrowser]: https://bioconductor.org/packages/HCABrowser
 
 The `HCABrowser` object serves as the representation of the Human Cell
 Atlas. Upon creation, it will automatically peform a cursorary query and
@@ -103,8 +102,11 @@ If the HCA cannot be reached, an error will be thrown displaying the status of
 the request.
 
 ```{r createHCA}
-hca <- HCABrowser(api_url='https://dss.data.humancellatlas.org/v1/swagger.json',
-                  host = 'dss.data.humancellatlas.org/v1')
+hca <-
+    HCABrowser(
+        api_url='https://dss.data.humancellatlas.org/v1/swagger.json',
+        host = 'dss.data.humancellatlas.org/v1'
+    )
 hca
 ```
 
@@ -130,8 +132,10 @@ hca
 
 ## Querying the HCABrowser
 
-The HCA extends the functionality of the `r CRANpkg("dplyr")` package's `filter()`
-and `select()` methods.
+The HCA extends the functionality of the [dplyr][] package's
+`filter()` and `select()` methods.
+
+[dplyr]: https://cran.r-project.org/package=dplyr
 
 The `filter()` method allows the user to query the HCA by relating fields to
 certain values. Character fields can be queried using the operators:
@@ -165,21 +169,44 @@ the result of input by other users, there may be errors or inconsistencies. To
 be safe, both fields can be queried with the following query:
 
 ```{r firstFilter}
-hca2 <- hca %>% filter('files.specimen_from_organism_json.organ.text' == c('Brain', 'brain'))
-hca2 <- hca %>% filter('files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain'))
-hca2 <- hca %>% filter('files.specimen_from_organism_json.organ.text' == Brain | 'files.specimen_from_organism_json.organ.text' == brain)
+hca2 <-
+    hca %>%
+    filter('files.specimen_from_organism_json.organ.text' == c('Brain', 'brain'))
+hca2 <-
+    hca %>%
+    filter(
+        'files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain')
+    )
+hca2 <-
+    hca %>%
+    filter(
+        'files.specimen_from_organism_json.organ.text' == Brain |
+        'files.specimen_from_organism_json.organ.text' == brain
+    )
 hca2
 ```
 
 If we also wish to search for results based on the NCBI Taxon ID for mouse,
 10090, as well as brain, we can perform this query in a variety of ways.
 ```{r multiFilter}
-hca2 <- hca %>% filter('files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain')) %>%
-                filter('specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090)
-hca2 <- hca %>% filter('files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain'),
-                       'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090)
-hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain') &
-                      'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090)
+hca2 <-
+    hca %>%
+    filter(
+        'files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain')
+    ) %>%
+    filter('specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090)
+hca2 <-
+    hca %>%
+    filter(
+        'files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain'),
+        'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090
+    )
+hca <-
+    hca %>%
+    filter(
+        'files.specimen_from_organism_json.organ.text' %in% c('Brain', 'brain') &
+        'specimen_from_organism_json.biomaterial_core.ncbi_taxon_id' == 10090
+    )
 hca
 ```
 
@@ -187,18 +214,24 @@ The `HCABrowser` package is able to handle arbitrarily complex queries on the
 Human Cell Atlas.
 
 ```{r complexFilter}
-hca2 <- hca %>% filter((!organ.text %in% c('Brain', 'blood')) & 
-                       (files.specimen_from_organism_json.genus_species.text == "Homo sapiens" |
-                        library_preparation_protocol_json.library_construction_approach.text == 'Smart-seq2')
-                )
+hca2 <-
+    hca %>%
+    filter((!organ.text %in% c('Brain', 'blood')) & (
+        files.specimen_from_organism_json.genus_species.text == "Homo sapiens" |
+        library_preparation_protocol_json.library_construction_approach.text == 'Smart-seq2'
+    ))
 hca2
 ``` 
 
 The `HCABrowser` object can undo the most recent queries run on it.
 
 ```{r undoQuery}
-hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' == heart)
-hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' != brain)
+hca <-
+    hca %>%
+    filter('files.specimen_from_organism_json.organ.text' == heart)
+hca <-
+    hca %>%
+    filter('files.specimen_from_organism_json.organ.text' != brain)
 hca <- undoEsQuery(hca, n = 2)
 hca
 ```
@@ -216,8 +249,12 @@ Using `fields()`, we can find that the fields `paired_end` and
 `HCABrowser` object using the `select()` method.
 
 ```{r select}
-hca2 <- hca %>% select('paired_end', 'organ.ontology')
-hca2 <- hca %>% select(c('paired_end', 'organ.ontology'))
+hca2 <-
+    hca %>%
+    select('paired_end', 'organ.ontology')
+hca2 <-
+    hca %>%
+    select(c('paired_end', 'organ.ontology'))
 hca2
 ```
 
@@ -227,89 +264,103 @@ The remainder of this vignette will review applicable uses for this package.
 
 ## Download a Bundle
 
+The following retrieves the first ten results satisfying the filter
+criterion.
+
 ```{r getBundle}
-hca <- HCABrowser()
+hca <-
+    HCABrowser() %>%
+    filter(
+        'files.specimen_from_organism_json.organ.text' == "brain"
+    )
+bundles <- searchBundles(hca, replica='aws', output_format='raw')
+bundles %>% httr::content() %>% names()
+result <- parseToSearchResults(bundles)
+```
 
-hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' == "brain")
-result <- searchBundles(hca, replica='aws', output_format='raw')
-result <- parseToSearchResults(result)
+Each result is represented as a 'bundle' of primary data and
+associated metadata. Bundles have a unique identifier, `bundle_fqid`,
+consisting of an identifier and version (date) stamp)
 
-bundles <- lapply(results(result), function(results) {
-    uuid <- stringr::str_split(results[["bundle_fqid"]], '\\.')[[1]][[1]]
-    getBundle(hca, uuid=uuid, replica='aws')
-})
+```{r}
+fqids <- vapply(results(result), `[[`, character(1), "bundle_fqid")
+uuid <- sub("([[:alnum:]-]+)\\.(.*)", "\\1", fqids)
+version <- sub("([[:alnum:]-]+)\\.(.*)", "\\2", fqids)
+tibble(uuid, version)
+```
 
-bundles
+Use `getBundle()` to 'check out' a bundle from the HCA to the Amazon
+or Google cloud.
+
+```{r}
+## provide 'version' for precise control
+bundle <- getBundle(hca, uuid[1], replica = "aws")
+bundle %>%
+    str()
+```
+
+The `checkout_job_id` can be used to query the status of the bundle
+
+```{r}
+jid <- as.list(bundle)$checkout_job_id
+status <- getBundleCheckout(hca, checkout_job_id=jid, replica='aws')
+status %>% str()
+```
+
+The `status` will change from 'RUNNING' to 'SUCCEEDED', showing the
+location of the bundle for download via AWS or GCP command line tools.
+
+```
+> getBundleCheckout(hca, checkout_job_id=jid, replica='aws') %>% str()
+List of 1
+ $ status: chr "RUNNING"
+> ## time passes
+> getBundleCheckout(hca, checkout_job_id=jid, replica='aws') %>% str()
+List of 2
+ $ location: chr "s3://org-hca-dss-checkout-prod/bundles/fffcea5e-...
+ $ status  : chr "SUCCEEDED"
 ```
 
 ## Download a File
 
 ```{r getFile}
-hca <- HCABrowser()
-
-hca <- hca %>% filter('files.specimen_from_organism_json.organ.text' == "brain")
-result <- searchBundles(hca, replica='aws', output_format='raw')
-result <- parseToSearchResults(result)
-
-bundles <- lapply(results(result), function(results) {
-    uuid <- stringr::str_split(results[["bundle_fqid"]], '\\.')[[1]][[1]]
-
-    bundle <- c()
-
-    tryCatch({
-    checkout_id <- httr::content(checkoutBundle(hca, uuid=uuid, replica='aws'))$checkout_job_id
-
-    bundle_checkout_status <- httr::content(getBundleCheckout(hca, checkout_job_id=checkout_id, replica='aws'))$status
-
-    bundle <- getBundle(uuid=uuid, replica='aws')
-    httr::content(bundle)
-    }, error = function(e) {
-        message('Missing checkout request')
-    }, finally = {
-        NULL
-    })
-})
-
-files <- lapply(bundles, function(bundle) {
-    uuid <- bundle[['bundle']]['uuid']
-    getFile(hca, uuid=uuid, replica='aws')
-})
-
-files
+hca <-
+    HCABrowser() %>%
+    filter('files.specimen_from_organism_json.organ.text' == "brain")
+results <-
+    searchBundles(hca, replica='aws', output_format='raw') %>%
+    parseToSearchResults() %>%
+    results()
+result <- results[[1]]
 ```
 
-## Download an Expression Matrix
+`result` is a list-of-lists structure. Files associated with a bundle
+are in at the following path:
 
-In addition to the method shown below, the HCAMatrixBrowser package can be
-used itself to download expression matrix data.
-
-```
-# Add to filter (functions like json)
-hca <- hca %>% filter('files.project_json.project_core.project_title' == 'Census of Immume Cells')
-
-# Use ropenapi to access search function
-ret <- searchBundles(hca, getEsQuery(hca), replica='aws', output_format='raw')
-
-# Prepare SearchResult object
-ret <- parseToSearchResults(ret)
-res <- results(ret)
-
-# Process SearchResult object, fetch file, save results file to BiocFileCache
-for(bundles in res) {
-    file <- bundles[['metadata']][['manifest']][['files']]
-    if (endsWith('results', file)) {
-        file <- searchBundles(hca, uuid=file, replica='aws')
-        saveToBiocFileCache(file)
-    }
-}
+```{r}
+tbl <-
+    result$metadata$manifest$files %>%
+    bind_rows() %>%
+    mutate(`content-type` = noquote(`content-type`))
+tbl
 ```
 
-## Download all fastq files in a project
+The following filters the manifest to the name and uuid of a fastq
+file
 
+```{r}
+fastq <- 
+    tbl %>%
+    filter(endsWith(name, "fastq.gz")) %>%
+    select(name, uuid) %>%
+    head(1)
+fastq
+```
 
+Download the file with
 
-```{r fastq}
-
+```{r, eval = FALSE}
+getFile(HCABrowser(), uuid=fastq$uuid, replica='aws')
 ```
 
 # Developer notes
@@ -320,3 +371,8 @@ for(bundles in res) {
 - In the future, we wish to expand the functionalit of this packages to cover
 the remaining functionality of the hca dcp api.
 
+# Session info {.unnumbered}
+
+```{r sessionInfo, echo = FALSE}
+sessionInfo()
+```
