@@ -7,7 +7,8 @@
 HCABrowser(
   host = "dss.data.humancellatlas.org",
   api_url = "https://dss.data.humancellatlas.org/v1/swagger.json",
-  per_page = 10
+  per_page = 10,
+  authenticate = FALSE
 )
 }
 \arguments{
@@ -16,6 +17,9 @@ HCABrowser(
 \item{api_url}{character(1) path to hca-dcp api file}
 
 \item{per_page}{numeric(1) numbers of pages to view at a time.}
+
+\item{authenticate}{logical(1) authenticate? required for actions
+that update the HCA data repostiory (rare).}
 }
 \value{
 An HCABrowser object.

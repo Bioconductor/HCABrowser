@@ -73,6 +73,8 @@ setOldClass('quosures')
 #' @param per_page numeric(1) numbers of pages to view at a time.
 #' @param host character(1) path to hca-dcp server
 #' @param api_url character(1) path to hca-dcp api file
+#' @param authenticate logical(1) authenticate? required for actions
+#'     that update the HCA data repostiory (rare).
 #'
 #' @return An HCABrowser object.
 #'
@@ -84,14 +86,23 @@ setOldClass('quosures')
 HCABrowser <-
     function(host='dss.data.humancellatlas.org',
              api_url='https://dss.data.humancellatlas.org/v1/swagger.json',
-             per_page=10)
+             per_page=10,
+             authenticate = FALSE)
 {
+    stopifnot(
+        is.character(host), length(host) == 1L, !is.na(host),
+        is.character(api_url), length(api_url) == 1L, !is.na(api_url),
+        is.numeric(per_page), length(per_page) == 1L, !is.na(per_page),
+        is.logical(authenticate), length(authenticate) == 1L,
+        !is.na(authenticate)
+    )
     .HCABrowser(
         Service(
             service = "HCA",
             config = httr::config(ssl_verifypeer = 0L, ssl_verifyhost = 0L),
             host = host,
-            api_url = api_url
+            api_url = api_url,
+            authenticate = authenticate
         ),
         es_query=quos(),
         es_source=quos()
