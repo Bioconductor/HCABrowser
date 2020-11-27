@@ -22,6 +22,7 @@
     names %in% c("filter", "should", "must_not") 
 }
 
+#' @importFrom jsonlite unbox
 .binary_op <- function(sep)
 {
     force(sep)
@@ -56,6 +57,9 @@
             if(sep == 'endsWith')
                 value <- paste0('.*', value)
         }
+
+        if (length(value) == 1L)
+            value <- unbox(value)
 
         leaf <- list(value)
         if(fun == 'range') {
