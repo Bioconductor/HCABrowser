@@ -1,11 +1,12 @@
 ## https://dss.integration.data.humancellatlas.org/
 
-#' @importFrom BiocFileCache BiocFileCache bfcnew bfcrpath bfccache
+#' @importFrom BiocFileCache BiocFileCache bfcnew bfcrpath bfccache bfcquery
+#' @importFrom methods is
 .retrieve_BiocFileCache_dbpath <- function(url)
 {
     if (is.null(dbpath))
         dbpath <- BiocFileCache()
-    if (methods::is(dbpath, "BiocFileCache")) {
+    if (is(dbpath, "BiocFileCache")) {
         nrec <- NROW(bfcquery(dbpath, url, "rname", exact = TRUE))
         if (nrec == 0L)
             dbpath <- bfcnew(dbpath, url)
@@ -28,30 +29,10 @@
     readr::read_tsv(fname)
 }
 
-#' Parse results from a search query to a Search Results object
-#'
-#' @param res the results from an HCA query.
-#'
-#' @return a SearchResults object. 
-#'
-#' @importFrom httr content
-#' @export
-parseToSearchResults <-
-    function(res)
-{
-    res <- httr::content(res)
-    len <- as.integer(length(res[['results']]))
-    first_hit <- 1L
-    res <- SearchResult(es_query=res$es_query, results=res$results,
-                        first_hit = first_hit, last_hit = len,
-                        total_hits=res$total_hits)
-    res
-}
-
 #' HCA API methods
 #'
-#' @aliases listBundles getBundleCheckout getBundle checkoutBundle
-#'          getFile headFile searchBundles
+#' @aliases getBundleCheckout getBundle checkoutBundle getFile
+#'     headFile
 #'
 #' @description
 #'
@@ -60,13 +41,11 @@ parseToSearchResults <-
 #'
 #' @usage
 #'
-#' listBundles(x, ...)
 #' getBundleCheckout(x, ...)
 #' getBundle(x, ...)
 #' checkoutBundle(x, ...)
 #' getFile(x, ...)
 #' headFile(x, ...)
-#' searchBundles(x, ...) 
 #'
 #' @param checkout_job_id character(1). A RFC4122-complliant ID for the checkout
 #'  job request.
@@ -79,11 +58,6 @@ parseToSearchResults <-
 #'
 #' @param json_request_body character(1) of a json query to be executed.
 #'
-#' @param output_format character(1). Specifies the output format. Either
-#'  "summary" or "raw". The default format, "summary", is a list of UUIDs for
-#'  bundles that match the query. Set this parameter to "raw" to get the
-#'  verbatim JSON metadata for bundles that match the query.
-#'
 #' @param per_page numeric(1). Max number of results to return per page.
 #'
 #' @param presignedurls logical(1). Include presigned URLs in the response. This
@@ -91,11 +65,6 @@ parseToSearchResults <-
 #'
 #' @param replica character(1). A replica to fetch form. Can either be
 #'  set to "aws", "gcp", or "azure".  DEFAULT is "aws".
-#'
-#' @param search_after character(1). **Search-After-Context**. An internal state
-#'  pointer parameter for use with pagination. The API client should not need to
-#'  set this parameter directly; it should instead directly fetch the URL given
-#'  in the "Link" header.
 #'
 #' @param token \code{Token}. Token to manage retries. End users constructing
 #'   queries should not set this parameter. Use \code{get_token()} to generate.
@@ -116,18 +85,6 @@ parseToSearchResults <-
 #' @name hca-api-methods
 #' @author Daniel Van Twisk
 NULL
-
-.listBundles <- function(x, replica = c('aws', 'gcp'), token,
-                         per_page = 100, search_after)
-{
-    
-}
-
-#' List all avaiable bundles
-#'
-#' @rdname hca-api-methods
-#' @export
-setMethod('listBundles', 'HCABrowser', .listBundles)
 
 .getBundleCheckout <- function(x, replica = c('aws', 'gcp'), checkout_job_id)
 {
@@ -197,20 +154,4 @@ setMethod('getFile', 'HCABrowser', .getFile)
 #' @rdname hca-api-methods
 #' @export
 setMethod('headFile', 'HCABrowser', .headFile)
-
-.searchBundles <- function(x, json_request_body = getEsQuery(x),
-                           output_format = c('summary', 'raw'),
-                           replica = c('aws', 'gcp'), per_page = 100,
-                           search_after)
-{
-    replica = match.arg(replica)
-    output_format = match.arg(output_format)
-    x$Find_bundles_by_searching_their_metadata_with_an_Elasticsearch_query(json_request_body = json_request_body, output_format = output_format, replica = replica, per_page = per_page)
-}
-
-#' Find bundles by searching their metadata with an Elasticsearch query 
-#'
-#' @rdname hca-api-methods
-#' @export
-setMethod('searchBundles', 'HCABrowser', .searchBundles)
 

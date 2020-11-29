@@ -1,21 +1,7 @@
-setGeneric("nextResults", function(x, ...) standardGeneric("nextResults"))
-setGeneric('first_hit', function(x, ...) standardGeneric('first_hit'))
-setGeneric('last_hit', function(x, ...) standardGeneric('last_hit'))
-setGeneric('total_hits', function(x, ...) standardGeneric('total_hits'))
-setGeneric('es_query', function(x, ...) standardGeneric('es_query'))
-setGeneric('results', function(x, ...) standardGeneric('results'))
-setGeneric('link', function(x, ...) standardGeneric('link'))
-setGeneric('undoEsQuery', function(x, ...) standardGeneric('undoEsQuery'))
-setGeneric('resetEsQuery', function(x, ...) standardGeneric('resetEsQuery'))
-setGeneric('getEsQuery', function(x, ...) standardGeneric('getEsQuery'))
-setGeneric('per_page', function(x, ...) standardGeneric('per_page'))
-
 ## Api Methods
 
-setGeneric('listBundles', function(x, ...) standardGeneric('listBundles'))
 setGeneric('getBundleCheckout', function(x, ...) standardGeneric('getBundleCheckout'))
 setGeneric('getBundle', function(x, ...) standardGeneric('getBundle'))
 setGeneric('checkoutBundle', function(x, ...) standardGeneric('checkoutBundle'))
 setGeneric('getFile', function(x, ...) standardGeneric('getFile'))
 setGeneric('headFile', function(x, ...) standardGeneric('headFile'))
-setGeneric('searchBundles', function(x, ...) standardGeneric('searchBundles'))
