@@ -118,18 +118,6 @@ Upon displaying the object, multiple fields can be seen:
     - You may notice that some columns are already selected. These columns are
       automatically selected to allow the user some initial view of the hca.
 
-To change how many pages are being displayed, the `per_page()` method can be
-used.
-(Note the hca dcp had a maximum of 10 bundles per page to be shown at a time)
-
-Since there are far more bundles in the HCA than can be shown, if `link` is
-`True`, the next set of bundles can be obtained using the `nextResults` method.
-
-```{r nextResults, eval=FALSE}
-hca <- nextResults(hca)
-hca
-```
-
 ## Querying the HCABrowser
 
 The HCA extends the functionality of the [dplyr][] package's
@@ -270,23 +258,48 @@ criterion.
 ```{r getBundle}
 hca <-
     HCABrowser() %>%
-    filter(
-        'files.specimen_from_organism_json.organ.text' == "brain"
-    )
-bundles <- searchBundles(hca, replica='aws', output_format='raw')
-bundles %>% httr::content() %>% names()
-result <- parseToSearchResults(bundles)
+    filter('files.specimen_from_organism_json.organ.text' == "brain")
+result <- searchBundles(hca, replica='aws')
+result
 ```
 
-Each result is represented as a 'bundle' of primary data and
-associated metadata. Bundles have a unique identifier, `bundle_fqid`,
-consisting of an identifier and version (date) stamp)
+Each result is represented as a 'bundle' of primary data and (with
+`output_format = 'summary'`) associated metadata. Bundles have a
+unique identifier, `bundle_fqid`, consisting of an identifier and
+version (date) stamp
 
 ```{r}
-fqids <- vapply(results(result), `[[`, character(1), "bundle_fqid")
-uuid <- sub("([[:alnum:]-]+)\\.(.*)", "\\1", fqids)
-version <- sub("([[:alnum:]-]+)\\.(.*)", "\\2", fqids)
-tibble(uuid, version)
+result %>%
+    as_tibble() %>%
+    select("bundle_fqid")
+```
+
+Use the `searchBundles()` parameter `per_page=` to influence the
+number of bundles returned. The maximimum `per_page=` value when
+`output_format = "summary"` is 500; when `output_format = "raw"` the
+maximum is 10. Use `nextResults()` to obtain the next `per_page` set
+of results.
+
+```{r}
+nextResults(result) %>%
+    as_tibble() %>%
+    select("bundle_fqid")
+```
+
+The `uuid` and `version` components of the `fqid` are easily obtained,
+e.g.,
+
+```{r}
+re <- "^([^\\.]+)\\.(.*)$" # uuid / version as before / after the first '.'
+tbl <-
+    result %>%
+    as_tibble() %>%
+    mutate(
+        uuid = sub(re, "\\1", bundle_fqid),
+        version = sub(re, "\\2", bundle_fqid)
+    ) %>%
+    select(uuid, version)
+tbl
 ```
 
 Use `getBundle()` to 'check out' a bundle from the HCA to the Amazon
@@ -294,9 +307,9 @@ or Google cloud.
 
 ```{r}
 ## provide 'version' for precise control
-bundle <- getBundle(hca, uuid[1], replica = "aws")
+bundle <- getBundle(hca, tbl$uuid[1], replica = "aws")
 bundle %>%
-    str()
+    as.list()
 ```
 
 The `checkout_job_id` can be used to query the status of the bundle
@@ -329,7 +342,6 @@ hca <-
     filter('files.specimen_from_organism_json.organ.text' == "brain")
 results <-
     searchBundles(hca, replica='aws', output_format='raw') %>%
-    parseToSearchResults() %>%
     results()
 result <- results[[1]]
 ```
@@ -366,10 +378,10 @@ getFile(HCABrowser(), uuid=fastq$uuid, replica='aws')
 # Developer notes
 
 - The `S3` object-oriented programming paradigm is used.
-- Methods from the `dplyr` package can be used to manipulate objects in the
-`HCABrowser` package.
-- In the future, we wish to expand the functionalit of this packages to cover
-the remaining functionality of the hca dcp api.
+- Methods from the `dplyr` package can be used to manipulate objects
+  in the `HCABrowser` package.
+- In the future, we wish to expand the functionalit of this packages
+  to cover the remaining functionality of the hca dcp api.
 
 # Session info {.unnumbered}
 

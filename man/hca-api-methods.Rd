@@ -2,31 +2,23 @@
 % Please edit documentation in R/hca-api.R
 \name{hca-api-methods}
 \alias{hca-api-methods}
-\alias{listBundles}
 \alias{getBundleCheckout}
 \alias{getBundle}
 \alias{checkoutBundle}
 \alias{getFile}
 \alias{headFile}
-\alias{searchBundles}
-\alias{listBundles,HCABrowser-method}
 \alias{getBundleCheckout,HCABrowser-method}
 \alias{getBundle,HCABrowser-method}
 \alias{checkoutBundle,HCABrowser-method}
 \alias{getFile,HCABrowser-method}
 \alias{headFile,HCABrowser-method}
-\alias{searchBundles,HCABrowser-method}
 \title{HCA API methods}
 \usage{
-listBundles(x, ...)
 getBundleCheckout(x, ...)
 getBundle(x, ...)
 checkoutBundle(x, ...)
 getFile(x, ...)
 headFile(x, ...)
-searchBundles(x, ...)
-
-\S4method{listBundles}{HCABrowser}(x, replica = c("aws", "gcp"), token, per_page = 100, search_after)
 
 \S4method{getBundleCheckout}{HCABrowser}(x, replica = c("aws", "gcp"), checkout_job_id)
 
@@ -46,31 +38,12 @@ searchBundles(x, ...)
 \S4method{getFile}{HCABrowser}(x, uuid, replica = c("aws", "gcp"), version, token)
 
 \S4method{headFile}{HCABrowser}(x, uuid, replica = c("aws", "gcp"), version)
-
-\S4method{searchBundles}{HCABrowser}(
-  x,
-  json_request_body = getEsQuery(x),
-  output_format = c("summary", "raw"),
-  replica = c("aws", "gcp"),
-  per_page = 100,
-  search_after
-)
 }
 \arguments{
 \item{x}{An HCABrowser object that is the subject of the request.}
 
 \item{replica}{character(1). A replica to fetch form. Can either be
 set to "aws", "gcp", or "azure".  DEFAULT is "aws".}
-
-\item{token}{\code{Token}. Token to manage retries. End users constructing
-queries should not set this parameter. Use \code{get_token()} to generate.}
-
-\item{per_page}{numeric(1). Max number of results to return per page.}
-
-\item{search_after}{character(1). **Search-After-Context**. An internal state
-pointer parameter for use with pagination. The API client should not need to
-set this parameter directly; it should instead directly fetch the URL given
-in the "Link" header.}
 
 \item{checkout_job_id}{character(1). A RFC4122-complliant ID for the checkout
 job request.}
@@ -86,12 +59,12 @@ is \code{NULL}.}
 \item{presignedurls}{logical(1). Include presigned URLs in the response. This
 is mutually exclusive with the directurls parameter.}
 
-\item{json_request_body}{character(1) of a json query to be executed.}
+\item{token}{\code{Token}. Token to manage retries. End users constructing
+queries should not set this parameter. Use \code{get_token()} to generate.}
 
-\item{output_format}{character(1). Specifies the output format. Either
-"summary" or "raw". The default format, "summary", is a list of UUIDs for
-bundles that match the query. Set this parameter to "raw" to get the
-verbatim JSON metadata for bundles that match the query.}
+\item{per_page}{numeric(1). Max number of results to return per page.}
+
+\item{json_request_body}{character(1) of a json query to be executed.}
 
 \item{...}{Additional arguments.}
 }
