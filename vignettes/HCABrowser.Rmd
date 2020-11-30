@@ -302,21 +302,18 @@ tbl <-
 tbl
 ```
 
-Use `getBundle()` to 'check out' a bundle from the HCA to the Amazon
+Use `checkoutBundle()` to 'check out' a bundle from the HCA to the Amazon
 or Google cloud.
 
 ```{r}
 ## provide 'version' for precise control
-bundle <- getBundle(hca, tbl$uuid[1], replica = "aws")
-bundle %>%
-    as.list()
+checkout_job_id <- checkoutBundle(hca, tbl$uuid[1])
 ```
 
 The `checkout_job_id` can be used to query the status of the bundle
 
 ```{r}
-jid <- as.list(bundle)$checkout_job_id
-status <- getBundleCheckout(hca, checkout_job_id=jid, replica='aws')
+status <- getBundleCheckout(hca, checkout_job_id)
 status %>% str()
 ```
 
@@ -324,11 +321,11 @@ The `status` will change from 'RUNNING' to 'SUCCEEDED', showing the
 location of the bundle for download via AWS or GCP command line tools.
 
 ```
-> getBundleCheckout(hca, checkout_job_id=jid, replica='aws') %>% str()
+> getBundleCheckout(hca, checkout_job_id=jid) %>% str()
 List of 1
  $ status: chr "RUNNING"
 > ## time passes
-> getBundleCheckout(hca, checkout_job_id=jid, replica='aws') %>% str()
+> getBundleCheckout(hca, checkout_job_id=jid) %>% str()
 List of 2
  $ location: chr "s3://org-hca-dss-checkout-prod/bundles/fffcea5e-...
  $ status  : chr "SUCCEEDED"
@@ -341,7 +338,7 @@ hca <-
     HCABrowser() %>%
     filter('files.specimen_from_organism_json.organ.text' == "brain")
 results <-
-    searchBundles(hca, replica='aws', output_format='raw') %>%
+    searchBundles(hca, output_format='raw') %>%
     results()
 result <- results[[1]]
 ```
@@ -372,7 +369,8 @@ fastq
 Download the file with
 
 ```{r, eval = FALSE}
-getFile(HCABrowser(), uuid=fastq$uuid, replica='aws')
+destination <- file.path(tempdir(), fastq$name)
+getFile(HCABrowser(), fastq$uuid, destination = destination)
 ```
 
 # Developer notes

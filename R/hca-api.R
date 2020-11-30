@@ -1,157 +1,246 @@
 ## https://dss.integration.data.humancellatlas.org/
 
-#' @importFrom BiocFileCache BiocFileCache bfcnew bfcrpath bfccache bfcquery
-#' @importFrom methods is
-.retrieve_BiocFileCache_dbpath <- function(url)
-{
-    if (is.null(dbpath))
-        dbpath <- BiocFileCache()
-    if (is(dbpath, "BiocFileCache")) {
-        nrec <- NROW(bfcquery(dbpath, url, "rname", exact = TRUE))
-        if (nrec == 0L)
-            dbpath <- bfcnew(dbpath, url)
-        else if (nrec == 1L)
-            dbpath <- bfcrpath(dbpath, url)
-        else
-            stop(
-                "\n  'bfc' contains duplicate record names",
-                    "\n      url: ", url,
-                    "\n      bfccache(): ", bfccache(dbpath),
-                    "\n      rname: ", bfccache(dbpath)$rname
-            )
-    }
-}
-
-#' @importFrom readr read_tsv
-.save_as_BiocFileCache <- function(dbpath, url)
-{
-    fname <- BiocFileCache::bfcrpath(rnames = url)
-    readr::read_tsv(fname)
-}
-
 #' HCA API methods
 #'
-#' @aliases getBundleCheckout getBundle checkoutBundle getFile
-#'     headFile
+#' @rdname hca-api
+#' @md
 #'
-#' @description
+#' @name HCA-API
 #'
-#' Methods to access the Human Cell Atlas's Data Coordination Platform (HCA DCP)
-#' by means of the platform's REST API.
+#' @author Daniel Van Twisk
 #'
-#' @usage
+#' @description Methods to access the Human Cell Atlas's Data
+#'     Coordination Platform (HCA DCP) using the platform's REST API.
 #'
-#' getBundleCheckout(x, ...)
-#' getBundle(x, ...)
-#' checkoutBundle(x, ...)
-#' getFile(x, ...)
-#' headFile(x, ...)
+#' @examples
 #'
-#' @param checkout_job_id character(1). A RFC4122-complliant ID for the checkout
-#'  job request.
+#' hca <-
+#'     HCABrowser() %>%
+#'     filter('files.specimen_from_organism_json.organ.text' == "brain")
+#' hca
 #'
-#' @param directurls logical(1). Include direct-access URLs in the response.
-#'  This is mutually exclusive with the \code{presignedurls} parameter.  DEFAULT
-#'  is \code{NULL}.
+#' result <-
+#'     hca %>%
+#'     searchBundles(per_page = 10L, output_format = "raw")
+#' result
+#'
+#' tbl <-
+#'    results(result)[[1]]$metadata$manifest$files %>%
+#'    bind_rows() %>%
+#'    mutate(`content-type` = noquote(`content-type`))
+#' tbl
+#'
+NULL
+
+.REPLICAS <- c("aws", "gcp") # "azure" ?
+
+.hca_api_doit <-
+    function(FUN, uuid, version, replica, call)
+{
+    replica <- match.arg(replica, .REPLICAS)
+    stopifnot(
+        .is_scalar_character(uuid),
+        is.null(version) || .is_scalar_character(version)
+    )
+
+    if (is.null(version))
+        response <- FUN(uuid = uuid, replica = replica)
+    else
+        response <- FUN(uuid = uuid, version = version, replica = replica)
+    .stop_for_status(response, call)
+}
+
+#' @rdname hca-api
+#' @md
+#'
+#' @description `checkoutBundle()` initiates the 'checkout' process
+#'     from the HCA DCP DSS.
 #'
 #' @param x An HCABrowser object that is the subject of the request.
-#'
-#' @param json_request_body character(1) of a json query to be executed.
-#'
-#' @param per_page numeric(1). Max number of results to return per page.
-#'
-#' @param presignedurls logical(1). Include presigned URLs in the response. This
-#'   is mutually exclusive with the directurls parameter.
-#'
-#' @param replica character(1). A replica to fetch form. Can either be
-#'  set to "aws", "gcp", or "azure".  DEFAULT is "aws".
-#'
-#' @param token \code{Token}. Token to manage retries. End users constructing
-#'   queries should not set this parameter. Use \code{get_token()} to generate.
 #'
 #' @param uuid character(1). A RFC4122-compliant ID for the bundle.
 #'
 #' @param version character(1). Timestamp of bundle creation in RFC3339.
 #'
-#' @param ... Additional arguments.
+#' @param replica character(1). A replica to fetch form. Can be one of
+#'     "aws", "gcp", or "azure".  Default is "aws".
 #'
-#' @return an HCABrowser object
+#' @return `checkoutBundle()` returns a character(1) identifier to be
+#'     used as the `checkout_job_id=` to determine status of the
+#'     checkout using `getBundleCheckout()`.
 #'
 #' @examples
-#' hca <- HCABrowser()
-#' #addmore
-#' 
 #'
-#' @name hca-api-methods
-#' @author Daniel Van Twisk
-NULL
-
-.getBundleCheckout <- function(x, replica = c('aws', 'gcp'), checkout_job_id)
+#' re <- "^([^\\.]+)\\.(.*)$" # uuid / version as before / after the first '.'
+#'
+#' uuid <-
+#'     hca %>%
+#'     searchBundles(per_page = 10L, output_format = "summary") %>%
+#'     as_tibble() %>%
+#'     mutate(
+#'        uuid = sub(re, "\\1", bundle_fqid),
+#'        version = sub(re, "\\2", bundle_fqid)
+#'    ) %>%
+#'    pull(uuid)
+#' uuid
+#'
+#' checkout_job_id <- checkoutBundle(hca, uuid[1])
+#' checkout_job_id
+#'
+#' @export
+checkoutBundle <-
+    function(x, uuid, version = NULL, replica = "aws")
 {
-    replica <- match.arg(replica)
-    x$dss.api.bundles.checkout.get(replica = replica, checkout_job_id = checkout_job_id)
+    stopifnot(is(x, "HCABrowser"))
+
+    FUN <- x$dss.api.bundles.checkout.post
+    response <- .hca_api_doit(FUN, uuid, version, replica, "checkoutBundle()")
+    as.list(response)$checkout_job_id
 }
 
-#' Check the status of a bundle checkout request
+#' @rdname deprecated
+#' @title Deprecated functions in the HCABrowser package
+#' @name deprecated
+#' @md
 #'
-#' @rdname hca-api-methods
+#' @description `getBundle()` is deprecated, use `checkoutBundle()`
+#'
+#' @keywords internal
+#'
 #' @export
-setMethod('getBundleCheckout', 'HCABrowser', .getBundleCheckout)
-
-.getBundle <- function(x, uuid, version, replica = c('aws', 'gcp'),
-                       directurls, presignedurls, token, per_page = 500)
+getBundle <-
+    function(x, uuid, version = NULL, replica = "aws")
 {
-    replica <- match.arg(replica)
-    if (missing(version))
-        x$dss.api.bundles.checkout.post(uuid = uuid, replica = replica)
-    else
-        x$dss.api.bundles.checkout.post(uuid = uuid, version = version,
-                                     replica = replica)
+    .Deprecated(
+        msg = "'getBundle()' is deprecated, use 'checkoutBundle()' instead"
+    )
+    checkoutBundle(x, uuid, version, replica)
 }
 
-#' Retrieve an bundle given a UUID and and optionally a version
+#' @rdname hca-api
+#' @md
 #'
-#' @rdname hca-api-methods
-#' @export
-setMethod('getBundle', 'HCABrowser', .getBundle)
-
-.checkoutBundle <- function(x, uuid, version, replica = c('aws', 'gcp'),
-                            json_request_body)
-{
-    replica <- match.arg(replica)
-    if (missing(version))
-        x$dss.api.bundles.checkout.post(uuid = uuid, replica = replica)
-    else
-        x$dss.api.bundles.checkout.post(uuid = uuid, version = version, replica = replica)
-}
-
-#' Check out a bundle to DSS-managed or user-managed cloud object storage destination
+#' @description `getBundleCheckout()` queries the status of a bundle
+#'     checkout request
 #'
-#' @rdname hca-api-methods
+#' @param checkout_job_id character(1). A RFC4122-complliant ID for
+#'     the checkout job request.
+#'
+#' @return `getBundleCheckout()` returns a list. One component of the
+#'     list is `status=`. If the value is `SUCCEEDED`, then the list
+#'     contains a second element `location=` containing a URL to the
+#'     location of the checkout, e.g., an s3 bucket.
+#'
+#' @examples
+#'
+#' getBundleCheckout(hca, checkout_job_id)
+#'
 #' @export
-setMethod('checkoutBundle', 'HCABrowser', .checkoutBundle)
-
-.getFile <- function(x, uuid, replica = c('aws', 'gcp'), version, token)
+getBundleCheckout <-
+    function(x, checkout_job_id, replica = "aws")
 {
-    replica = match.arg(replica)
-    x$Retrieve_a_file_given_a_UUID_and_optionally_a_version.(uuid = uuid, replica = replica)
+    replica <- match.arg(replica, .REPLICAS)
+    stopifnot(
+        is(x, "HCABrowser"),
+        .is_scalar_character(checkout_job_id)
+    )
+
+    FUN <- x$dss.api.bundles.checkout.get
+    response <- FUN(replica = replica, checkout_job_id = checkout_job_id)
+    as.list(response)
 }
 
 #' Retrieve a file given a UUID and optionally a version
 #'
-#' @rdname hca-api-methods
+#' @rdname hca-api
+#' @md
+#'
+#' @description `getFile()` retrieves a file from its UUID.
+#'
+#' @param destination character(1) path to downloaded file. The path
+#'     cannot exist.
+#'
+#' @return `getFile()` returns the path to the downloaded file.
+#'
+#' @importFrom httr set_config reset_config
+#'
+#' @examples
+#'
+#' fastq <-
+#'    tbl %>%
+#'    filter(endsWith(name, "fastq.gz")) %>%
+#'    select(name, uuid)
+#' fastq
+#'
+#' uuid <- pull(fastq) %>% tail(1)
+#' uuid
+#'
+#' \dontrun{
+#' destination <- getFile(hca, uuid)
+#' readLines(destination, 4L)
+#' }
+#'
 #' @export
-setMethod('getFile', 'HCABrowser', .getFile)
-
-.headFile <- function(x, uuid, replica = c('aws', 'gcp'), version)
+getFile <-
+    function(x, uuid, version = NULL, replica = "aws", destination = tempfile())
 {
-    replica = match.arg(replica)
-    x$`Retrieve_a_file's_metadata_given_an_UUID_and_optionally_a_version.`(uuid = uuid, replica = replica)
+    stopifnot(
+        is(x, "HCABrowser"),
+        .is_scalar_character(destination),
+        !file.exists(destination)
+    )
+    directory <- dirname(destination)
+    if (!dir.exists(directory))
+        dir.create(directory, recursive = TRUE)
+
+    ## hard-coded to allow for write_disk()
+    FUN <- local({
+        api <- AnVIL:::.api(x)
+        host <- api$host
+        basePath <- api$basePath
+        function(uuid, version, replica)  {
+            url <- paste0(
+                "https://", host, basePath, "/files/", uuid,
+                "?replica=", replica,
+                if (!is.null(version)) paste0("&version=", version)
+            )
+            httr::GET(url, httr::write_disk(destination), httr::progress())
+        }
+    })
+
+    response <- .hca_api_doit(FUN, uuid, version, replica, "getFile()")
+
+    destination
 }
 
 #' Retrieve a file's metadata given an UUID and optionally a version
 #'
-#' @rdname hca-api-methods
+#' @rdname hca-api
+#'
+#' @description `headFile()` retrieves metadata about a file from its
+#'     UUID.
+#'
+#' @return `headFile()` returns a tibble of technical metadata,
+#'     including file size and content type (e.g.,
+#'     `application/gzip`), about a file.
+#'
+#' @examples
+#'
+#' headFile(hca, uuid)
+#'
+#' @importFrom dplyr bind_cols %>%
+#'
 #' @export
-setMethod('headFile', 'HCABrowser', .headFile)
+headFile <-
+    function(x, uuid, version = NULL, replica = "aws")
+{
+    stopifnot(is(x, "HCABrowser"))
 
+    FUN <- x$`Retrieve_a_file's_metadata_given_an_UUID_and_optionally_a_version.`
+    response <- .hca_api_doit(FUN, uuid, version, replica, "headFile()")
+    hdrs <- headers(response)
+    xdss <- hdrs[startsWith(names(hdrs), "x-dss-")]
+    names(xdss) <- sub("x-dss-", "", names(xdss))
+    bind_cols(tibble(uuid), as_tibble(xdss)) %>%
+        select("uuid", "version", "size", "content-type", dplyr::everything())
+}
