@@ -88,7 +88,7 @@ nextResults <-
     rel <- sub(re, "\\2", link)
 
     response <- POST(url, content_type_json(), body = body)
-    .stop_for_status(response, "nextResults()")
+    response <- .stop_for_status(response, "nextResults()")
 
     .as_SearchResult(
         response, .es_query(x),

@@ -241,7 +241,7 @@ searchBundles <-
         json_request_body = json_request_body, output_format = output_format,
         replica = replica, per_page = per_page
     )
-    .stop_for_status(response, "searchBundles()")
+    response <- .stop_for_status(response, "searchBundles()")
 
     .as_SearchResult(response, getEsQuery(x), output_format, replica, per_page)
 }
